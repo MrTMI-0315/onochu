@@ -6,6 +6,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 - Next.js App Router 스캐폴딩 완료
 - TypeScript 및 Tailwind CSS 설정 완료
+- 공통 타입과 mock data 연결 완료
+- 필수 MVP 라우트 뼈대 생성 완료
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 
@@ -42,7 +44,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 - 패키지 매니저는 `npm` 기준으로 정리되어 있습니다.
 - 기본 실행 명령은 `npm run dev`, `npm run lint`, `npm run build`입니다.
-- 다음 단계는 공통 타입, mock data, 기본 라우트 구조를 연결하는 MB 03입니다.
+- 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/profile/edit` 라우트가 존재합니다.
+- 다음 단계는 랜딩 메시지와 공통 네비게이션을 정리하는 MB 04입니다.
 
 ## Commit Rule
 
@@ -52,6 +55,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 03 진행
-2. `docs/shared.md` 기준으로 타입과 mock data 정의
-3. 필수 라우트 뼈대를 생성하고 더미 데이터 렌더링 준비
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 04 진행
+2. 랜딩 메시지와 CTA 구조를 제품 톤에 맞게 다듬기
+3. 공통 네비게이션을 붙여 라우트 이동 흐름 정리
