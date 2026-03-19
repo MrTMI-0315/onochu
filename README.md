@@ -8,6 +8,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 - TypeScript 및 Tailwind CSS 설정 완료
 - 공통 타입과 mock data 연결 완료
 - 필수 MVP 라우트 뼈대 생성 완료
+- 공통 네비게이션 추가 완료
+- 랜딩 CTA와 제품 소개 구조 정리 완료
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 
@@ -45,7 +47,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 - 패키지 매니저는 `npm` 기준으로 정리되어 있습니다.
 - 기본 실행 명령은 `npm run dev`, `npm run lint`, `npm run build`입니다.
 - 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/profile/edit` 라우트가 존재합니다.
-- 다음 단계는 랜딩 메시지와 공통 네비게이션을 정리하는 MB 04입니다.
+- 공통 네비게이션은 desktop top bar와 mobile bottom bar로 동작합니다.
+- 다음 단계는 멤버 디렉터리 검색/필터 인터랙션을 붙이는 MB 05입니다.
 
 ## Commit Rule
 
@@ -55,6 +58,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 04 진행
-2. 랜딩 메시지와 CTA 구조를 제품 톤에 맞게 다듬기
-3. 공통 네비게이션을 붙여 라우트 이동 흐름 정리
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 05 진행
+2. `/members`에 닉네임 검색과 장르/플랫폼 필터 추가
+3. 필터 상태가 UI에 보이도록 directory 인터랙션 연결

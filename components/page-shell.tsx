@@ -16,7 +16,7 @@ export function PageShell({
   aside,
 }: PageShellProps) {
   return (
-    <main className="min-h-screen bg-stone-950 px-6 py-10 text-stone-100">
+    <main className="min-h-screen bg-stone-950 px-6 pb-28 pt-24 text-stone-100 md:pb-10 md:pt-32">
       <div className="mx-auto flex max-w-6xl flex-col gap-8">
         <section className="grid gap-4 rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur md:grid-cols-[1.3fr_0.7fr]">
           <div className="flex flex-col gap-4">
