@@ -30,12 +30,15 @@ export default async function MemberPage({ params }: MemberPageProps) {
   }
 
   const memberRecommendations = getRecommendationsByMemberId(member.id);
+  const moodHighlights = Array.from(
+    new Set(memberRecommendations.flatMap((recommendation) => recommendation.moodTags)),
+  ).slice(0, 5);
 
   return (
     <PageShell
       eyebrow={`Member / ${member.nickname}`}
       title={`${member.nickname}'s taste profile`}
-      description={member.bio}
+      description={`${member.bio} 이 프로필은 플레이리스트 링크와 추천곡 흐름을 함께 보여주도록 구성했습니다.`}
       aside={
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-white">Profile Snapshot</h2>
@@ -85,6 +88,24 @@ export default async function MemberPage({ params }: MemberPageProps) {
               </div>
             </div>
 
+            {moodHighlights.length > 0 ? (
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
+                  Recommendation moods
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {moodHighlights.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-cyan-200/10 px-3 py-1 text-xs text-cyan-100"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             <Link href="/members" className="text-sm text-lime-200 underline">
               Back to directory
             </Link>
@@ -110,6 +131,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                 <RecommendationCard
                   key={recommendation.id}
                   recommendation={recommendation}
+                  linkToMember={false}
                 />
               ))}
             </div>

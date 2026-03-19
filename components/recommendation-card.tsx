@@ -1,22 +1,36 @@
+import Link from "next/link";
 import { getMemberName, platformLabels } from "@/lib/mock-data";
 import type { SongRecommendation } from "@/lib/types";
 
 type RecommendationCardProps = {
   recommendation: SongRecommendation;
   compact?: boolean;
+  linkToMember?: boolean;
 };
 
 export function RecommendationCard({
   recommendation,
   compact = false,
+  linkToMember = true,
 }: RecommendationCardProps) {
+  const memberName = getMemberName(recommendation.memberId);
+
   return (
     <article className="flex h-full flex-col gap-4 rounded-[28px] border border-white/10 bg-stone-900/80 p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
-            {getMemberName(recommendation.memberId)}
-          </p>
+          {linkToMember ? (
+            <Link
+              href={`/members/${recommendation.memberId}`}
+              className="text-xs uppercase tracking-[0.2em] text-stone-500 underline decoration-stone-700 underline-offset-4"
+            >
+              {memberName}
+            </Link>
+          ) : (
+            <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+              {memberName}
+            </p>
+          )}
           <h3 className="mt-2 text-lg font-semibold text-white">
             {recommendation.trackTitle}
           </h3>

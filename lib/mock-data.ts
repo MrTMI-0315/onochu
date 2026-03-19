@@ -276,6 +276,10 @@ export const recommendations: SongRecommendation[] = [
   },
 ];
 
+export const sortedRecommendations = [...recommendations].sort((left, right) =>
+  right.createdAt.localeCompare(left.createdAt),
+);
+
 export const allGenres = Array.from(
   new Set(members.flatMap((member) => member.favoriteGenres)),
 ).sort();
@@ -289,7 +293,7 @@ export function getMemberById(id: string) {
 }
 
 export function getRecommendationsByMemberId(memberId: string) {
-  return recommendations
+  return sortedRecommendations
     .filter((recommendation) => recommendation.memberId === memberId)
     .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
 }
