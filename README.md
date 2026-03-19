@@ -4,10 +4,10 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Current Status
 
-- 앱 코드 스캐폴딩 전 단계
+- Next.js App Router 스캐폴딩 완료
+- TypeScript 및 Tailwind CSS 설정 완료
 - 구현 기준 문서 작성 완료
-- 기능별 문서 트리 구성 완료
-- 실행 스크립트 없음
+- `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 
 ## Documents
 
@@ -40,9 +40,9 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Execution Notes
 
-- 현재 `package.json`, `Makefile`, `pubspec.yaml`은 없습니다.
-- 따라서 실행 가능한 `lint`, `test`, `build` 명령은 아직 정의되지 않았습니다.
-- 다음 단계는 Next.js App Router 기반 초기 스캐폴딩과 mock data 설계입니다.
+- 패키지 매니저는 `npm` 기준으로 정리되어 있습니다.
+- 기본 실행 명령은 `npm run dev`, `npm run lint`, `npm run build`입니다.
+- 다음 단계는 공통 타입, mock data, 기본 라우트 구조를 연결하는 MB 03입니다.
 
 ## Commit Rule
 
@@ -52,6 +52,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 순서대로 MB 진행
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 03 진행
 2. `docs/shared.md` 기준으로 타입과 mock data 정의
-3. `docs` 기능 문서 순서대로 MVP 화면 구현
+3. 필수 라우트 뼈대를 생성하고 더미 데이터 렌더링 준비
