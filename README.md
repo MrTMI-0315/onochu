@@ -13,6 +13,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 - 멤버 디렉터리 검색/필터 인터랙션 완료
 - 멤버 상세와 추천곡 피드 흐름 정리 완료
 - 커스텀 not-found 상태 추가 완료
+- 프로필 입력 검증 및 local save 상태 표현 완료
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 
@@ -49,12 +50,16 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 - 패키지 매니저는 `npm` 기준으로 정리되어 있습니다.
 - 기본 실행 명령은 `npm run dev`, `npm run lint`, `npm run build`입니다.
+- 초기 실행:
+  - `npm install`
+  - `npm run dev`
 - 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/profile/edit` 라우트가 존재합니다.
 - 공통 네비게이션은 desktop top bar와 mobile bottom bar로 동작합니다.
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
 - `/recommendations`에서는 작성자 링크와 무드 하이라이트가 함께 렌더링됩니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
-- 다음 단계는 프로필 입력 폼과 저장 상태 표현을 정리하는 MB 07입니다.
+- `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.
+- 현재 구현은 mock data 기반 MVP입니다.
 
 ## Commit Rule
 
@@ -64,6 +69,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 기준으로 MB 07 진행
-2. `/profile/edit`에 필수값 검증과 저장 상태 메시지 추가
-3. MVP Acceptance Criteria 기준으로 최종 문서/검증 정리
+1. [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md) 기준으로 MVP Acceptance Criteria 재점검
+2. mock/local state를 실제 persistence 레이어로 옮길지 결정
+3. 필요 시 Supabase 연동이나 invite flow 같은 Phase 2 범위 설계
