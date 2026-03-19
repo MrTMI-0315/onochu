@@ -1,0 +1,27 @@
+# Docs Index
+
+`docs`는 MVP 기능을 기준으로 나눈 작업용 문서 모음이다. 각 문서는 이후 구현, 이슈 분리, QA 체크의 최소 단위로 사용한다.
+
+## Tree
+
+```text
+docs
+|-- README.md
+|-- landing.md
+|-- member-directory.md
+|-- member-profile.md
+|-- profile-edit.md
+|-- recommendation-feed.md
+|-- shared.md
+`-- spec.md
+```
+
+## Document Purpose
+
+- `spec.md`: PRD 기반 MVP 제품 명세
+- `landing.md`: 서비스 소개와 핵심 CTA 정의
+- `member-directory.md`: 멤버 목록, 검색, 필터 요구사항 정의
+- `member-profile.md`: 멤버 상세와 추천곡 연동 정의
+- `recommendation-feed.md`: 최근 추천곡 피드 요구사항 정의
+- `profile-edit.md`: 프로필 생성/수정 폼 요구사항 정의
+- `shared.md`: 공통 타입, 라우팅, UI/상태 규칙 정의
