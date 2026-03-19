@@ -11,6 +11,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Documents
 
+- [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md): MB 단위 작업 계획과 완료 기준
 - [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md): PRD를 구현 기준으로 재구성한 제품 명세
 - [`docs/README.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/README.md): 기능별 문서 트리 인덱스
 - [`docs/landing.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/landing.md): 랜딩 페이지 요구사항
@@ -28,6 +29,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 `-- docs
     |-- README.md
     |-- landing.md
+    |-- mb-plan.md
     |-- member-directory.md
     |-- member-profile.md
     |-- profile-edit.md
@@ -42,8 +44,14 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 - 따라서 실행 가능한 `lint`, `test`, `build` 명령은 아직 정의되지 않았습니다.
 - 다음 단계는 Next.js App Router 기반 초기 스캐폴딩과 mock data 설계입니다.
 
+## Commit Rule
+
+- 모든 MB 완료 직후 커밋과 `origin/main` 푸시를 수행한다.
+- 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 따른다.
+- 현재 MB 계획은 [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)에 정리한다.
+
 ## Recommended Next Step
 
-1. Next.js + TypeScript + Tailwind CSS 초기 스캐폴딩
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md) 순서대로 MB 진행
 2. `docs/shared.md` 기준으로 타입과 mock data 정의
 3. `docs` 기능 문서 순서대로 MVP 화면 구현

@@ -8,6 +8,7 @@
 docs
 |-- README.md
 |-- landing.md
+|-- mb-plan.md
 |-- member-directory.md
 |-- member-profile.md
 |-- profile-edit.md
@@ -18,6 +19,7 @@ docs
 
 ## Document Purpose
 
+- `mb-plan.md`: MB 단위 작업 계획, 완료 기준, 커밋 규칙
 - `spec.md`: PRD 기반 MVP 제품 명세
 - `landing.md`: 서비스 소개와 핵심 CTA 정의
 - `member-directory.md`: 멤버 목록, 검색, 필터 요구사항 정의
