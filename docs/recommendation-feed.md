@@ -33,6 +33,7 @@
 - compose idle / saving / success / error 상태
 - draft preview 상태
 - local feed insertion simulation 상태
+- top pick / contributor / mood / total recs 재계산 상태
 - 기본 피드 상태
 - 추천곡 없음 상태
 
@@ -42,3 +43,4 @@
 - 모바일에서 한 카드당 정보 밀도가 과하지 않도록 조정한다.
 - 작성 플로우는 현재 local mock validation 까지만 포함한다.
 - 저장된 draft는 새로고침 전까지 local feed 최상단에만 시뮬레이션으로 반영한다.
+- local draft가 추가되면 feed 상단 카드와 파생 통계가 함께 갱신되어야 한다.
