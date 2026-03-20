@@ -1,6 +1,6 @@
 # Onochu
 
-Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 공유 웹앱 MVP 문서 저장소입니다. 현재 저장소는 구현 전 단계이며, `/Users/mrtmi/Downloads/Onochu_PRD_v0.1.md`를 기준으로 제품 요구사항과 기능별 문서를 먼저 정리한 상태입니다.
+Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹앱 MVP 저장소입니다. 현재 문서 기준선은 [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md)로 옮겨졌고, 이는 `/Users/mrtmi/Downloads/Onochu_PRD_v0.2.md`를 저장소용으로 재정리한 버전입니다.
 
 ## Current Status
 
@@ -16,9 +16,12 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 - 프로필 입력 검증 및 local save 상태 표현 완료
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
+- PRD v0.2 기준 문서 재정렬 완료
+- `/recommendations/new` 독립 route와 reaction/save UI는 아직 남은 갭
 
 ## Documents
 
+- [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md): PRD v0.2 저장소 반영본
 - [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md): MB 단위 작업 계획과 완료 기준
 - [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md): PRD를 구현 기준으로 재구성한 제품 명세
 - [`docs/README.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/README.md): 기능별 문서 트리 인덱스
@@ -40,6 +43,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
     |-- mb-plan.md
     |-- member-directory.md
     |-- member-profile.md
+    |-- prd.md
     |-- profile-edit.md
     |-- recommendation-feed.md
     |-- shared.md
@@ -69,6 +73,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 취향 프로필 및 추천곡 �
 
 ## Recommended Next Step
 
-1. [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md) 기준으로 MVP Acceptance Criteria 재점검
-2. mock/local state를 실제 persistence 레이어로 옮길지 결정
-3. 필요 시 Supabase 연동이나 invite flow 같은 Phase 2 범위 설계
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 16` 기준으로 `/recommendations/new` 독립 route 구현
+2. recommendation card에 reaction/save UI와 count field 반영
+3. theme / event slot과 data model을 PRD v0.2 기준으로 추가 정렬
