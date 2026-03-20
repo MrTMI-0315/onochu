@@ -16,25 +16,24 @@ export function PageShell({
   aside,
 }: PageShellProps) {
   return (
-    <main className="min-h-screen bg-stone-950 px-6 pb-28 pt-24 text-stone-100 md:pb-10 md:pt-32">
+    <main className="min-h-screen px-4 pb-28 pt-24 text-stone-100 md:px-6 md:pb-12 md:pt-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-8">
-        <section className="grid gap-4 rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur md:grid-cols-[1.3fr_0.7fr]">
+        <section className="onochu-panel relative overflow-hidden rounded-[2rem] p-7 md:grid md:grid-cols-[1.3fr_0.7fr] md:gap-5 md:p-8">
+          <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[#de8eff]/10 blur-[100px]" />
           <div className="flex flex-col gap-4">
-            <span className="w-fit rounded-full border border-lime-200/20 bg-lime-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-lime-100">
-              {eyebrow}
-            </span>
+            <span className="onochu-eyebrow">{eyebrow}</span>
             <div className="flex flex-col gap-3">
-              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h1 className="onochu-display text-4xl font-semibold uppercase leading-[0.95] text-white md:text-6xl">
                 {title}
               </h1>
-              <p className="max-w-2xl text-sm leading-7 text-stone-300 sm:text-base">
+              <p className="max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
                 {description}
               </p>
             </div>
           </div>
 
           {aside ? (
-            <aside className="rounded-[28px] border border-cyan-200/10 bg-cyan-200/5 p-5">
+            <aside className="onochu-panel-soft rounded-[1.75rem] p-5">
               {aside}
             </aside>
           ) : null}
