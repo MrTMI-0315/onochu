@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
-import { RecommendationCard } from "@/components/recommendation-card";
-import { RecommendationComposer } from "@/components/recommendation-composer";
+import { RecommendationStudio } from "@/components/recommendation-studio";
 import { getMemberName, members, sortedRecommendations } from "@/lib/mock-data";
 
 const weeklyTheme = {
@@ -239,8 +238,9 @@ export default function RecommendationsPage() {
         </div>
       </section>
 
-      <RecommendationComposer
-        currentMemberName={currentMember.nickname}
+      <RecommendationStudio
+        currentMember={currentMember}
+        initialRecommendations={sortedRecommendations}
         moodSuggestions={moodHighlights}
       />
 
@@ -260,15 +260,6 @@ export default function RecommendationsPage() {
         </a>
       </section>
 
-      <section id="feed-start" className="grid gap-4 lg:grid-cols-2">
-        {sortedRecommendations.map((recommendation) => (
-          <RecommendationCard
-            key={recommendation.id}
-            recommendation={recommendation}
-            linkToMember
-          />
-        ))}
-      </section>
     </PageShell>
   );
 }

@@ -31,3 +31,12 @@ export type SongRecommendation = {
   moodTags: string[];
   createdAt: string;
 };
+
+export type RecommendationDraftInput = {
+  trackTitle: string;
+  artistName: string;
+  platform: MusicPlatform;
+  url: string;
+  comment: string;
+  moodTags: string[];
+};

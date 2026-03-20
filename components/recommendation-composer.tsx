@@ -2,11 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { platformLabels } from "@/lib/mock-data";
-import type { MusicPlatform } from "@/lib/types";
+import type { MusicPlatform, RecommendationDraftInput } from "@/lib/types";
 
 type RecommendationComposerProps = {
   currentMemberName: string;
   moodSuggestions: string[];
+  onDraftSaved?: (draft: RecommendationDraftInput) => void;
 };
 
 type ComposerErrors = {
@@ -27,6 +28,7 @@ const MAX_COMMENT_LENGTH = 100;
 export function RecommendationComposer({
   currentMemberName,
   moodSuggestions,
+  onDraftSaved,
 }: RecommendationComposerProps) {
   const [trackTitle, setTrackTitle] = useState("");
   const [artistName, setArtistName] = useState("");
@@ -46,13 +48,17 @@ export function RecommendationComposer({
     [MusicPlatform, string]
   >;
 
-  function resetForm() {
+  function clearFormFields() {
     setTrackTitle("");
     setArtistName("");
     setPlatform("spotify");
     setUrl("");
     setComment("");
     setSelectedTags([]);
+  }
+
+  function resetForm() {
+    clearFormFields();
     setErrors({});
     setSaveStatus({
       type: "idle",
@@ -120,11 +126,23 @@ export function RecommendationComposer({
       setTimeout(resolve, 700);
     });
 
+    const normalizedDraft: RecommendationDraftInput = {
+      trackTitle: trackTitle.trim(),
+      artistName: artistName.trim(),
+      platform,
+      url: url.trim(),
+      comment: comment.trim(),
+      moodTags: selectedTags,
+    };
+
     startTransition(() => {
+      onDraftSaved?.(normalizedDraft);
       setSaveStatus({
         type: "success",
         message: `draft 저장 흐름을 확인했습니다. posting member: ${currentMemberName}`,
       });
+      clearFormFields();
+      setErrors({});
     });
 
     setIsSaving(false);
