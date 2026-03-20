@@ -1,0 +1,295 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { platformLabels } from "@/lib/mock-data";
+import type { MusicPlatform } from "@/lib/types";
+
+type RecommendationComposerProps = {
+  currentMemberName: string;
+  moodSuggestions: string[];
+};
+
+type ComposerErrors = {
+  trackTitle?: string;
+  artistName?: string;
+  url?: string;
+  comment?: string;
+};
+
+type SaveStatus =
+  | { type: "idle"; message: string }
+  | { type: "saving"; message: string }
+  | { type: "success"; message: string }
+  | { type: "error"; message: string };
+
+const MAX_COMMENT_LENGTH = 100;
+
+export function RecommendationComposer({
+  currentMemberName,
+  moodSuggestions,
+}: RecommendationComposerProps) {
+  const [trackTitle, setTrackTitle] = useState("");
+  const [artistName, setArtistName] = useState("");
+  const [platform, setPlatform] = useState<MusicPlatform>("spotify");
+  const [url, setUrl] = useState("");
+  const [comment, setComment] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [errors, setErrors] = useState<ComposerErrors>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>({
+    type: "idle",
+    message: "현재 작성은 local mock flow로 동작합니다.",
+  });
+
+  const platformOptions = Object.entries(platformLabels) as Array<
+    [MusicPlatform, string]
+  >;
+
+  function resetForm() {
+    setTrackTitle("");
+    setArtistName("");
+    setPlatform("spotify");
+    setUrl("");
+    setComment("");
+    setSelectedTags([]);
+    setErrors({});
+    setSaveStatus({
+      type: "idle",
+      message: "초안을 초기 상태로 되돌렸습니다.",
+    });
+  }
+
+  function toggleTag(tag: string) {
+    setSelectedTags((currentTags) =>
+      currentTags.includes(tag)
+        ? currentTags.filter((currentTag) => currentTag !== tag)
+        : [...currentTags, tag],
+    );
+  }
+
+  function validateForm() {
+    const nextErrors: ComposerErrors = {};
+
+    if (trackTitle.trim().length === 0) {
+      nextErrors.trackTitle = "곡명은 비워둘 수 없습니다.";
+    }
+
+    if (artistName.trim().length === 0) {
+      nextErrors.artistName = "아티스트명은 비워둘 수 없습니다.";
+    }
+
+    if (url.trim().length === 0) {
+      nextErrors.url = "원본 링크는 최소 1개 필요합니다.";
+    } else {
+      try {
+        new URL(url.trim());
+      } catch {
+        nextErrors.url = "원본 링크는 올바른 URL 형식이어야 합니다.";
+      }
+    }
+
+    if (comment.trim().length === 0) {
+      nextErrors.comment = "한 줄 코멘트는 비워둘 수 없습니다.";
+    }
+
+    return nextErrors;
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const nextErrors = validateForm();
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      setSaveStatus({
+        type: "error",
+        message: "필수 입력값과 링크 형식을 먼저 확인해 주세요.",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveStatus({
+      type: "saving",
+      message: "추천곡 draft를 local mock state 기준으로 저장 중입니다.",
+    });
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 700);
+    });
+
+    startTransition(() => {
+      setSaveStatus({
+        type: "success",
+        message: `draft 저장 흐름을 확인했습니다. posting member: ${currentMemberName}`,
+      });
+    });
+
+    setIsSaving(false);
+  }
+
+  const statusTone =
+    saveStatus.type === "success"
+      ? "border-[#de8eff]/30 bg-[#de8eff]/10 text-[#f4d2ff]"
+      : saveStatus.type === "error"
+        ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
+        : "border-white/10 bg-white/4 text-white/68";
+
+  return (
+    <section id="compose-panel" className="onochu-panel rounded-[2rem] p-6 md:p-8">
+      <header className="mb-8">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+          New Recommendation
+        </p>
+        <h2 className="onochu-display mt-3 text-4xl font-bold uppercase leading-[0.9] text-white md:text-5xl">
+          Curate The
+          <br />
+          <span className="bg-gradient-to-r from-[#de8eff] to-[#b90afc] bg-clip-text text-transparent">
+            Soundscape.
+          </span>
+        </h2>
+        <div className="mt-5 h-1 w-12 bg-[#de8eff]" />
+        <p className="mt-5 text-sm leading-7 text-white/65">
+          현재 로그인 개념은 없어서 local mock 기준 작성자는 {currentMemberName}
+          으로 가정합니다.
+        </p>
+      </header>
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className={`rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
+          {saveStatus.message}
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <label className="flex flex-col gap-2">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              Song title
+            </span>
+            <input
+              value={trackTitle}
+              onChange={(event) => setTrackTitle(event.target.value)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              placeholder="e.g. Midnight City"
+            />
+            {errors.trackTitle ? (
+              <span className="text-xs text-rose-200">{errors.trackTitle}</span>
+            ) : null}
+          </label>
+
+          <label className="flex flex-col gap-2">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              Artist
+            </span>
+            <input
+              value={artistName}
+              onChange={(event) => setArtistName(event.target.value)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              placeholder="e.g. M83"
+            />
+            {errors.artistName ? (
+              <span className="text-xs text-rose-200">{errors.artistName}</span>
+            ) : null}
+          </label>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
+          <label className="flex flex-col gap-2">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              Platform
+            </span>
+            <select
+              value={platform}
+              onChange={(event) => setPlatform(event.target.value as MusicPlatform)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none"
+            >
+              {platformOptions.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex flex-col gap-2">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              Original link
+            </span>
+            <input
+              value={url}
+              onChange={(event) => setUrl(event.target.value)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              placeholder="https://open.spotify.com/track/..."
+              type="url"
+            />
+            {errors.url ? (
+              <span className="text-xs text-rose-200">{errors.url}</span>
+            ) : null}
+          </label>
+        </div>
+
+        <label className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              The vibe
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.16em] text-white/30">
+              {comment.length}/{MAX_COMMENT_LENGTH}
+            </span>
+          </div>
+          <textarea
+            value={comment}
+            onChange={(event) => setComment(event.target.value.slice(0, MAX_COMMENT_LENGTH))}
+            className="min-h-28 rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+            placeholder="Tell the members why this track hits different..."
+          />
+          {errors.comment ? (
+            <span className="text-xs text-rose-200">{errors.comment}</span>
+          ) : null}
+        </label>
+
+        <div className="space-y-4">
+          <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            Add mood tags
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {moodSuggestions.map((tag) => {
+              const isActive = selectedTags.includes(tag);
+
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleTag(tag)}
+                  className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] ${
+                    isActive ? "onochu-chip-active" : "onochu-chip"
+                  }`}
+                >
+                  #{tag}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 md:flex-row">
+          <button
+            type="button"
+            onClick={resetForm}
+            className="flex-1 rounded-full bg-white/6 px-8 py-5 text-sm font-bold uppercase tracking-[0.2em] text-white"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSaving || isPending}
+            className="onochu-glow flex-[1.4] rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-8 py-5 text-sm font-extrabold uppercase tracking-[0.2em] text-black disabled:opacity-60"
+          >
+            {isSaving || isPending ? "Posting..." : "Post now"}
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+}
