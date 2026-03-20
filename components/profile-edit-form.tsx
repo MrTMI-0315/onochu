@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { platformLabels } from "@/lib/mock-data";
+import { useMemo, useState, useTransition } from "react";
+import { allGenres, platformLabels } from "@/lib/mock-data";
 import type { MusicPlatform } from "@/lib/types";
 
 type ProfileEditFormProps = {
@@ -50,6 +50,14 @@ export function ProfileEditForm({
   const platformOptions = Object.entries(platformLabels) as Array<
     [MusicPlatform, string]
   >;
+  const selectedGenres = useMemo(
+    () =>
+      favoriteGenres
+        .split(",")
+        .map((genre) => genre.trim())
+        .filter((genre) => genre.length > 0),
+    [favoriteGenres],
+  );
 
   function updatePlaylistLink(index: number, value: string) {
     setPlaylistLinks((currentLinks) =>
@@ -67,6 +75,14 @@ export function ProfileEditForm({
     setPlaylistLinks((currentLinks) =>
       currentLinks.filter((_, currentIndex) => currentIndex !== index),
     );
+  }
+
+  function toggleGenre(genre: string) {
+    const nextGenres = selectedGenres.includes(genre)
+      ? selectedGenres.filter((selectedGenre) => selectedGenre !== genre)
+      : [...selectedGenres, genre];
+
+    setFavoriteGenres(nextGenres.join(", "));
   }
 
   function validateForm(): FormErrors {
@@ -138,129 +154,191 @@ export function ProfileEditForm({
     setIsSaving(false);
   }
 
+  const statusTone =
+    saveStatus.type === "success"
+      ? "border-[#de8eff]/30 bg-[#de8eff]/10 text-[#f4d2ff]"
+      : saveStatus.type === "error"
+        ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
+        : "border-white/10 bg-white/4 text-white/68";
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid gap-6 rounded-[28px] border border-white/10 bg-white/5 p-6 lg:grid-cols-2"
-    >
-      <div className="lg:col-span-2">
-        <div
-          className={`rounded-3xl border px-4 py-4 text-sm ${
-            saveStatus.type === "success"
-              ? "border-lime-300/30 bg-lime-300/10 text-lime-100"
-              : saveStatus.type === "error"
-                ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
-                : "border-white/10 bg-stone-900/80 text-stone-300"
-          }`}
-        >
-          {saveStatus.message}
-        </div>
-      </div>
+    <form onSubmit={handleSubmit} className="onochu-panel rounded-[2rem] p-6 md:p-8">
+      <div className="mx-auto max-w-3xl space-y-8">
+        <section className="flex flex-col items-center gap-5 text-center">
+          <div className="relative">
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,#de8eff_0%,#202020_70%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(188,19,254,0.25)]">
+              {nickname.slice(0, 2).toUpperCase() || "ME"}
+            </div>
+            <div className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-black">
+              Edit
+            </div>
+          </div>
 
-      <label className="flex flex-col gap-2 text-sm text-stone-200">
-        Nickname
-        <input
-          value={nickname}
-          onChange={(event) => setNickname(event.target.value)}
-          className="rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-stone-100 outline-none"
-          name="nickname"
-        />
-        {errors.nickname ? (
-          <span className="text-xs text-rose-200">{errors.nickname}</span>
-        ) : null}
-      </label>
+          <div>
+            <h2 className="onochu-display text-4xl font-bold uppercase text-white">
+              Identity Setup
+            </h2>
+            <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/40">
+              Craft your digital taste presence
+            </p>
+          </div>
 
-      <label className="flex flex-col gap-2 text-sm text-stone-200">
-        Main platform
-        <select
-          value={mainPlatform}
-          onChange={(event) =>
-            setMainPlatform(event.target.value as MusicPlatform)
-          }
-          className="rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-stone-100 outline-none"
-          name="mainPlatform"
-        >
-          {platformOptions.map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-        {errors.mainPlatform ? (
-          <span className="text-xs text-rose-200">{errors.mainPlatform}</span>
-        ) : null}
-      </label>
+          <div className={`w-full rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
+            {saveStatus.message}
+          </div>
+        </section>
 
-      <label className="flex flex-col gap-2 text-sm text-stone-200 lg:col-span-2">
-        Bio
-        <textarea
-          value={bio}
-          onChange={(event) => setBio(event.target.value)}
-          className="min-h-32 rounded-3xl border border-white/10 bg-stone-950 px-4 py-3 text-stone-100 outline-none"
-          name="bio"
-        />
-      </label>
-
-      <label className="flex flex-col gap-2 text-sm text-stone-200 lg:col-span-2">
-        Favorite genres
-        <input
-          value={favoriteGenres}
-          onChange={(event) => setFavoriteGenres(event.target.value)}
-          className="rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-stone-100 outline-none"
-          name="favoriteGenres"
-        />
-      </label>
-
-      <div className="flex flex-col gap-3 lg:col-span-2">
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-sm font-semibold text-stone-200">
-            Playlist links
-          </span>
-          <button
-            type="button"
-            onClick={addPlaylistLink}
-            className="rounded-full border border-white/10 px-3 py-2 text-xs text-stone-200 transition hover:border-lime-300 hover:text-lime-200"
-          >
-            Add link
-          </button>
-        </div>
-
-        {playlistLinks.map((playlistLink, index) => (
-          <div key={`playlist-link-${index + 1}`} className="flex gap-3">
+        <section className="grid gap-6 md:grid-cols-2">
+          <label className="flex flex-col gap-2 text-sm text-white/78">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              Nickname
+            </span>
             <input
-              value={playlistLink}
-              onChange={(event) => updatePlaylistLink(index, event.target.value)}
-              className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-sm text-stone-100 outline-none"
-              name={`playlistLink-${index + 1}`}
-              placeholder="https://..."
+              value={nickname}
+              onChange={(event) => setNickname(event.target.value)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
+              name="nickname"
+              placeholder="Neon curator"
             />
+            {errors.nickname ? (
+              <span className="text-xs text-rose-200">{errors.nickname}</span>
+            ) : null}
+          </label>
+
+          <div className="flex flex-col gap-2 text-sm text-white/78">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              Primary platform
+            </span>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {platformOptions.map(([value, label]) => {
+                const isActive = mainPlatform === value;
+
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setMainPlatform(value)}
+                    className={`rounded-[1rem] border px-3 py-4 text-center text-[11px] font-bold uppercase tracking-[0.16em] transition ${
+                      isActive
+                        ? "border-[#de8eff]/30 bg-[#de8eff]/12 text-[#de8eff]"
+                        : "border-white/8 bg-[#111111] text-white/55"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+            {errors.mainPlatform ? (
+              <span className="text-xs text-rose-200">{errors.mainPlatform}</span>
+            ) : null}
+          </div>
+
+          <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              Short bio
+            </span>
+            <textarea
+              value={bio}
+              onChange={(event) => setBio(event.target.value)}
+              className="min-h-32 rounded-[1.25rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
+              name="bio"
+              placeholder="Tell the archive what kind of sound you keep returning to."
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              Favorite genres
+            </span>
+            <input
+              value={favoriteGenres}
+              onChange={(event) => setFavoriteGenres(event.target.value)}
+              className="rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
+              name="favoriteGenres"
+              placeholder="Hip-hop, Jazz Rap, Cloud Rap"
+            />
+          </label>
+        </section>
+
+        <section className="space-y-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            Quick vibe selection
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {allGenres.slice(0, 8).map((genre) => {
+              const isActive = selectedGenres.includes(genre);
+
+              return (
+                <button
+                  key={genre}
+                  type="button"
+                  onClick={() => toggleGenre(genre)}
+                  className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                    isActive ? "onochu-chip-active" : "onochu-chip"
+                  }`}
+                >
+                  {genre}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              Playlist links
+            </span>
             <button
               type="button"
-              onClick={() => removePlaylistLink(index)}
-              disabled={playlistLinks.length === 1}
-              className="rounded-2xl border border-white/10 px-4 py-3 text-sm text-stone-300 transition hover:border-rose-300 hover:text-rose-200 disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={addPlaylistLink}
+              className="rounded-full border border-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65"
             >
-              Remove
+              Add link
             </button>
           </div>
-        ))}
 
-        {errors.playlistLinks ? (
-          <span className="text-xs text-rose-200">{errors.playlistLinks}</span>
-        ) : null}
-      </div>
+          {playlistLinks.map((playlistLink, index) => (
+            <div
+              key={`playlist-link-${index + 1}`}
+              className="flex flex-col gap-3 sm:flex-row"
+            >
+              <input
+                value={playlistLink}
+                onChange={(event) => updatePlaylistLink(index, event.target.value)}
+                className="min-w-0 flex-1 rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-sm text-white outline-none"
+                name={`playlistLink-${index + 1}`}
+                placeholder="https://..."
+              />
+              <button
+                type="button"
+                onClick={() => removePlaylistLink(index)}
+                disabled={playlistLinks.length === 1}
+                className="rounded-[1rem] border border-white/10 px-4 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white/55 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
 
-      <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-        <button
-          type="submit"
-          disabled={isSaving || isPending}
-          className="rounded-full bg-lime-300 px-5 py-3 text-sm font-semibold text-stone-950 disabled:opacity-60"
-        >
-          {isSaving || isPending ? "Saving..." : "Save profile"}
-        </button>
-        <p className="text-sm text-stone-400">
-          실제 persistence 없이 입력/검증 흐름만 먼저 확인합니다.
-        </p>
+          {errors.playlistLinks ? (
+            <span className="text-xs text-rose-200">{errors.playlistLinks}</span>
+          ) : null}
+        </section>
+
+        <footer className="space-y-4 pt-2">
+          <button
+            type="submit"
+            disabled={isSaving || isPending}
+            className="onochu-glow w-full rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-5 text-base font-bold uppercase tracking-[0.16em] text-black disabled:opacity-60"
+          >
+            {isSaving || isPending ? "Saving..." : "Initialize profile"}
+          </button>
+          <p className="text-center text-[11px] uppercase tracking-[0.18em] text-white/35">
+            실제 persistence 없이 입력과 검증 흐름만 먼저 확인합니다.
+          </p>
+        </footer>
       </div>
     </form>
   );

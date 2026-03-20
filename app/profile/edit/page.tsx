@@ -7,18 +7,20 @@ export default function ProfileEditPage() {
 
   return (
     <PageShell
-      eyebrow="Profile Edit"
-      title="Create or revise a taste profile with minimal friction."
-      description="프로필 작성은 필수값 검증과 링크 형식 검증을 거친 뒤 local mock save flow로 마무리됩니다. MVP 단계에서는 입력 부담을 낮게 유지하는 것이 우선입니다."
+      eyebrow="Profile Setup"
+      title="Build a taste profile with minimal friction."
+      description="입력 부담은 낮게 유지하되, 닉네임과 링크 검증은 놓치지 않는 onboarding 형태로 정리했습니다. 현재 저장은 local mock flow로만 동작합니다."
       aside={
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">Form Scope</h2>
-          <ul className="space-y-2 text-sm text-stone-300">
-            <li>Nickname and bio</li>
-            <li>Genre tags and main platform</li>
-            <li>At least one playlist link field</li>
-            <li>Validation and save feedback included</li>
-          </ul>
+        <div className="space-y-4">
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Current scope
+            </p>
+            <p className="mt-2 text-sm leading-7 text-white/68">
+              nickname, bio, genre tags, main platform, playlist links, validation
+              feedback
+            </p>
+          </div>
         </div>
       }
     >

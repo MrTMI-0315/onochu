@@ -7,17 +7,29 @@ export default function MembersPage() {
 
   return (
     <PageShell
-      eyebrow="Members"
-      title="Browse the KNU_POW directory through taste, genre, and platform."
-      description="닉네임 검색, 장르 태그 필터, 플랫폼 필터를 조합해 다른 동아리원의 음악 취향을 빠르게 좁혀볼 수 있습니다."
+      eyebrow="Club Directory"
+      title={`${members.length} members in the taste archive.`}
+      description="닉네임, 장르, 플랫폼 축으로 탐색 흐름을 나눠서 KNU_POW 안의 취향 네트워크를 빠르게 훑을 수 있게 구성했습니다."
       aside={
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">Directory Stats</h2>
-          <ul className="space-y-2 text-sm text-stone-300">
-            <li>{members.length} total members</li>
-            <li>{allGenres.length} unique genres</li>
-            <li>{platforms.length} active platforms</li>
-          </ul>
+        <div className="space-y-4">
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-3xl font-bold text-white">{members.length}</p>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Total members
+            </p>
+          </div>
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-3xl font-bold text-white">{allGenres.length}</p>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Genre clusters
+            </p>
+          </div>
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-3xl font-bold text-white">{platforms.length}</p>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Active platforms
+            </p>
+          </div>
         </div>
       }
     >

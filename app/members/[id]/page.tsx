@@ -5,8 +5,8 @@ import { RecommendationCard } from "@/components/recommendation-card";
 import {
   getMemberById,
   getRecommendationsByMemberId,
-  platformLabels,
   members,
+  platformLabels,
 } from "@/lib/mock-data";
 
 type MemberPageProps = {
@@ -33,35 +33,118 @@ export default async function MemberPage({ params }: MemberPageProps) {
   const moodHighlights = Array.from(
     new Set(memberRecommendations.flatMap((recommendation) => recommendation.moodTags)),
   ).slice(0, 5);
+  const initials = member.nickname.slice(0, 2).toUpperCase();
 
   return (
     <PageShell
       eyebrow={`Member / ${member.nickname}`}
-      title={`${member.nickname}'s taste profile`}
-      description={`${member.bio} 이 프로필은 플레이리스트 링크와 추천곡 흐름을 함께 보여주도록 구성했습니다.`}
+      title={`${member.nickname} taste profile`}
+      description={`${member.bio} 플레이리스트 링크와 추천 흐름을 같은 화면 안에서 이어 보도록 구성했습니다.`}
       aside={
-        <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">Profile Snapshot</h2>
-          <ul className="space-y-2 text-sm text-stone-300">
-            <li>Main platform: {platformLabels[member.mainPlatform]}</li>
-            <li>{member.favoriteGenres.length} favorite genres</li>
-            <li>{memberRecommendations.length} linked recommendations</li>
-          </ul>
+        <div className="space-y-4">
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Main platform
+            </p>
+            <p className="mt-2 text-lg font-semibold text-white">
+              {platformLabels[member.mainPlatform]}
+            </p>
+          </div>
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Recommendation count
+            </p>
+            <p className="mt-2 text-3xl font-bold text-white">
+              {memberRecommendations.length}
+            </p>
+          </div>
         </div>
       }
     >
-      <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <article className="rounded-[28px] border border-white/10 bg-white/5 p-6">
-          <div className="flex flex-col gap-5">
+      <section className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
+        <article className="onochu-panel rounded-[2rem] p-6">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end">
+              <div className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-[#1f1f1f] bg-[radial-gradient(circle_at_top,#de8eff_0%,#b90afc_55%,#171717_100%)] text-2xl font-bold uppercase text-black shadow-[0_0_34px_rgba(188,19,254,0.25)]">
+                {initials}
+              </div>
+
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="onochu-display text-4xl font-bold uppercase text-white md:text-5xl">
+                      {member.nickname}
+                    </h2>
+                    <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/35">
+                      Curator / KNU_POW
+                    </p>
+                  </div>
+                  <a
+                    href={member.playlistLinks[0]?.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                  >
+                    Open playlist
+                  </a>
+                </div>
+
+                <p className="mt-4 max-w-xl text-sm leading-7 text-white/68">
+                  {member.bio}
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                    {platformLabels[member.mainPlatform]}
+                  </span>
+                  {member.favoriteGenres.slice(0, 2).map((genre) => (
+                    <span
+                      key={genre}
+                      className="rounded-sm border border-white/8 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+                <p className="text-3xl font-bold text-white">
+                  {memberRecommendations.length}
+                </p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Recs posted
+                </p>
+              </div>
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+                <p className="text-3xl font-bold text-[#de8eff]">
+                  {member.favoriteGenres.length}
+                </p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Genre tags
+                </p>
+              </div>
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+                <p className="text-3xl font-bold text-white">
+                  {member.playlistLinks.length}
+                </p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Playlist links
+                </p>
+              </div>
+            </div>
+
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
                 Favorite genres
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {member.favoriteGenres.map((genre) => (
                   <span
                     key={genre}
-                    className="rounded-full bg-stone-100/10 px-3 py-1 text-xs text-stone-200"
+                    className="rounded-sm border border-white/8 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
                   >
                     {genre}
                   </span>
@@ -70,17 +153,17 @@ export default async function MemberPage({ params }: MemberPageProps) {
             </div>
 
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
                 Playlist links
               </p>
-              <div className="mt-4 flex flex-col gap-3">
+              <div className="mt-3 flex flex-col gap-3">
                 {member.playlistLinks.map((playlistLink) => (
                   <a
                     key={playlistLink.url}
                     href={playlistLink.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-2xl border border-white/10 px-4 py-3 text-sm text-stone-100 transition hover:border-lime-300 hover:text-lime-200"
+                    className="rounded-[1.25rem] border border-white/8 bg-black/20 px-4 py-4 text-sm text-white/78 transition hover:border-[#de8eff]/30 hover:text-white"
                   >
                     {playlistLink.label}
                   </a>
@@ -90,38 +173,49 @@ export default async function MemberPage({ params }: MemberPageProps) {
 
             {moodHighlights.length > 0 ? (
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-stone-500">
-                  Recommendation moods
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                  Mood highlights
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   {moodHighlights.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-cyan-200/10 px-3 py-1 text-xs text-cyan-100"
+                      className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
                     >
-                      #{tag}
+                      {tag}
                     </span>
                   ))}
                 </div>
               </div>
             ) : null}
 
-            <Link href="/members" className="text-sm text-lime-200 underline">
-              Back to directory
-            </Link>
+            <div className="flex flex-wrap items-center gap-4 border-t border-white/6 pt-4">
+              <Link
+                href="/members"
+                className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55"
+              >
+                Back to directory
+              </Link>
+              <Link
+                href="/recommendations"
+                className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de8eff]"
+              >
+                Open full feed
+              </Link>
+            </div>
           </div>
         </article>
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">
-              Member recommendations
+            <h2 className="onochu-display text-2xl font-bold uppercase tracking-tight text-white">
+              Recent Recommendations
             </h2>
             <Link
               href="/recommendations"
-              className="text-sm text-lime-200 underline"
+              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
             >
-              Open full feed
+              View archive
             </Link>
           </div>
 
@@ -136,7 +230,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
               ))}
             </div>
           ) : (
-            <div className="rounded-[28px] border border-dashed border-white/10 bg-white/5 p-6 text-sm text-stone-400">
+            <div className="onochu-panel rounded-[2rem] p-6 text-sm text-white/55">
               아직 연결된 추천곡이 없습니다.
             </div>
           )}

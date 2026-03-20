@@ -28,20 +28,53 @@ export function MemberDirectoryClient() {
   });
 
   const activeFilters = [
-    normalizedQuery.length > 0 ? `search: ${query.trim()}` : null,
-    selectedGenre ? `genre: ${selectedGenre}` : null,
-    selectedPlatform ? `platform: ${platformLabels[selectedPlatform]}` : null,
+    normalizedQuery.length > 0 ? `Search / ${query.trim()}` : null,
+    selectedGenre ? `Genre / ${selectedGenre}` : null,
+    selectedPlatform ? `Platform / ${platformLabels[selectedPlatform]}` : null,
   ].filter(Boolean);
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6">
-        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+    <div className="space-y-8">
+      <section className="onochu-panel rounded-[2rem] p-6 md:p-7">
+        <div className="grid gap-8 xl:grid-cols-[0.7fr_1.3fr]">
           <div className="space-y-4">
-            <div>
+            <span className="onochu-eyebrow">Search the archive</span>
+            <h2 className="onochu-display text-5xl font-bold uppercase text-white md:text-6xl">
+              {filteredMembers.length}
+            </h2>
+            <p className="text-sm leading-7 text-white/65">
+              현재 보이는 프로필 수입니다. 닉네임 검색과 취향 필터를
+              조합해서 원하는 curator cluster를 빠르게 좁힐 수 있습니다.
+            </p>
+
+            <div className="rounded-[1.5rem] bg-white/4 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                Active filters
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {activeFilters.length > 0 ? (
+                  activeFilters.map((filter) => (
+                    <span
+                      key={filter}
+                      className="onochu-chip-active rounded-sm px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                    >
+                      {filter}
+                    </span>
+                  ))
+                ) : (
+                  <span className="onochu-chip rounded-sm px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]">
+                    All profiles
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="rounded-[1.5rem] bg-black/20 p-4">
               <label
                 htmlFor="member-search"
-                className="text-sm font-semibold text-white"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45"
               >
                 Nickname search
               </label>
@@ -49,50 +82,34 @@ export function MemberDirectoryClient() {
                 id="member-search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="예: Kai, Yuri"
-                className="mt-3 w-full rounded-2xl border border-white/10 bg-stone-950 px-4 py-3 text-sm text-stone-100 outline-none placeholder:text-stone-500"
+                placeholder="Kai, Yuri, Min..."
+                className="mt-3 w-full rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-sm text-white outline-none placeholder:text-white/28"
               />
             </div>
 
-            <div className="rounded-3xl border border-cyan-200/10 bg-cyan-200/5 p-4">
-              <h2 className="text-sm font-semibold text-white">Current result</h2>
-              <p className="mt-2 text-sm leading-7 text-stone-300">
-                {filteredMembers.length} / {members.length} members shown
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activeFilters.length > 0 ? (
-                  activeFilters.map((filter) => (
-                    <span
-                      key={filter}
-                      className="rounded-full bg-white/10 px-3 py-1 text-xs text-stone-100"
-                    >
-                      {filter}
-                    </span>
-                  ))
-                ) : (
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-stone-300">
-                    no active filters
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-6">
             <div>
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-sm font-semibold text-white">Genre filter</h2>
-                {selectedGenre ? (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGenre(null)}
-                    className="text-xs text-lime-200 underline"
-                  >
-                    clear genre
-                  </button>
-                ) : null}
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+                  Genre filter
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setSelectedGenre(null)}
+                  className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                >
+                  Reset
+                </button>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedGenre(null)}
+                  className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                    selectedGenre === null ? "onochu-chip-active" : "onochu-chip"
+                  }`}
+                >
+                  All
+                </button>
                 {allGenres.map((genre) => {
                   const isActive = selectedGenre === genre;
 
@@ -101,10 +118,8 @@ export function MemberDirectoryClient() {
                       key={genre}
                       type="button"
                       onClick={() => setSelectedGenre(isActive ? null : genre)}
-                      className={`rounded-full px-3 py-2 text-xs transition ${
-                        isActive
-                          ? "bg-lime-300 text-stone-950"
-                          : "bg-stone-100/10 text-stone-200 hover:bg-stone-100/15"
+                      className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                        isActive ? "onochu-chip-active" : "onochu-chip"
                       }`}
                     >
                       {genre}
@@ -116,20 +131,29 @@ export function MemberDirectoryClient() {
 
             <div>
               <div className="flex items-center justify-between gap-3">
-                <h2 className="text-sm font-semibold text-white">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
                   Platform filter
                 </h2>
-                {selectedPlatform ? (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedPlatform(null)}
-                    className="text-xs text-lime-200 underline"
-                  >
-                    clear platform
-                  </button>
-                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlatform(null)}
+                  className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                >
+                  Reset
+                </button>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlatform(null)}
+                  className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                    selectedPlatform === null
+                      ? "onochu-chip-active"
+                      : "onochu-chip"
+                  }`}
+                >
+                  All
+                </button>
                 {platforms.map((platform) => {
                   const isActive = selectedPlatform === platform;
 
@@ -140,10 +164,8 @@ export function MemberDirectoryClient() {
                       onClick={() =>
                         setSelectedPlatform(isActive ? null : platform)
                       }
-                      className={`rounded-full px-3 py-2 text-xs transition ${
-                        isActive
-                          ? "bg-cyan-200 text-stone-950"
-                          : "bg-cyan-200/10 text-cyan-100 hover:bg-cyan-200/20"
+                      className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                        isActive ? "onochu-chip-active" : "onochu-chip"
                       }`}
                     >
                       {platformLabels[platform]}
@@ -153,19 +175,17 @@ export function MemberDirectoryClient() {
               </div>
             </div>
 
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  setQuery("");
-                  setSelectedGenre(null);
-                  setSelectedPlatform(null);
-                }}
-                className="rounded-full border border-white/10 px-4 py-2 text-sm text-stone-200 transition hover:border-lime-300 hover:text-lime-200"
-              >
-                Clear all filters
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setSelectedGenre(null);
+                setSelectedPlatform(null);
+              }}
+              className="rounded-full border border-white/10 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/40 hover:text-white"
+            >
+              Clear all filters
+            </button>
           </div>
         </div>
       </section>
@@ -177,10 +197,13 @@ export function MemberDirectoryClient() {
           ))}
         </section>
       ) : (
-        <section className="rounded-[28px] border border-dashed border-white/10 bg-white/5 p-10 text-center">
-          <h2 className="text-lg font-semibold text-white">No matching members</h2>
-          <p className="mt-3 text-sm leading-7 text-stone-400">
-            검색어를 지우거나 장르, 플랫폼 필터를 다시 조합해 보세요.
+        <section className="onochu-panel rounded-[2rem] p-10 text-center">
+          <h2 className="onochu-display text-3xl font-bold uppercase text-white">
+            No matching profiles
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-white/55">
+            검색어를 지우거나 장르, 플랫폼 조합을 바꾸면 더 넓은 profile
+            cluster를 다시 볼 수 있습니다.
           </p>
         </section>
       )}

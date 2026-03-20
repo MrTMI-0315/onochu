@@ -7,44 +7,60 @@ type MemberCardProps = {
 };
 
 export function MemberCard({ member }: MemberCardProps) {
+  const initials = member.nickname.slice(0, 2).toUpperCase();
+
   return (
-    <article className="flex h-full flex-col gap-4 rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-semibold text-white">{member.nickname}</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-300">{member.bio}</p>
+    <article className="group onochu-panel flex h-full flex-col gap-5 rounded-[1.75rem] p-5 transition duration-300 hover:bg-white/[0.06]">
+      <div className="flex items-start gap-4">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-[#de8eff]/20 bg-[radial-gradient(circle_at_top,#de8eff_0%,#b90afc_52%,#171717_100%)] text-lg font-bold uppercase text-black shadow-[0_0_30px_rgba(188,19,254,0.18)]">
+          {initials}
         </div>
-        <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-stone-300">
-          {platformLabels[member.mainPlatform]}
-        </span>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="onochu-display text-2xl font-bold uppercase text-white">
+                {member.nickname}
+              </h2>
+              <p className="mt-1 text-xs uppercase tracking-[0.24em] text-white/35">
+                Taste archive entry
+              </p>
+            </div>
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              {platformLabels[member.mainPlatform]}
+            </span>
+          </div>
+
+          <p className="mt-4 text-sm leading-7 text-white/68">{member.bio}</p>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
         {member.favoriteGenres.map((genre) => (
           <span
             key={genre}
-            className="rounded-full bg-stone-100/10 px-3 py-1 text-xs text-stone-200"
+            className="rounded-sm border border-white/8 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
           >
             {genre}
           </span>
         ))}
       </div>
 
-      <div className="mt-auto flex items-center justify-between gap-4 pt-2">
-        <Link
-          href={`/members/${member.id}`}
-          className="rounded-full bg-lime-300 px-4 py-2 text-sm font-semibold text-stone-950 transition hover:bg-lime-200"
-        >
-          View profile
-        </Link>
+      <div className="mt-auto flex items-center justify-between gap-4 border-t border-white/6 pt-4">
         <a
           href={member.playlistLinks[0]?.url}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-stone-300 underline decoration-stone-600 underline-offset-4"
+          className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45 transition hover:text-white"
         >
           {member.playlistLinks[0]?.label}
         </a>
+        <Link
+          href={`/members/${member.id}`}
+          className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#de8eff] transition group-hover:translate-x-0.5"
+        >
+          View Studio
+        </Link>
       </div>
     </article>
   );
