@@ -17,6 +17,12 @@ type RecommendationStudioProps = {
   initialRecommendations: SongRecommendation[];
 };
 
+type StoredRecommendationState = {
+  version: number;
+  recommendations: SongRecommendation[];
+  latestDraft: SongRecommendation | null;
+};
+
 const weeklyTheme = {
   label: "Current Theme",
   title: "90s NYC BOOM BAP",
@@ -46,7 +52,9 @@ const themeModules = [
   },
 ];
 
-const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio-v1";
+const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
+const LEGACY_RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio-v1";
+const RECOMMENDATION_STORAGE_VERSION = 2;
 
 export function RecommendationStudio({
   allMembers,
@@ -57,20 +65,61 @@ export function RecommendationStudio({
     useState<SongRecommendation[]>(initialRecommendations);
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
   const [hasHydrated, setHasHydrated] = useState(false);
+  const [storageMessage, setStorageMessage] = useState(
+    "browser storage active",
+  );
 
   useEffect(() => {
     try {
       const storedValue = window.localStorage.getItem(RECOMMENDATION_STORAGE_KEY);
+      const legacyValue = window.localStorage.getItem(
+        LEGACY_RECOMMENDATION_STORAGE_KEY,
+      );
 
-      if (!storedValue) {
+      if (!storedValue && !legacyValue) {
         setHasHydrated(true);
         return;
       }
 
-      const parsedValue = JSON.parse(storedValue) as {
-        recommendations?: SongRecommendation[];
-        latestDraft?: SongRecommendation | null;
-      };
+      const parsedValue = JSON.parse(storedValue ?? legacyValue ?? "null") as
+        | StoredRecommendationState
+        | {
+            recommendations?: SongRecommendation[];
+            latestDraft?: SongRecommendation | null;
+          }
+        | null;
+
+      if (!parsedValue) {
+        setHasHydrated(true);
+        return;
+      }
+
+      if ("version" in parsedValue) {
+        if (parsedValue.version !== RECOMMENDATION_STORAGE_VERSION) {
+          window.localStorage.removeItem(RECOMMENDATION_STORAGE_KEY);
+          window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
+          setLocalRecommendations(initialRecommendations);
+          setLatestDraft(null);
+          setStorageMessage("storage reset after version change");
+          setHasHydrated(true);
+          return;
+        }
+
+        if (
+          Array.isArray(parsedValue.recommendations) &&
+          parsedValue.recommendations.length > 0
+        ) {
+          setLocalRecommendations(parsedValue.recommendations);
+        }
+
+        if (parsedValue.latestDraft) {
+          setLatestDraft(parsedValue.latestDraft);
+        }
+
+        setStorageMessage("hydrated from browser storage");
+        setHasHydrated(true);
+        return;
+      }
 
       if (
         Array.isArray(parsedValue.recommendations) &&
@@ -82,9 +131,15 @@ export function RecommendationStudio({
       if (parsedValue.latestDraft) {
         setLatestDraft(parsedValue.latestDraft);
       }
+
+      if (legacyValue) {
+        setStorageMessage("migrated legacy browser storage");
+        window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
+      }
     } catch {
       setLocalRecommendations(initialRecommendations);
       setLatestDraft(null);
+      setStorageMessage("storage parse failed, reverted to seeded feed");
     } finally {
       setHasHydrated(true);
     }
@@ -98,6 +153,7 @@ export function RecommendationStudio({
     window.localStorage.setItem(
       RECOMMENDATION_STORAGE_KEY,
       JSON.stringify({
+        version: RECOMMENDATION_STORAGE_VERSION,
         recommendations: localRecommendations,
         latestDraft,
       }),
@@ -147,6 +203,15 @@ export function RecommendationStudio({
       nextDraft,
       ...currentRecommendations,
     ]);
+    setStorageMessage("saved to browser storage");
+  }
+
+  function handleResetStorage() {
+    window.localStorage.removeItem(RECOMMENDATION_STORAGE_KEY);
+    window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
+    setLocalRecommendations(initialRecommendations);
+    setLatestDraft(null);
+    setStorageMessage("storage cleared and reset to seeded feed");
   }
 
   return (
@@ -191,7 +256,17 @@ export function RecommendationStudio({
                   contributor count까지 함께 다시 계산하고 브라우저에
                   유지합니다.
                 </p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                  v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={handleResetStorage}
+                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+              >
+                Reset local feed
+              </button>
             </div>
           </aside>
         </section>

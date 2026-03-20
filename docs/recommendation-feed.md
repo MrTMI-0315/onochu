@@ -35,6 +35,8 @@
 - local feed insertion simulation 상태
 - top pick / contributor / mood / total recs 재계산 상태
 - localStorage hydrate / save 상태
+- storage version migration 상태
+- local reset 상태
 - 기본 피드 상태
 - 추천곡 없음 상태
 
@@ -46,3 +48,5 @@
 - 저장된 draft는 localStorage 기준으로 새로고침 이후에도 local feed 최상단에 유지된다.
 - local draft가 추가되면 feed 상단 카드와 파생 통계가 함께 갱신되어야 한다.
 - 브라우저/기기 간 동기화는 지원하지 않고 현재 브라우저 컨텍스트에만 유지한다.
+- storage schema가 바뀌면 version 체크 후 baseline seeded feed로 reset 할 수 있어야 한다.
+- 사용자는 reset action으로 local draft/persistence를 직접 비울 수 있어야 한다.
