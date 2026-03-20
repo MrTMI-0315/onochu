@@ -7,11 +7,13 @@
 ## Route
 
 - `/recommendations`
+- `/recommendations/new`에서 독립 등록 후 feed로 복귀 가능
 
 ## Must Have
 
 - weekly theme hero / theme selects
 - local mock recommendation compose panel
+- 독립 recommendation create route 진입 CTA
 - 최근 추천곡 카드 리스트
 - 곡명, 아티스트, 작성자
 - 플랫폼, 코멘트, 무드 태그

@@ -5,6 +5,13 @@ import Link from "next/link";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
 import { getMemberName } from "@/lib/mock-data";
+import {
+  createRecommendationFromDraft,
+  loadStoredRecommendationState,
+  persistStoredRecommendationState,
+  RECOMMENDATION_STORAGE_VERSION,
+  resetStoredRecommendationState,
+} from "@/lib/recommendation-drafts";
 import type {
   MemberProfile,
   RecommendationDraftInput,
@@ -15,12 +22,6 @@ type RecommendationStudioProps = {
   allMembers: MemberProfile[];
   currentMember: MemberProfile;
   initialRecommendations: SongRecommendation[];
-};
-
-type StoredRecommendationState = {
-  version: number;
-  recommendations: SongRecommendation[];
-  latestDraft: SongRecommendation | null;
 };
 
 const weeklyTheme = {
@@ -52,10 +53,6 @@ const themeModules = [
   },
 ];
 
-const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
-const LEGACY_RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio-v1";
-const RECOMMENDATION_STORAGE_VERSION = 2;
-
 export function RecommendationStudio({
   allMembers,
   currentMember,
@@ -70,79 +67,18 @@ export function RecommendationStudio({
   );
 
   useEffect(() => {
-    try {
-      const storedValue = window.localStorage.getItem(RECOMMENDATION_STORAGE_KEY);
-      const legacyValue = window.localStorage.getItem(
-        LEGACY_RECOMMENDATION_STORAGE_KEY,
-      );
+    const storedState = loadStoredRecommendationState(initialRecommendations);
 
-      if (!storedValue && !legacyValue) {
-        setHasHydrated(true);
-        return;
-      }
-
-      const parsedValue = JSON.parse(storedValue ?? legacyValue ?? "null") as
-        | StoredRecommendationState
-        | {
-            recommendations?: SongRecommendation[];
-            latestDraft?: SongRecommendation | null;
-          }
-        | null;
-
-      if (!parsedValue) {
-        setHasHydrated(true);
-        return;
-      }
-
-      if ("version" in parsedValue) {
-        if (parsedValue.version !== RECOMMENDATION_STORAGE_VERSION) {
-          window.localStorage.removeItem(RECOMMENDATION_STORAGE_KEY);
-          window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
-          setLocalRecommendations(initialRecommendations);
-          setLatestDraft(null);
-          setStorageMessage("storage reset after version change");
-          setHasHydrated(true);
-          return;
-        }
-
-        if (
-          Array.isArray(parsedValue.recommendations) &&
-          parsedValue.recommendations.length > 0
-        ) {
-          setLocalRecommendations(parsedValue.recommendations);
-        }
-
-        if (parsedValue.latestDraft) {
-          setLatestDraft(parsedValue.latestDraft);
-        }
-
-        setStorageMessage("hydrated from browser storage");
-        setHasHydrated(true);
-        return;
-      }
-
-      if (
-        Array.isArray(parsedValue.recommendations) &&
-        parsedValue.recommendations.length > 0
-      ) {
-        setLocalRecommendations(parsedValue.recommendations);
-      }
-
-      if (parsedValue.latestDraft) {
-        setLatestDraft(parsedValue.latestDraft);
-      }
-
-      if (legacyValue) {
-        setStorageMessage("migrated legacy browser storage");
-        window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
-      }
-    } catch {
-      setLocalRecommendations(initialRecommendations);
-      setLatestDraft(null);
-      setStorageMessage("storage parse failed, reverted to seeded feed");
-    } finally {
+    const hydrationFrame = window.requestAnimationFrame(() => {
+      setLocalRecommendations(storedState.recommendations);
+      setLatestDraft(storedState.latestDraft);
+      setStorageMessage(storedState.storageMessage);
       setHasHydrated(true);
-    }
+    });
+
+    return () => {
+      window.cancelAnimationFrame(hydrationFrame);
+    };
   }, [initialRecommendations]);
 
   useEffect(() => {
@@ -150,14 +86,10 @@ export function RecommendationStudio({
       return;
     }
 
-    window.localStorage.setItem(
-      RECOMMENDATION_STORAGE_KEY,
-      JSON.stringify({
-        version: RECOMMENDATION_STORAGE_VERSION,
-        recommendations: localRecommendations,
-        latestDraft,
-      }),
-    );
+    persistStoredRecommendationState({
+      recommendations: localRecommendations,
+      latestDraft,
+    });
   }, [hasHydrated, latestDraft, localRecommendations]);
 
   const contributorCounts = useMemo(() => {
@@ -186,17 +118,7 @@ export function RecommendationStudio({
   }, [localRecommendations]);
 
   function handleDraftSaved(draft: RecommendationDraftInput) {
-    const nextDraft: SongRecommendation = {
-      id: `draft-${Date.now()}`,
-      memberId: currentMember.id,
-      trackTitle: draft.trackTitle,
-      artistName: draft.artistName,
-      platform: draft.platform,
-      url: draft.url,
-      comment: draft.comment,
-      moodTags: draft.moodTags.length > 0 ? draft.moodTags : ["fresh"],
-      createdAt: new Date().toISOString(),
-    };
+    const nextDraft = createRecommendationFromDraft(draft, currentMember);
 
     setLatestDraft(nextDraft);
     setLocalRecommendations((currentRecommendations) => [
@@ -207,8 +129,7 @@ export function RecommendationStudio({
   }
 
   function handleResetStorage() {
-    window.localStorage.removeItem(RECOMMENDATION_STORAGE_KEY);
-    window.localStorage.removeItem(LEGACY_RECOMMENDATION_STORAGE_KEY);
+    resetStoredRecommendationState();
     setLocalRecommendations(initialRecommendations);
     setLatestDraft(null);
     setStorageMessage("storage cleared and reset to seeded feed");
@@ -284,18 +205,18 @@ export function RecommendationStudio({
               {weeklyTheme.description}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a
-                href="#compose-panel"
+              <Link
+                href="/recommendations/new"
                 className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
               >
-                Contribute to theme
-              </a>
-              <Link
-                href="#theme-selects"
+                Open create route
+              </Link>
+              <a
+                href="#compose-panel"
                 className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"
               >
-                View selects
-              </Link>
+                Quick draft in feed
+              </a>
             </div>
           </div>
         </section>

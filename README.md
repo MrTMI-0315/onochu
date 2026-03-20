@@ -17,7 +17,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 - PRD v0.2 기준 문서 재정렬 완료
-- `/recommendations/new` 독립 route와 reaction/save UI는 아직 남은 갭
+- reaction/save UI와 v0.2 data model 정렬은 아직 남은 갭
 
 ## Documents
 
@@ -57,7 +57,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 초기 실행:
   - `npm install`
   - `npm run dev`
-- 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/profile/edit` 라우트가 존재합니다.
+- 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/recommendations/new`, `/profile/edit` 라우트가 존재합니다.
 - 공통 네비게이션은 desktop top bar와 mobile bottom bar로 동작합니다.
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
 - `/recommendations`에서는 작성자 링크와 무드 하이라이트가 함께 렌더링됩니다.

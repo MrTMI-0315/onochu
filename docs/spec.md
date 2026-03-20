@@ -249,7 +249,6 @@ type ThemeSpotlight = {
 
 현재 PRD v0.2 대비 주요 갭:
 
-- `/recommendations/new` 독립 경로 없음
 - recommendation card의 reaction/save UI 미완료
 - data model의 `memberNickname`, `reactionCount`, `saveCount`, `ThemeSpotlight`이 UI 전반에 완전히 반영되지 않음
 - 운영진 관점의 event-linked theme 운영 흐름 미완료
@@ -258,7 +257,7 @@ type ThemeSpotlight = {
 
 - [x] 랜딩 페이지가 존재한다.
 - [x] 추천곡 피드 페이지가 존재한다.
-- [ ] 추천곡 등록 페이지(`/recommendations/new`)가 존재한다.
+- [x] 추천곡 등록 페이지(`/recommendations/new`)가 존재한다.
 - [x] 멤버 디렉터리 페이지가 존재한다.
 - [x] 멤버 상세 페이지가 존재한다.
 - [x] 프로필 생성/수정 페이지가 존재한다.
