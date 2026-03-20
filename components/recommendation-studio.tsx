@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
@@ -46,6 +46,8 @@ const themeModules = [
   },
 ];
 
+const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio-v1";
+
 export function RecommendationStudio({
   allMembers,
   currentMember,
@@ -54,6 +56,53 @@ export function RecommendationStudio({
   const [localRecommendations, setLocalRecommendations] =
     useState<SongRecommendation[]>(initialRecommendations);
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedValue = window.localStorage.getItem(RECOMMENDATION_STORAGE_KEY);
+
+      if (!storedValue) {
+        setHasHydrated(true);
+        return;
+      }
+
+      const parsedValue = JSON.parse(storedValue) as {
+        recommendations?: SongRecommendation[];
+        latestDraft?: SongRecommendation | null;
+      };
+
+      if (
+        Array.isArray(parsedValue.recommendations) &&
+        parsedValue.recommendations.length > 0
+      ) {
+        setLocalRecommendations(parsedValue.recommendations);
+      }
+
+      if (parsedValue.latestDraft) {
+        setLatestDraft(parsedValue.latestDraft);
+      }
+    } catch {
+      setLocalRecommendations(initialRecommendations);
+      setLatestDraft(null);
+    } finally {
+      setHasHydrated(true);
+    }
+  }, [initialRecommendations]);
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      RECOMMENDATION_STORAGE_KEY,
+      JSON.stringify({
+        recommendations: localRecommendations,
+        latestDraft,
+      }),
+    );
+  }, [hasHydrated, latestDraft, localRecommendations]);
 
   const contributorCounts = useMemo(() => {
     return localRecommendations.reduce<Record<string, number>>((counts, recommendation) => {
@@ -139,7 +188,8 @@ export function RecommendationStudio({
               <div className="rounded-[1.25rem] bg-white/5 p-4">
                 <p className="text-sm leading-7 text-white/65">
                   compose flow는 local state 안에서 top pick, mood highlights,
-                  contributor count까지 함께 다시 계산합니다.
+                  contributor count까지 함께 다시 계산하고 브라우저에
+                  유지합니다.
                 </p>
               </div>
             </div>
