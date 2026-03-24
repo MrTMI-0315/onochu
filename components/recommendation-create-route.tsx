@@ -174,7 +174,11 @@ export function RecommendationCreateRoute({
             </div>
 
             {latestDraft ? (
-              <RecommendationCard recommendation={latestDraft} linkToMember={false} />
+              <RecommendationCard
+                recommendation={latestDraft}
+                linkToMember={false}
+                viewerPlatform={currentMember.mainPlatform}
+              />
             ) : (
               <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">
                 아직 이 route에서 저장한 draft가 없습니다. 한 번 등록하면 같은

@@ -327,7 +327,11 @@ export function RecommendationStudio({
                 Open create route
               </Link>
             </div>
-            <RecommendationCard recommendation={latestDraft} linkToMember={false} />
+            <RecommendationCard
+              recommendation={latestDraft}
+              linkToMember={false}
+              viewerPlatform={currentMember.mainPlatform}
+            />
           </section>
         ) : null}
 
@@ -359,6 +363,7 @@ export function RecommendationStudio({
                   key={recommendation.id}
                   recommendation={recommendation}
                   compact
+                  viewerPlatform={currentMember.mainPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()
@@ -423,6 +428,7 @@ export function RecommendationStudio({
                 <RecommendationCard
                   key={recommendation.id}
                   recommendation={recommendation}
+                  viewerPlatform={currentMember.mainPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()
@@ -577,6 +583,7 @@ export function RecommendationStudio({
                 <RecommendationCard
                   key={recommendation.id}
                   recommendation={recommendation}
+                  viewerPlatform={currentMember.mainPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()

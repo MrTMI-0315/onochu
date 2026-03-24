@@ -24,6 +24,7 @@
 - 플랫폼, 코멘트, 무드 태그
 - fire / save interaction
 - 외부 링크 이동
+- viewer preferred platform 우선 CTA
 - active theme에서 작성된 draft는 theme metadata를 함께 가진다
 - active theme draft는 필요 시 alternate platform links도 함께 가진다
 
@@ -58,6 +59,7 @@
 - 추천 카드에서 프로필 이동 이유가 짧게 설명되어야 한다.
 - 모바일에서 한 카드당 정보 밀도가 과하지 않도록 조정한다.
 - feed는 browse-first, 작성은 `/recommendations/new` 중심으로 분리한다.
+- 카드의 메인 CTA는 viewer main platform이 있으면 그 플랫폼을 먼저 열어야 한다.
 - save interaction은 다시 보기 위한 personal revisit flow로 이어져야 한다.
 - 저장된 곡이 없을 때도 save 목적을 설명하는 empty guidance가 필요하다.
 - 추천 등록은 원본 링크 1개로 끝낼 수 있지만, 필요하면 alternate platform links를 선택적으로 추가할 수 있어야 한다.

@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { getMemberName, platformLabels } from "@/lib/mock-data";
+import { resolveRecommendationLink } from "@/lib/platform-links";
 import type {
+  MusicPlatform,
   RecommendationEngagementAction,
   RecommendationEngagementState,
   SongRecommendation,
@@ -12,6 +14,7 @@ type RecommendationCardProps = {
   recommendation: SongRecommendation;
   compact?: boolean;
   linkToMember?: boolean;
+  viewerPlatform?: MusicPlatform;
   engagement?: RecommendationEngagementState;
   onToggleEngagement?: (
     recommendationId: string,
@@ -24,6 +27,7 @@ export function RecommendationCard({
   recommendation,
   compact = false,
   linkToMember = true,
+  viewerPlatform,
   engagement,
   onToggleEngagement,
   showEngagementControls = true,
@@ -39,6 +43,13 @@ export function RecommendationCard({
     fire: false,
     save: false,
   };
+  const resolvedLink = resolveRecommendationLink({
+    recommendation,
+    preferredPlatform: viewerPlatform,
+  });
+  const resolvedPlatformLabel = viewerPlatform
+    ? platformLabels[viewerPlatform]
+    : platformLabels[recommendation.platform];
   const engagementButtons = [
     {
       action: "fire" as const,
@@ -166,14 +177,19 @@ export function RecommendationCard({
                 follow the taste path
               </span>
             ) : null}
+            {viewerPlatform ? (
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
+                viewer platform: {resolvedPlatformLabel}
+              </span>
+            ) : null}
           </div>
           <a
-            href={recommendation.url}
+            href={resolvedLink.href}
             target="_blank"
             rel="noreferrer"
             className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition active:scale-[0.98]"
           >
-            {compact ? "Open" : "Play now"}
+            {compact ? `Open ${resolvedPlatformLabel}` : `Play on ${resolvedPlatformLabel}`}
           </a>
         </div>
       </div>
