@@ -7,6 +7,7 @@ import {
   loadStoredProfileDraft,
   persistStoredProfileDraft,
   PROFILE_STORAGE_VERSION,
+  resetStoredProfileDraft,
 } from "@/lib/profile-drafts";
 import type { MusicPlatform } from "@/lib/types";
 
@@ -51,6 +52,7 @@ export function ProfileEditForm({
   const [storageMessage, setStorageMessage] = useState(
     "profile browser storage active",
   );
+  const [lastPersistedAt, setLastPersistedAt] = useState<string | null>(null);
   const [hasHydrated, setHasHydrated] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({
     type: "idle",
@@ -89,6 +91,7 @@ export function ProfileEditForm({
           ? storedState.draft.playlistLinks
           : initialPlaylistLinks,
       );
+      setLastPersistedAt(storedState.draft.updatedAt);
       setStorageMessage(storedState.storageMessage);
       setHasHydrated(true);
     });
@@ -198,6 +201,7 @@ export function ProfileEditForm({
       });
 
       persistStoredProfileDraft(nextDraft);
+      setLastPersistedAt(nextDraft.updatedAt);
       setStorageMessage("saved profile to browser storage");
       setSaveStatus({
         type: "success",
@@ -210,6 +214,30 @@ export function ProfileEditForm({
 
     setIsSaving(false);
   }
+
+  function handleResetProfileDraft() {
+    resetStoredProfileDraft();
+    setNickname(initialNickname);
+    setBio(initialBio);
+    setFavoriteGenres(initialFavoriteGenres.join(", "));
+    setMainPlatform(initialMainPlatform);
+    setPlaylistLinks(initialPlaylistLinks);
+    setErrors({});
+    setLastPersistedAt(null);
+    setStorageMessage("profile storage cleared and reset to seeded draft");
+    setSaveStatus({
+      type: "idle",
+      message: "저장된 프로필 draft를 지우고 초기 상태로 되돌렸습니다.",
+    });
+  }
+
+  const completionCount = [
+    nickname.trim().length > 0,
+    bio.trim().length > 0,
+    selectedGenres.length > 0,
+    Boolean(mainPlatform),
+    playlistLinks.some((link) => link.trim().length > 0),
+  ].filter(Boolean).length;
 
   const statusTone =
     saveStatus.type === "success"
@@ -249,6 +277,11 @@ export function ProfileEditForm({
           {hasHydrated ? (
             <div className="w-full rounded-[1.25rem] border border-white/8 bg-white/4 px-4 py-4 text-sm text-white/68">
               v{PROFILE_STORAGE_VERSION} / {storageMessage}
+              {lastPersistedAt ? (
+                <span className="block pt-2 text-[11px] uppercase tracking-[0.16em] text-white/40">
+                  last persisted {new Date(lastPersistedAt).toLocaleTimeString("ko-KR")}
+                </span>
+              ) : null}
             </div>
           ) : null}
 
@@ -261,6 +294,30 @@ export function ProfileEditForm({
             </div>
             <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
               링크 하나면 시작할 수 있습니다.
+            </div>
+          </div>
+
+          <div className="grid w-full gap-3 sm:grid-cols-[0.8fr_1.2fr]">
+            <div className="rounded-[1.25rem] border border-[#de8eff]/18 bg-[#de8eff]/8 p-4 text-left">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                Completion
+              </p>
+              <p className="mt-2 text-3xl font-bold text-white">
+                {completionCount}/5
+              </p>
+            </div>
+            <div className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
+              <p className="max-w-sm text-sm leading-7 text-white/68">
+                local draft가 꼬였을 때는 초기 mock profile로 바로 되돌릴 수
+                있습니다.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetProfileDraft}
+                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+              >
+                Reset profile
+              </button>
             </div>
           </div>
         </section>
