@@ -121,6 +121,16 @@ export function RecommendationStudio({
       savedRecommendationIds.has(recommendation.id),
     );
   }, [localRecommendations, savedRecommendationIds]);
+  const activeThemeRecommendations = useMemo(() => {
+    return localRecommendations.filter(
+      (recommendation) => recommendation.themeId === activeTheme.id,
+    );
+  }, [activeTheme.id, localRecommendations]);
+  const activeThemeContributorCount = useMemo(() => {
+    return new Set(
+      activeThemeRecommendations.map((recommendation) => recommendation.memberId),
+    ).size;
+  }, [activeThemeRecommendations]);
   const featuredRecommendations = filteredRecommendations.slice(0, 4);
   const remainingRecommendations = filteredRecommendations.slice(4);
 
@@ -282,6 +292,10 @@ export function RecommendationStudio({
                 </p>
                 <p className="mt-2 text-sm leading-7 text-white/62">
                   {activeTheme.relatedEvent ?? activeTheme.participantSummary}
+                </p>
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                  {activeThemeRecommendations.length} theme-linked recs /{" "}
+                  {activeThemeContributorCount} contributors
                 </p>
               </div>
               <button
@@ -530,6 +544,11 @@ export function RecommendationStudio({
                 화면에서 빠르게 끝내도록 분리했습니다. 현재 작성자는{" "}
                 {currentMember.nickname}으로 가정합니다.
               </p>
+              <div className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
+                현재 테마 <span className="font-semibold text-white">{activeTheme.title}</span>
+                에는 {activeThemeRecommendations.length}개의 연결된 추천과{" "}
+                {activeThemeContributorCount}명의 참여자가 있습니다.
+              </div>
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href="/recommendations/new"

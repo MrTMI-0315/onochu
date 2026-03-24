@@ -62,6 +62,7 @@
 - local draft가 추가되면 feed 상단 카드와 파생 통계가 함께 갱신되어야 한다.
 - fire와 save는 browser storage 기준으로 새로고침 뒤에도 active state와 count 변화가 유지되어야 한다.
 - active theme는 운영 맥락이 읽히도록 event name, window, curator note가 함께 보여야 한다.
+- active theme에 연결된 recommendation 수와 참여자 수가 surface에서 읽혀야 한다.
 - 브라우저/기기 간 동기화는 지원하지 않고 현재 브라우저 컨텍스트에만 유지한다.
 - storage schema가 바뀌면 version 체크 후 baseline seeded feed로 reset 할 수 있어야 한다.
 - 사용자는 reset action으로 local draft/persistence를 직접 비울 수 있어야 한다.

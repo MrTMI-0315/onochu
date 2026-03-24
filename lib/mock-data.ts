@@ -298,12 +298,23 @@ const seededEngagementMetrics = [
   { reactionCount: 12, saveCount: 9 },
 ];
 
+const liveThemeRecommendationIds = new Set(["rec-001", "rec-002", "rec-003"]);
+
 export const recommendations: SongRecommendation[] = baseRecommendations.map(
   (recommendation, index) => ({
     ...recommendation,
     memberNickname: getMemberName(recommendation.memberId),
     reactionCount: seededEngagementMetrics[index]?.reactionCount ?? 0,
     saveCount: seededEngagementMetrics[index]?.saveCount ?? 0,
+    themeId: liveThemeRecommendationIds.has(recommendation.id)
+      ? "theme-001"
+      : undefined,
+    themeTitle: liveThemeRecommendationIds.has(recommendation.id)
+      ? "SPRING CYPHER WARM-UP"
+      : undefined,
+    themePhaseLabel: liveThemeRecommendationIds.has(recommendation.id)
+      ? "Live Theme"
+      : undefined,
   }),
 );
 

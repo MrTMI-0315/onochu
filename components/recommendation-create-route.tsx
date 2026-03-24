@@ -19,6 +19,11 @@ export function RecommendationCreateRoute({
   initialRecommendations,
 }: RecommendationCreateRouteProps) {
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
+  const [themeParticipationCount, setThemeParticipationCount] = useState(
+    initialRecommendations.filter(
+      (recommendation) => recommendation.themeId === getActiveThemeSpotlight()?.id,
+    ).length,
+  );
   const [storageMessage, setStorageMessage] = useState(
     "submit creates a local draft and inserts it into the feed storage",
   );
@@ -40,6 +45,13 @@ export function RecommendationCreateRoute({
 
     setLatestDraft(nextState.latestDraft);
     setStorageMessage(nextState.storageMessage);
+    if (activeTheme) {
+      setThemeParticipationCount(
+        nextState.recommendations.filter(
+          (recommendation) => recommendation.themeId === activeTheme.id,
+        ).length,
+      );
+    }
   }
 
   return (
@@ -76,6 +88,9 @@ export function RecommendationCreateRoute({
               <p className="mt-2 text-sm leading-7 text-white/62">
                 {activeTheme.relatedEvent ?? activeTheme.activationWindow}
               </p>
+              <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                {themeParticipationCount} linked recs in this theme
+              </p>
             </div>
           ) : null}
           <Link
@@ -107,6 +122,13 @@ export function RecommendationCreateRoute({
               저장 후에는 `/recommendations`에서 draft preview와 피드 삽입 상태를
               바로 확인할 수 있습니다.
             </p>
+            {activeTheme ? (
+              <p className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/62">
+                이번 작성은 <span className="font-semibold text-white">{activeTheme.title}</span>
+                에 자동으로 연결됩니다. 저장 후 feed에서 theme badge와 참여 수로
+                이어집니다.
+              </p>
+            ) : null}
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <div className="rounded-[1.25rem] bg-white/4 p-4 text-sm text-white/72">
                 song first
