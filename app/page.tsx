@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { MemberCard } from "@/components/member-card";
 import { RecommendationCard } from "@/components/recommendation-card";
-import { members, sortedRecommendations } from "@/lib/mock-data";
+import {
+  getActiveThemeSpotlight,
+  members,
+  sortedRecommendations,
+} from "@/lib/mock-data";
 
 const quickLinks = [
   {
@@ -21,15 +25,9 @@ const quickLinks = [
   },
 ];
 
-const weeklyTheme = {
-  title: "JAZZ NOIR REBORN",
-  subtitle: "Lofi Underground",
-  description:
-    "이번 주는 샘플의 먼지감과 재즈 랩의 야간 질감을 중심으로 모았습니다. 취향과 추천이 한 화면에서 이어지는 구조를 보여주는 편집 섹션입니다.",
-};
-
 export default function HomePage() {
   const topPick = sortedRecommendations[0];
+  const activeTheme = getActiveThemeSpotlight();
 
   return (
     <main className="px-4 pb-28 pt-24 text-white md:px-6 md:pb-12 md:pt-28">
@@ -77,8 +75,9 @@ export default function HomePage() {
               </div>
               <div className="rounded-[1.25rem] bg-white/5 p-4">
                 <p className="text-sm leading-7 text-white/65">
-                  Weekly theme, top pick, member cards, and profile setup are
-                  now mapped to the current app routes.
+                  {activeTheme
+                    ? `${activeTheme.relatedEvent ?? activeTheme.title}가 현재 운영 중인 테마로 연결돼 있습니다.`
+                    : "Weekly theme, top pick, member cards, and profile setup are now mapped to the current app routes."}
                 </p>
               </div>
             </div>
@@ -130,14 +129,27 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(222,142,255,0.2),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.84)_100%)]" />
             <div className="relative flex min-h-[28rem] flex-col justify-end rounded-[1.75rem] bg-[linear-gradient(135deg,#151515_0%,#232323_45%,#0e0e0e_100%)] p-8">
               <span className="w-fit rounded-sm border border-[#de8eff]/30 bg-[#de8eff]/12 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#de8eff]">
-                {weeklyTheme.subtitle}
+                {activeTheme?.phaseLabel ?? "Live Theme"}
               </span>
               <h3 className="onochu-display mt-5 max-w-lg text-5xl font-extrabold uppercase leading-none text-white">
-                {weeklyTheme.title}
+                {activeTheme?.title ?? "THEME IN MOTION"}
               </h3>
               <p className="mt-4 max-w-xl text-sm leading-7 text-white/65">
-                {weeklyTheme.description}
+                {activeTheme?.description ??
+                  "이번 주 운영 테마와 커뮤니티 큐레이션을 홈에서도 바로 읽을 수 있게 연결합니다."}
               </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {activeTheme?.relatedEvent ? (
+                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                    {activeTheme.relatedEvent}
+                  </span>
+                ) : null}
+                {activeTheme?.activationWindow ? (
+                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                    {activeTheme.activationWindow}
+                  </span>
+                ) : null}
+              </div>
               <div className="mt-6 flex items-center gap-3">
                 <div className="flex -space-x-3">
                   {members.slice(0, 3).map((member, index) => (
@@ -159,7 +171,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/40">
-                  members listening
+                  {activeTheme?.participantSummary ?? "members listening"}
                 </span>
               </div>
             </div>

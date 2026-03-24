@@ -50,3 +50,18 @@ export type RecommendationEngagementState = {
   fire: boolean;
   save: boolean;
 };
+
+export type ThemeSpotlight = {
+  id: string;
+  title: string;
+  description: string;
+  relatedEvent?: string;
+  isActive: boolean;
+  phaseLabel?: string;
+  activationWindow?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  curatorNote?: string;
+  participantSummary?: string;
+  highlightTags?: string[];
+};

@@ -1,4 +1,9 @@
-import type { MemberProfile, MusicPlatform, SongRecommendation } from "@/lib/types";
+import type {
+  MemberProfile,
+  MusicPlatform,
+  SongRecommendation,
+  ThemeSpotlight,
+} from "@/lib/types";
 
 export const platformLabels: Record<MusicPlatform, string> = {
   spotify: "Spotify",
@@ -306,6 +311,57 @@ export const sortedRecommendations = [...recommendations].sort((left, right) =>
   right.createdAt.localeCompare(left.createdAt),
 );
 
+export const themeSpotlights: ThemeSpotlight[] = [
+  {
+    id: "theme-001",
+    title: "SPRING CYPHER WARM-UP",
+    description:
+      "행사 전 붐뱁과 crew energy를 다시 끌어올리는 트랙을 모읍니다. 추천 자체가 공연 전 대화와 팀 바이브를 예열하는 구조를 목표로 합니다.",
+    relatedEvent: "Spring Cipher Night",
+    isActive: true,
+    phaseLabel: "Live Theme",
+    activationWindow: "03.24 - 03.28",
+    ctaLabel: "Warm up the set",
+    ctaHref: "/recommendations/new",
+    curatorNote:
+      "운영진이 공연 전 mood를 정리하고 신입도 쉽게 한 곡씩 얹을 수 있도록 설계한 테마입니다.",
+    participantSummary: "17 members already adding warm-up tracks",
+    highlightTags: ["boom bap", "crew energy", "warm-up"],
+  },
+  {
+    id: "theme-002",
+    title: "NEW MEMBER HANDSHAKE",
+    description:
+      "신입이 자신의 취향을 가장 잘 설명하는 첫 곡을 남기고, 기존 멤버가 그 곡을 통해 먼저 말을 걸 수 있게 돕는 환영 슬롯입니다.",
+    relatedEvent: "New Member Welcome Session",
+    isActive: false,
+    phaseLabel: "Queued Next",
+    activationWindow: "03.29 - 04.02",
+    ctaLabel: "Prep welcome picks",
+    ctaHref: "/recommendations/new",
+    curatorNote:
+      "프로필 탐색과 추천 피드를 자연스럽게 묶어 신입 onboarding friction을 낮추는 데 초점을 둡니다.",
+    participantSummary: "Ready for onboarding week",
+    highlightTags: ["intro", "first pick", "welcome"],
+  },
+  {
+    id: "theme-003",
+    title: "AFTER SESSION DEBRIEF",
+    description:
+      "세션이나 공연 이후 여운이 남는 곡을 묶어, 행사가 끝난 뒤에도 대화를 이어가는 회고 큐레이션 슬롯입니다.",
+    relatedEvent: "Post Session Debrief",
+    isActive: false,
+    phaseLabel: "Archive Slot",
+    activationWindow: "Always available",
+    ctaLabel: "Leave a debrief track",
+    ctaHref: "/recommendations/new",
+    curatorNote:
+      "행사 후 감상을 카톡 밖에서도 이어갈 수 있게 만드는 retention 실험용 테마입니다.",
+    participantSummary: "Used for post-event reflection",
+    highlightTags: ["debrief", "afterglow", "reflection"],
+  },
+];
+
 export const allGenres = Array.from(
   new Set(members.flatMap((member) => member.favoriteGenres)),
 ).sort();
@@ -326,4 +382,8 @@ export function getRecommendationsByMemberId(memberId: string) {
 
 export function getMemberName(memberId: string) {
   return getMemberById(memberId)?.nickname ?? "Unknown";
+}
+
+export function getActiveThemeSpotlight() {
+  return themeSpotlights.find((themeSpotlight) => themeSpotlight.isActive);
 }

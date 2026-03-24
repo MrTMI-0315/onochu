@@ -4,7 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
-import { getMemberName } from "@/lib/mock-data";
+import {
+  getActiveThemeSpotlight,
+  getMemberName,
+  themeSpotlights,
+} from "@/lib/mock-data";
 import {
   createEmptyRecommendationEngagementState,
   createRecommendationFromDraft,
@@ -26,35 +30,6 @@ type RecommendationStudioProps = {
   currentMember: MemberProfile;
   initialRecommendations: SongRecommendation[];
 };
-
-const weeklyTheme = {
-  label: "Current Theme",
-  title: "90s NYC BOOM BAP",
-  description:
-    "Gritty drums, dusty samples, and the pulse of the underground. 이번 주 큐레이션은 클래식 붐뱁의 질감과 거리의 공기를 다시 꺼내는 데 집중합니다.",
-};
-
-const themeModules = [
-  {
-    title: "Classic Crates Vol. 1",
-    subtitle: "Staff Pick",
-    meta: "120 tracks",
-    tone:
-      "col-span-2 row-span-2 min-h-[18rem] bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,#4f1f65_0%,#1d1d1d_50%,#0f0f0f_100%)]",
-  },
-  {
-    title: "MPC Essentials",
-    subtitle: "Technique & Gear",
-    meta: "Beat craft",
-    tone: "bg-white/4",
-  },
-  {
-    title: "Bronx Origins",
-    subtitle: "Map Location",
-    meta: "Street context",
-    tone: "bg-white/4",
-  },
-];
 
 export function RecommendationStudio({
   allMembers,
@@ -117,6 +92,10 @@ export function RecommendationStudio({
       new Set(localRecommendations.flatMap((recommendation) => recommendation.moodTags)),
     ).slice(0, 8);
   }, [localRecommendations]);
+  const activeTheme = getActiveThemeSpotlight() ?? themeSpotlights[0];
+  const queuedThemes = themeSpotlights.filter(
+    (themeSpotlight) => themeSpotlight.id !== activeTheme.id,
+  );
 
   const topPick = localRecommendations[0];
   const contributingMembers = useMemo(() => {
@@ -239,6 +218,17 @@ export function RecommendationStudio({
                   v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
                 </p>
               </div>
+              <div className="rounded-[1.25rem] bg-white/5 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Current campaign
+                </p>
+                <p className="mt-2 text-sm font-semibold text-white">
+                  {activeTheme.relatedEvent ?? activeTheme.title}
+                </p>
+                <p className="mt-2 text-sm leading-7 text-white/62">
+                  {activeTheme.participantSummary}
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={handleResetStorage}
@@ -253,27 +243,51 @@ export function RecommendationStudio({
         <section className="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[#131313] p-4 md:p-6">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(222,142,255,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))]" />
           <div className="relative flex min-h-[22rem] flex-col justify-end rounded-[1.5rem] bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.84)_100%),linear-gradient(135deg,#44344e_0%,#1a1a1a_45%,#101010_100%)] p-6 md:min-h-[26rem] md:p-8">
-            <span className="w-fit rounded-sm bg-[#de8eff] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
-              {weeklyTheme.label}
-            </span>
+            <div className="flex flex-wrap gap-2">
+              <span className="w-fit rounded-sm bg-[#de8eff] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
+                {activeTheme.phaseLabel ?? "Current Theme"}
+              </span>
+              {activeTheme.relatedEvent ? (
+                <span className="w-fit rounded-sm border border-white/12 bg-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
+                  {activeTheme.relatedEvent}
+                </span>
+              ) : null}
+            </div>
             <h2 className="onochu-display mt-4 max-w-2xl text-4xl font-bold uppercase leading-[0.92] text-white md:text-6xl">
-              {weeklyTheme.title}
+              {activeTheme.title}
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/68">
-              {weeklyTheme.description}
+              {activeTheme.description}
             </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {activeTheme.activationWindow ? (
+                <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                  {activeTheme.activationWindow}
+                </span>
+              ) : null}
+              {activeTheme.participantSummary ? (
+                <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                  {activeTheme.participantSummary}
+                </span>
+              ) : null}
+            </div>
+            {activeTheme.curatorNote ? (
+              <div className="mt-5 max-w-2xl rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
+                {activeTheme.curatorNote}
+              </div>
+            ) : null}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link
-                href="/recommendations/new"
+                href={activeTheme.ctaHref ?? "/recommendations/new"}
                 className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
               >
-                Open create route
+                {activeTheme.ctaLabel ?? "Open create route"}
               </Link>
               <a
                 href="#compose-panel"
                 className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"
               >
-                Quick draft in feed
+                Join this theme now
               </a>
             </div>
           </div>
@@ -286,7 +300,7 @@ export function RecommendationStudio({
                 Theme Selects
               </h2>
               <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
-                Curated for this week
+                Event-linked curation queue
               </p>
             </div>
             <a
@@ -298,27 +312,34 @@ export function RecommendationStudio({
           </div>
 
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {themeModules.map((module, index) => (
+            {[activeTheme, ...queuedThemes].map((themeSpotlight, index) => (
               <article
-                key={module.title}
+                key={themeSpotlight.id}
                 className={`overflow-hidden rounded-[1.5rem] border border-white/6 p-4 ${
-                  module.tone
+                  index === 0
+                    ? "col-span-2 row-span-2 min-h-[18rem] bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,#4f1f65_0%,#1d1d1d_50%,#0f0f0f_100%)]"
+                    : "aspect-square bg-white/4"
                 } ${index === 0 ? "" : "aspect-square"}`}
               >
                 <div className="flex h-full flex-col justify-between">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/8 text-[#de8eff]">
-                    {index === 0 ? ">" : index === 1 ? "M" : "B"}
+                    {index === 0 ? "L" : index === 1 ? "Q" : "A"}
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
-                      {module.subtitle}
+                      {themeSpotlight.phaseLabel ?? (themeSpotlight.isActive ? "Live" : "Queued")}
                     </p>
                     <h3 className="onochu-display mt-2 text-lg font-bold uppercase text-white">
-                      {module.title}
+                      {themeSpotlight.title}
                     </h3>
                     <p className="mt-2 text-xs uppercase tracking-[0.16em] text-white/45">
-                      {module.meta}
+                      {themeSpotlight.relatedEvent ?? "Weekly curation"}
                     </p>
+                    {index === 0 ? (
+                      <p className="mt-4 max-w-sm text-sm leading-7 text-white/65">
+                        {themeSpotlight.description}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </article>
@@ -335,10 +356,16 @@ export function RecommendationStudio({
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-white">
-                <span className="font-bold">{contributingMembers} members</span>{" "}
-                currently contributing
-              </p>
+              <div className="min-w-0">
+                <p className="text-sm text-white">
+                  <span className="font-bold">{contributingMembers} members</span>{" "}
+                  currently contributing
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.16em] text-white/45">
+                  {activeTheme.relatedEvent ?? "Weekly theme"} /{" "}
+                  {activeTheme.activationWindow ?? "ongoing"}
+                </p>
+              </div>
             </article>
           </div>
         </section>

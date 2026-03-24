@@ -250,13 +250,13 @@ type ThemeSpotlight = {
 - Member profile
 - Profile edit
 - weekly theme slot
+- `ThemeSpotlight` mock data 기반 event-linked theme surface
 - local draft preview / browser storage persistence
 
 현재 PRD v0.3 대비 주요 갭:
 
 - feed에서 추천인 탐색은 가능하지만 connection-first 강조가 더 필요
-- `ThemeSpotlight`와 event-linked theme metadata가 코드 전반에 완전히 정렬되지 않음
-- 운영진 관점의 event-linked theme copy / metadata / CTA가 아직 약함
+- theme 운영은 아직 manual/mock 수준이며 admin-grade workflow는 없음
 - Vercel 배포 가능 상태에 대한 문서 증거가 아직 없음
 
 ## 16. MVP Acceptance Criteria
@@ -277,7 +277,7 @@ type ThemeSpotlight = {
 
 ## 17. Implementation Guardrails
 
-- 기능 우선순위는 사람 탐색, 이벤트 연결, theme data 정렬 순으로 본다.
+- 기능 우선순위는 사람 탐색, data/model 정렬, QA 순으로 본다.
 - 저장/반응은 local state로 시작하되 후속 persistence 이관을 막지 않아야 한다.
 - 추천 feed는 링크 저장소가 아니라 사람 탐색 surface라는 원칙을 유지한다.
 - 운영진용 기능은 수동 큐레이션 가능한 수준까지만 허용한다.

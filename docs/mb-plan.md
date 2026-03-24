@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-18
+## Completed MB 01-19
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -26,27 +26,7 @@
 - `MB 16` recommendation create route 분리
 - `MB 17` PRD v0.3 기준 문서 교체
 - `MB 18` recommendation reaction / save UI
-
-## MB 19
-
-- 제목: Theme / Event Connection 강화
-- Goal:
-  - 주간 테마와 행사 연계 영역을 커뮤니티 운영 도구 수준으로 강화한다.
-- Scope:
-  - recommendation theme section
-  - landing / feed theme copy
-  - theme metadata 표현
-- Deliverables:
-  - `ThemeSpotlight` 기반 mock data
-  - related event copy / metadata
-  - 운영진 관점 CTA 정리
-- Acceptance Criteria:
-  - active theme가 분명히 보인다.
-  - 행사 연계 문구와 상태를 표현할 수 있다.
-  - 신입 환영/행사 예열 같은 운영 시나리오를 담을 수 있다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+- `MB 19` theme / event connection surface 강화
 
 ## MB 20
 
