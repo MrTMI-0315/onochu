@@ -116,6 +116,11 @@ export function RecommendationStudio({
 
     return localRecommendations;
   }, [activeFilter, localRecommendations, savedRecommendationIds]);
+  const savedRecommendations = useMemo(() => {
+    return localRecommendations.filter((recommendation) =>
+      savedRecommendationIds.has(recommendation.id),
+    );
+  }, [localRecommendations, savedRecommendationIds]);
   const featuredRecommendations = filteredRecommendations.slice(0, 4);
   const remainingRecommendations = filteredRecommendations.slice(4);
 
@@ -311,6 +316,51 @@ export function RecommendationStudio({
             <RecommendationCard recommendation={latestDraft} linkToMember={false} />
           </section>
         ) : null}
+
+        <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
+          <div className="mb-5 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                Saved shelf
+              </p>
+              <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
+                Your revisit queue
+              </h2>
+            </div>
+            {savedRecommendations.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setActiveFilter("saved")}
+                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+              >
+                View saved only
+              </button>
+            ) : null}
+          </div>
+
+          {savedRecommendations.length > 0 ? (
+            <div className="grid gap-4 lg:grid-cols-2">
+              {savedRecommendations.slice(0, 2).map((recommendation) => (
+                <RecommendationCard
+                  key={recommendation.id}
+                  recommendation={recommendation}
+                  compact
+                  engagement={
+                    engagementByRecommendationId[recommendation.id] ??
+                    createEmptyRecommendationEngagementState()
+                  }
+                  linkToMember
+                  onToggleEngagement={handleToggleEngagement}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">
+              아직 저장한 곡이 없습니다. 먼저 feed에서 Save를 눌러 두면 나중에
+              다시 듣고 싶은 트랙을 여기서 바로 꺼낼 수 있습니다.
+            </div>
+          )}
+        </section>
 
         <section id="feed-start" className="space-y-5">
           <div className="flex items-end justify-between gap-4">
