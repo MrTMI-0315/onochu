@@ -33,6 +33,7 @@ export function RecommendationStudio({
   currentMember,
   initialRecommendations,
 }: RecommendationStudioProps) {
+  const [activeFilter, setActiveFilter] = useState<"all" | "saved">("all");
   const [localRecommendations, setLocalRecommendations] =
     useState<SongRecommendation[]>(initialRecommendations);
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
@@ -94,13 +95,29 @@ export function RecommendationStudio({
   const queuedThemes = themeSpotlights.filter(
     (themeSpotlight) => themeSpotlight.id !== activeTheme.id,
   );
+  const savedRecommendationIds = useMemo(() => {
+    return new Set(
+      Object.entries(engagementByRecommendationId)
+        .filter(([, engagement]) => engagement.save)
+        .map(([recommendationId]) => recommendationId),
+    );
+  }, [engagementByRecommendationId]);
   const contributingMembers = useMemo(() => {
     return new Set(localRecommendations.map((recommendation) => recommendation.memberId))
       .size;
   }, [localRecommendations]);
   const topPick = localRecommendations[0];
-  const featuredRecommendations = localRecommendations.slice(0, 4);
-  const remainingRecommendations = localRecommendations.slice(4);
+  const filteredRecommendations = useMemo(() => {
+    if (activeFilter === "saved") {
+      return localRecommendations.filter((recommendation) =>
+        savedRecommendationIds.has(recommendation.id),
+      );
+    }
+
+    return localRecommendations;
+  }, [activeFilter, localRecommendations, savedRecommendationIds]);
+  const featuredRecommendations = filteredRecommendations.slice(0, 4);
+  const remainingRecommendations = filteredRecommendations.slice(4);
 
   function handleResetStorage() {
     resetStoredRecommendationState();
@@ -300,35 +317,63 @@ export function RecommendationStudio({
             <div>
               <span className="onochu-eyebrow">Start here</span>
               <h2 className="onochu-display mt-2 text-3xl font-bold uppercase text-white md:text-4xl">
-                What the club is listening to now.
+                {activeFilter === "saved"
+                  ? "What you saved for later."
+                  : "What the club is listening to now."}
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
-                첫 카드부터 곡, 이유, 추천인 흐름이 바로 보이도록 최근 추천을
-                위로 올렸습니다.
+                {activeFilter === "saved"
+                  ? "save한 곡만 다시 꺼내 보면서 링크보다 맥락과 추천인을 먼저 이어 볼 수 있습니다."
+                  : "첫 카드부터 곡, 이유, 추천인 흐름이 바로 보이도록 최근 추천을 위로 올렸습니다."}
               </p>
             </div>
-            <Link
-              href="/recommendations/new"
-              className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
-            >
-              Post yours
-            </Link>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveFilter("all")}
+                className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                  activeFilter === "all"
+                    ? "bg-[#de8eff] text-black"
+                    : "border border-white/10 text-white/55"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveFilter("saved")}
+                className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                  activeFilter === "saved"
+                    ? "bg-[#de8eff] text-black"
+                    : "border border-white/10 text-white/55"
+                }`}
+              >
+                Saved by you {savedRecommendationIds.size > 0 ? savedRecommendationIds.size : ""}
+              </button>
+            </div>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            {featuredRecommendations.map((recommendation) => (
-              <RecommendationCard
-                key={recommendation.id}
-                recommendation={recommendation}
-                engagement={
-                  engagementByRecommendationId[recommendation.id] ??
-                  createEmptyRecommendationEngagementState()
-                }
-                linkToMember
-                onToggleEngagement={handleToggleEngagement}
-              />
-            ))}
-          </div>
+          {featuredRecommendations.length > 0 ? (
+            <div className="grid gap-4 lg:grid-cols-2">
+              {featuredRecommendations.map((recommendation) => (
+                <RecommendationCard
+                  key={recommendation.id}
+                  recommendation={recommendation}
+                  engagement={
+                    engagementByRecommendationId[recommendation.id] ??
+                    createEmptyRecommendationEngagementState()
+                  }
+                  linkToMember
+                  onToggleEngagement={handleToggleEngagement}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">
+              아직 save한 곡이 없습니다. feed 카드에서 `Save`를 누르면 여기서
+              다시 꺼내 볼 수 있습니다.
+            </div>
+          )}
         </section>
 
         <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
