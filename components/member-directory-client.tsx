@@ -95,7 +95,7 @@ export function MemberDirectoryClient() {
                   setSelectedGenre(null);
                   setSelectedPlatform(null);
                 }}
-                className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]"
               >
                 Clear all
               </button>
@@ -156,7 +156,7 @@ export function MemberDirectoryClient() {
                 <button
                   type="button"
                   onClick={() => setShowAllGenres((current) => !current)}
-                  className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                  className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]"
                 >
                   {showAllGenres ? "Less" : "More genres"}
                 </button>
@@ -199,7 +199,7 @@ export function MemberDirectoryClient() {
               <button
                 type="button"
                 onClick={() => setSelectedPlatform(null)}
-                className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]"
               >
                 Reset
               </button>

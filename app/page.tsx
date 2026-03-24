@@ -140,7 +140,7 @@ export default function HomePage() {
 
           <aside className="grid gap-4">
             <article className="onochu-panel rounded-[2rem] p-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                 Live theme
               </p>
               <h2 className="onochu-display mt-3 text-3xl font-bold uppercase text-white">
@@ -164,7 +164,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/recommendations"
-                className="mt-6 inline-flex text-[11px] font-bold uppercase tracking-[0.2em] text-[#de8eff]"
+                className="mt-6 inline-flex text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]"
               >
                 Open live feed
               </Link>
@@ -199,7 +199,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/recommendations"
-                className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
+                className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--primary)]"
               >
                 Open feed
               </Link>
@@ -221,7 +221,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/members"
-                className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
+                className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--primary)]"
               >
                 View all
               </Link>

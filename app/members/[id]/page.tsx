@@ -87,7 +87,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
         <article className="onochu-panel rounded-[2rem] p-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end">
-              <div className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-[#1f1f1f] bg-[radial-gradient(circle_at_top,#de8eff_0%,#b90afc_55%,#171717_100%)] text-2xl font-bold uppercase text-black shadow-[0_0_34px_rgba(188,19,254,0.25)]">
+              <div className="flex h-28 w-28 items-center justify-center rounded-full border-4 border-[#1f1f1f] bg-[radial-gradient(circle_at_top,var(--paper)_0%,var(--primary)_32%,var(--surface)_72%)] text-2xl font-bold uppercase text-black shadow-[0_0_34px_rgba(213,140,116,0.24)]">
                 {initials}
               </div>
 
@@ -106,13 +106,13 @@ export default async function MemberPage({ params }: MemberPageProps) {
                       href={member.playlistLinks[0]?.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                      className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
                     >
                       Open playlist
                     </a>
                     <Link
                       href="/recommendations/new"
-                      className="rounded-full border border-white/10 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[#de8eff]/30 hover:text-white"
+                      className="rounded-full border border-white/10 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
                     >
                       Reply with your pick
                     </Link>
@@ -124,7 +124,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                 </p>
 
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span className="rounded-full border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                  <span className="rounded-full border border-[color:rgba(213,140,116,0.2)] bg-[color:rgba(213,140,116,0.1)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                     {platformLabels[member.mainPlatform]}
                   </span>
                   {member.favoriteGenres.slice(0, 2).map((genre) => (
@@ -140,10 +140,10 @@ export default async function MemberPage({ params }: MemberPageProps) {
             </div>
 
             {memberRecommendations.length > 0 ? (
-              <div className="rounded-[1.5rem] border border-[#de8eff]/16 bg-[#de8eff]/7 p-5">
+              <div className="rounded-[1.5rem] border border-[color:rgba(213,140,116,0.16)] bg-[color:rgba(213,140,116,0.07)] p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#de8eff]">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--primary)]">
                       Conversation starter
                     </p>
                     <p className="mt-3 text-lg font-semibold text-white">
@@ -153,7 +153,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   </div>
                   <Link
                     href="/recommendations/new"
-                    className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[#de8eff]/30 hover:text-white"
+                    className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
                   >
                     Reply with your pick
                   </Link>
@@ -167,7 +167,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   {featuredRecommendation?.moodTags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                      className="rounded-sm border border-[color:rgba(213,140,116,0.2)] bg-[color:rgba(213,140,116,0.1)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]"
                     >
                       {tag}
                     </span>
@@ -194,7 +194,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                 </p>
               </div>
               <div className="rounded-[1.25rem] bg-white/4 p-4">
-                <p className="text-3xl font-bold text-[#de8eff]">
+                <p className="text-3xl font-bold text-[var(--accent-indigo)]">
                   {totalSaveCount}
                 </p>
                 <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
@@ -240,7 +240,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                     {moodHighlights.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                        className="rounded-sm border border-[color:rgba(213,140,116,0.2)] bg-[color:rgba(213,140,116,0.1)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]"
                       >
                         {tag}
                       </span>
@@ -261,7 +261,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                     href={playlistLink.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-[1.25rem] border border-white/8 bg-black/20 px-4 py-4 text-sm text-white/78 transition hover:border-[#de8eff]/30 hover:text-white"
+                    className="rounded-[1.25rem] border border-white/8 bg-black/20 px-4 py-4 text-sm text-white/78 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
                   >
                     {playlistLink.label}
                   </a>
@@ -278,7 +278,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
               </Link>
               <Link
                 href="/recommendations"
-                className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de8eff]"
+                className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]"
               >
                 Open full feed
               </Link>
@@ -298,7 +298,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
             </div>
             <Link
               href="/recommendations"
-              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
+              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--primary)]"
             >
               View archive
             </Link>

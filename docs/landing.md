@@ -31,3 +31,5 @@
 - 텍스트 밀도를 낮게 유지한다.
 - 음악 커뮤니티 감성이 드러나되 과한 SaaS 톤은 피한다.
 - 섹션 수를 늘리기보다 문제 정의, 핵심 CTA, 대표 추천 1개, 멤버 스냅샷 정도로 압축하는 편이 낫다.
+- hero artwork는 종이 질감, lacquer/clay 톤, vintage headphone/turntable 무드를 기준으로 둔다.
+- 전역 팔레트는 parchment, clay brown, muted indigo, ink charcoal 조합을 우선 사용한다.
