@@ -17,7 +17,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 구현 기준 문서 작성 완료
 - `npm run dev`, `npm run lint`, `npm run build` 사용 가능
 - PRD v0.3 기준 문서 교체 완료
-- reaction/save UI와 connection-first data model 정렬은 아직 남은 갭
+- recommendation reaction/save UI 추가 완료
+- theme/event metadata와 connection-first data model 정렬은 아직 남은 갭
 
 ## Documents
 
@@ -60,7 +61,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 현재 `/`, `/members`, `/members/[id]`, `/recommendations`, `/recommendations/new`, `/profile/edit` 라우트가 존재합니다.
 - 공통 네비게이션은 desktop top bar와 mobile bottom bar로 동작합니다.
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
-- `/recommendations`에서는 작성자 링크와 무드 하이라이트가 함께 렌더링됩니다.
+- `/recommendations`에서는 작성자 링크, fire/save 인터랙션, 무드 하이라이트가 함께 렌더링됩니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
 - `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.
 - 현재 구현은 mock data 기반 MVP입니다.
@@ -73,6 +74,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 18` 기준으로 reaction/save UI 추가
-2. theme / event slot과 connection copy를 PRD v0.3 기준으로 정렬
-3. recommendation data model을 `memberNickname`, `reactionCount`, `saveCount`, `ThemeSpotlight`까지 코드에 반영
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 19` 기준으로 theme / event connection 강화
+2. recommendation data model을 `ThemeSpotlight` 중심으로 추가 정렬
+3. recommendation attribution과 member profile 탐색 copy를 connection-first 기준으로 다듬기

@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-16
+## Completed MB 01-18
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -24,53 +24,8 @@
 - `MB 14` storage version / reset control
 - `MB 15` PRD v0.2 기준 문서 재정렬
 - `MB 16` recommendation create route 분리
-
-## MB 17
-
-- 제목: PRD v0.3 기준 문서 교체
-- Goal:
-  - connection-first 관점을 반영한 PRD v0.3를 저장소 문서 기준선으로 교체한다.
-- Scope:
-  - `docs/prd.md`
-  - `docs/spec.md`
-  - `docs/mb-plan.md`
-  - `README.md`
-  - `docs/README.md`
-- Deliverables:
-  - PRD v0.3 저장소 반영본
-  - v0.3 SPEC 재작성
-  - v0.3 기준 남은 MB 재분해
-- Acceptance Criteria:
-  - 저장소 안에서 PRD/SPEC/MB가 모두 v0.3 기준을 가리킨다.
-  - 현재 구현 baseline과 남은 갭이 과장 없이 정리된다.
-  - lint/build 결과가 문서 근거로 반영된다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
-  - `sed -n '1,340p' docs/prd.md`
-  - `sed -n '1,340p' docs/spec.md`
-  - `sed -n '1,340p' docs/mb-plan.md`
-
-## MB 18
-
-- 제목: Lightweight Reaction / Save UI
-- Goal:
-  - PRD v0.3의 connection-first 경험을 위해 추천 카드에 낮은 마찰의 반응/저장 UI를 추가한다.
-- Scope:
-  - recommendation card
-  - recommendation studio local state
-  - mock data / 타입 보강
-- Deliverables:
-  - like / fire / save 중 최소 2개 이상 동작
-  - count 또는 active state
-  - local persistence와 충돌 없는 interaction
-- Acceptance Criteria:
-  - 추천 카드에서 반응 또는 저장이 가능하다.
-  - 모바일에서 탭 영역이 충분히 크다.
-  - lint/build가 유지된다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+- `MB 17` PRD v0.3 기준 문서 교체
+- `MB 18` recommendation reaction / save UI
 
 ## MB 19
 

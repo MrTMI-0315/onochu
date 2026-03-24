@@ -6,6 +6,7 @@ import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
 import { getMemberName } from "@/lib/mock-data";
 import {
+  createEmptyRecommendationEngagementState,
   createRecommendationFromDraft,
   loadStoredRecommendationState,
   persistStoredRecommendationState,
@@ -14,6 +15,8 @@ import {
 } from "@/lib/recommendation-drafts";
 import type {
   MemberProfile,
+  RecommendationEngagementAction,
+  RecommendationEngagementState,
   RecommendationDraftInput,
   SongRecommendation,
 } from "@/lib/types";
@@ -61,6 +64,8 @@ export function RecommendationStudio({
   const [localRecommendations, setLocalRecommendations] =
     useState<SongRecommendation[]>(initialRecommendations);
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
+  const [engagementByRecommendationId, setEngagementByRecommendationId] =
+    useState<Record<string, RecommendationEngagementState>>({});
   const [hasHydrated, setHasHydrated] = useState(false);
   const [storageMessage, setStorageMessage] = useState(
     "browser storage active",
@@ -72,6 +77,7 @@ export function RecommendationStudio({
     const hydrationFrame = window.requestAnimationFrame(() => {
       setLocalRecommendations(storedState.recommendations);
       setLatestDraft(storedState.latestDraft);
+      setEngagementByRecommendationId(storedState.engagementByRecommendationId);
       setStorageMessage(storedState.storageMessage);
       setHasHydrated(true);
     });
@@ -89,8 +95,9 @@ export function RecommendationStudio({
     persistStoredRecommendationState({
       recommendations: localRecommendations,
       latestDraft,
+      engagementByRecommendationId,
     });
-  }, [hasHydrated, latestDraft, localRecommendations]);
+  }, [engagementByRecommendationId, hasHydrated, latestDraft, localRecommendations]);
 
   const contributorCounts = useMemo(() => {
     return localRecommendations.reduce<Record<string, number>>((counts, recommendation) => {
@@ -121,6 +128,10 @@ export function RecommendationStudio({
     const nextDraft = createRecommendationFromDraft(draft, currentMember);
 
     setLatestDraft(nextDraft);
+    setEngagementByRecommendationId((currentEngagement) => ({
+      ...currentEngagement,
+      [nextDraft.id]: createEmptyRecommendationEngagementState(),
+    }));
     setLocalRecommendations((currentRecommendations) => [
       nextDraft,
       ...currentRecommendations,
@@ -132,7 +143,54 @@ export function RecommendationStudio({
     resetStoredRecommendationState();
     setLocalRecommendations(initialRecommendations);
     setLatestDraft(null);
+    setEngagementByRecommendationId({});
     setStorageMessage("storage cleared and reset to seeded feed");
+  }
+
+  function handleToggleEngagement(
+    recommendationId: string,
+    action: RecommendationEngagementAction,
+  ) {
+    setEngagementByRecommendationId((currentEngagementByRecommendationId) => {
+      const currentEngagement =
+        currentEngagementByRecommendationId[recommendationId] ??
+        createEmptyRecommendationEngagementState();
+      const nextIsActive = !currentEngagement[action];
+      const nextEngagementByRecommendationId = {
+        ...currentEngagementByRecommendationId,
+        [recommendationId]: {
+          ...currentEngagement,
+          [action]: nextIsActive,
+        },
+      };
+      const nextCountDelta = nextIsActive ? 1 : -1;
+
+      setLocalRecommendations((currentRecommendations) =>
+        currentRecommendations.map((recommendation) => {
+          if (recommendation.id !== recommendationId) {
+            return recommendation;
+          }
+
+          if (action === "save") {
+            return {
+              ...recommendation,
+              saveCount: Math.max(0, recommendation.saveCount + nextCountDelta),
+            };
+          }
+
+          return {
+            ...recommendation,
+            reactionCount: Math.max(
+              0,
+              recommendation.reactionCount + nextCountDelta,
+            ),
+          };
+        }),
+      );
+      setStorageMessage("saved engagement to browser storage");
+
+      return nextEngagementByRecommendationId;
+    });
   }
 
   return (
@@ -401,7 +459,12 @@ export function RecommendationStudio({
             <RecommendationCard
               key={recommendation.id}
               recommendation={recommendation}
+              engagement={
+                engagementByRecommendationId[recommendation.id] ??
+                createEmptyRecommendationEngagementState()
+              }
               linkToMember
+              onToggleEngagement={handleToggleEngagement}
             />
           ))}
         </section>

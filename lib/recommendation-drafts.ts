@@ -1,5 +1,6 @@
 import type {
   MemberProfile,
+  RecommendationEngagementState,
   RecommendationDraftInput,
   SongRecommendation,
 } from "@/lib/types";
@@ -8,22 +9,25 @@ export type StoredRecommendationState = {
   version: number;
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId: Record<string, RecommendationEngagementState>;
 };
 
 export const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
 export const LEGACY_RECOMMENDATION_STORAGE_KEY =
   "onochu-recommendation-studio-v1";
-export const RECOMMENDATION_STORAGE_VERSION = 2;
+export const RECOMMENDATION_STORAGE_VERSION = 3;
 
 type LoadedRecommendationState = {
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId: Record<string, RecommendationEngagementState>;
   storageMessage: string;
 };
 
 type PersistRecommendationStateInput = {
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId: Record<string, RecommendationEngagementState>;
 };
 
 type AppendDraftInput = {
@@ -32,6 +36,13 @@ type AppendDraftInput = {
   initialRecommendations: SongRecommendation[];
 };
 
+export function createEmptyRecommendationEngagementState(): RecommendationEngagementState {
+  return {
+    fire: false,
+    save: false,
+  };
+}
+
 export function createRecommendationFromDraft(
   draft: RecommendationDraftInput,
   currentMember: MemberProfile,
@@ -39,6 +50,7 @@ export function createRecommendationFromDraft(
   return {
     id: `draft-${Date.now()}`,
     memberId: currentMember.id,
+    memberNickname: currentMember.nickname,
     trackTitle: draft.trackTitle,
     artistName: draft.artistName,
     platform: draft.platform,
@@ -46,6 +58,8 @@ export function createRecommendationFromDraft(
     comment: draft.comment,
     moodTags: draft.moodTags.length > 0 ? draft.moodTags : ["fresh"],
     createdAt: new Date().toISOString(),
+    reactionCount: 0,
+    saveCount: 0,
   };
 }
 
@@ -62,6 +76,7 @@ export function loadStoredRecommendationState(
       return {
         recommendations: initialRecommendations,
         latestDraft: null,
+        engagementByRecommendationId: {},
         storageMessage: "browser storage active",
       };
     }
@@ -78,17 +93,32 @@ export function loadStoredRecommendationState(
       return {
         recommendations: initialRecommendations,
         latestDraft: null,
+        engagementByRecommendationId: {},
         storageMessage: "browser storage active",
       };
     }
 
     if ("version" in parsedValue) {
+      if (parsedValue.version === 2) {
+        return {
+          recommendations:
+            Array.isArray(parsedValue.recommendations) &&
+            parsedValue.recommendations.length > 0
+              ? parsedValue.recommendations
+              : initialRecommendations,
+          latestDraft: parsedValue.latestDraft ?? null,
+          engagementByRecommendationId: {},
+          storageMessage: "migrated browser storage to engagement state",
+        };
+      }
+
       if (parsedValue.version !== RECOMMENDATION_STORAGE_VERSION) {
         resetStoredRecommendationState();
 
         return {
           recommendations: initialRecommendations,
           latestDraft: null,
+          engagementByRecommendationId: {},
           storageMessage: "storage reset after version change",
         };
       }
@@ -100,6 +130,8 @@ export function loadStoredRecommendationState(
             ? parsedValue.recommendations
             : initialRecommendations,
         latestDraft: parsedValue.latestDraft ?? null,
+        engagementByRecommendationId:
+          parsedValue.engagementByRecommendationId ?? {},
         storageMessage: "hydrated from browser storage",
       };
     }
@@ -122,12 +154,14 @@ export function loadStoredRecommendationState(
     return {
       recommendations,
       latestDraft,
+      engagementByRecommendationId: {},
       storageMessage,
     };
   } catch {
     return {
       recommendations: initialRecommendations,
       latestDraft: null,
+      engagementByRecommendationId: {},
       storageMessage: "storage parse failed, reverted to seeded feed",
     };
   }
@@ -136,6 +170,7 @@ export function loadStoredRecommendationState(
 export function persistStoredRecommendationState({
   recommendations,
   latestDraft,
+  engagementByRecommendationId,
 }: PersistRecommendationStateInput) {
   window.localStorage.setItem(
     RECOMMENDATION_STORAGE_KEY,
@@ -143,6 +178,7 @@ export function persistStoredRecommendationState({
       version: RECOMMENDATION_STORAGE_VERSION,
       recommendations,
       latestDraft,
+      engagementByRecommendationId,
     } satisfies StoredRecommendationState),
   );
 }
@@ -155,15 +191,21 @@ export function appendDraftToStoredRecommendationState({
   const currentState = loadStoredRecommendationState(initialRecommendations);
   const latestDraft = createRecommendationFromDraft(draft, currentMember);
   const recommendations = [latestDraft, ...currentState.recommendations];
+  const engagementByRecommendationId = {
+    ...currentState.engagementByRecommendationId,
+    [latestDraft.id]: createEmptyRecommendationEngagementState(),
+  };
 
   persistStoredRecommendationState({
     recommendations,
     latestDraft,
+    engagementByRecommendationId,
   });
 
   return {
     recommendations,
     latestDraft,
+    engagementByRecommendationId,
     storageMessage: "saved to browser storage",
   };
 }

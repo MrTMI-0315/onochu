@@ -43,7 +43,7 @@ export function RecommendationCreateRoute({
     <PageShell
       eyebrow="Recommendation Create"
       title="Post a recommendation in its own route."
-      description="feed 안의 quick draft와 별개로, PRD v0.2가 요구한 독립 등록 경로를 열었습니다. 저장은 같은 browser storage를 사용하므로 등록 뒤 feed 최상단에서 바로 이어집니다."
+      description="feed 안의 quick draft와 별개로, PRD v0.3가 요구한 독립 등록 경로를 열었습니다. 저장은 같은 browser storage를 사용하므로 등록 뒤 feed 최상단에서 바로 이어집니다."
       aside={
         <div className="space-y-4">
           <div className="rounded-[1.25rem] bg-white/5 p-4">

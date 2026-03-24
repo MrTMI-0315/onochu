@@ -141,7 +141,9 @@ export const members: MemberProfile[] = [
   },
 ];
 
-export const recommendations: SongRecommendation[] = [
+const baseRecommendations: Array<
+  Omit<SongRecommendation, "memberNickname" | "reactionCount" | "saveCount">
+> = [
   {
     id: "rec-001",
     memberId: "kai",
@@ -275,6 +277,30 @@ export const recommendations: SongRecommendation[] = [
     createdAt: "2026-03-16T16:55:00+09:00",
   },
 ];
+
+const seededEngagementMetrics = [
+  { reactionCount: 18, saveCount: 9 },
+  { reactionCount: 14, saveCount: 11 },
+  { reactionCount: 21, saveCount: 8 },
+  { reactionCount: 16, saveCount: 12 },
+  { reactionCount: 24, saveCount: 15 },
+  { reactionCount: 27, saveCount: 13 },
+  { reactionCount: 13, saveCount: 7 },
+  { reactionCount: 11, saveCount: 10 },
+  { reactionCount: 9, saveCount: 5 },
+  { reactionCount: 19, saveCount: 16 },
+  { reactionCount: 15, saveCount: 6 },
+  { reactionCount: 12, saveCount: 9 },
+];
+
+export const recommendations: SongRecommendation[] = baseRecommendations.map(
+  (recommendation, index) => ({
+    ...recommendation,
+    memberNickname: getMemberName(recommendation.memberId),
+    reactionCount: seededEngagementMetrics[index]?.reactionCount ?? 0,
+    saveCount: seededEngagementMetrics[index]?.saveCount ?? 0,
+  }),
+);
 
 export const sortedRecommendations = [...recommendations].sort((left, right) =>
   right.createdAt.localeCompare(left.createdAt),

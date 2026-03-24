@@ -23,6 +23,7 @@ export type MemberProfile = {
 export type SongRecommendation = {
   id: string;
   memberId: string;
+  memberNickname: string;
   trackTitle: string;
   artistName: string;
   platform: MusicPlatform;
@@ -30,6 +31,8 @@ export type SongRecommendation = {
   comment: string;
   moodTags: string[];
   createdAt: string;
+  reactionCount: number;
+  saveCount: number;
 };
 
 export type RecommendationDraftInput = {
@@ -39,4 +42,11 @@ export type RecommendationDraftInput = {
   url: string;
   comment: string;
   moodTags: string[];
+};
+
+export type RecommendationEngagementAction = "fire" | "save";
+
+export type RecommendationEngagementState = {
+  fire: boolean;
+  save: boolean;
 };

@@ -1,23 +1,61 @@
+"use client";
+
 import Link from "next/link";
 import { getMemberName, platformLabels } from "@/lib/mock-data";
-import type { SongRecommendation } from "@/lib/types";
+import type {
+  RecommendationEngagementAction,
+  RecommendationEngagementState,
+  SongRecommendation,
+} from "@/lib/types";
 
 type RecommendationCardProps = {
   recommendation: SongRecommendation;
   compact?: boolean;
   linkToMember?: boolean;
+  engagement?: RecommendationEngagementState;
+  onToggleEngagement?: (
+    recommendationId: string,
+    action: RecommendationEngagementAction,
+  ) => void;
+  showEngagementControls?: boolean;
 };
 
 export function RecommendationCard({
   recommendation,
   compact = false,
   linkToMember = true,
+  engagement,
+  onToggleEngagement,
+  showEngagementControls = true,
 }: RecommendationCardProps) {
-  const memberName = getMemberName(recommendation.memberId);
+  const memberName =
+    recommendation.memberNickname || getMemberName(recommendation.memberId);
   const createdAt = new Intl.DateTimeFormat("ko-KR", {
     month: "2-digit",
     day: "2-digit",
   }).format(new Date(recommendation.createdAt));
+  const resolvedEngagement = engagement ?? {
+    fire: false,
+    save: false,
+  };
+  const engagementButtons = [
+    {
+      action: "fire" as const,
+      label: "Fire",
+      count: recommendation.reactionCount,
+      active: resolvedEngagement.fire,
+      activeClass:
+        "border-[#ff8b72]/35 bg-[#ff8b72]/14 text-[#ffc0b1] shadow-[0_0_30px_rgba(255,139,114,0.12)]",
+    },
+    {
+      action: "save" as const,
+      label: "Save",
+      count: recommendation.saveCount,
+      active: resolvedEngagement.save,
+      activeClass:
+        "border-[#de8eff]/35 bg-[#de8eff]/14 text-[#f2d7ff] shadow-[0_0_30px_rgba(222,142,255,0.12)]",
+    },
+  ];
 
   return (
     <article
@@ -72,6 +110,29 @@ export function RecommendationCard({
             </span>
           ))}
         </div>
+
+        {showEngagementControls ? (
+          <div className="grid grid-cols-2 gap-3">
+            {engagementButtons.map((button) => (
+              <button
+                key={button.action}
+                type="button"
+                disabled={!onToggleEngagement}
+                onClick={() =>
+                  onToggleEngagement?.(recommendation.id, button.action)
+                }
+                className={`flex min-h-12 items-center justify-between rounded-[1rem] border px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.16em] transition ${
+                  button.active
+                    ? button.activeClass
+                    : "border-white/8 bg-white/4 text-white/65 hover:border-white/14 hover:bg-white/6 hover:text-white"
+                } ${onToggleEngagement ? "" : "cursor-default opacity-70"}`}
+              >
+                <span>{button.label}</span>
+                <span>{button.count}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
 
         <div className="mt-auto flex items-center justify-between gap-4 border-t border-white/6 pt-4">
           <time className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">
