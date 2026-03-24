@@ -215,11 +215,11 @@ export function RecommendationStudio({
     <main className="min-h-screen px-4 pb-28 pt-24 text-stone-100 md:px-6 md:pb-12 md:pt-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-8">
         <section className="onochu-panel relative overflow-hidden rounded-[2rem] p-6 md:p-8">
-          <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[#de8eff]/10 blur-[100px]" />
+          <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[color:rgba(213,140,116,0.14)] blur-[100px]" />
           <div className="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="flex flex-col gap-5">
               <div className="flex flex-wrap gap-2">
-                <span className="rounded-sm bg-[#de8eff] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
+                <span className="rounded-sm bg-[var(--primary)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
                   {activeTheme.phaseLabel ?? "Current Theme"}
                 </span>
                 {activeTheme.relatedEvent ? (
@@ -262,7 +262,7 @@ export function RecommendationStudio({
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/recommendations/new"
-                  className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                  className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
                 >
                   Add your pick
                 </Link>
@@ -302,7 +302,7 @@ export function RecommendationStudio({
                   browse-first 구조를 유지하고 작성은 독립 route에서 처리합니다.
                   local draft와 engagement는 같은 browser storage를 공유합니다.
                 </p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                   v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
                 </p>
               </div>
@@ -316,7 +316,7 @@ export function RecommendationStudio({
                 <p className="mt-2 text-sm leading-7 text-white/62">
                   {activeTheme.relatedEvent ?? activeTheme.participantSummary}
                 </p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                   {activeThemeRecommendations.length} theme-linked recs /{" "}
                   {activeThemeContributorCount} contributors
                 </p>
@@ -324,7 +324,7 @@ export function RecommendationStudio({
               <button
                 type="button"
                 onClick={handleResetStorage}
-                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
               >
                 Reset local feed
               </button>
@@ -336,7 +336,7 @@ export function RecommendationStudio({
           <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                   Latest local draft
                 </p>
                 <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
@@ -345,7 +345,7 @@ export function RecommendationStudio({
               </div>
               <Link
                 href="/recommendations/new"
-                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
               >
                 Open create route
               </Link>
@@ -361,7 +361,7 @@ export function RecommendationStudio({
         <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                 Saved shelf
               </p>
               <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
@@ -372,7 +372,7 @@ export function RecommendationStudio({
               <button
                 type="button"
                 onClick={() => setActiveFilter("saved")}
-                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
               >
                 View saved only
               </button>
@@ -425,7 +425,7 @@ export function RecommendationStudio({
                 onClick={() => setActiveFilter("all")}
                 className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
                   activeFilter === "all"
-                    ? "bg-[#de8eff] text-black"
+                    ? "bg-[var(--primary)] text-black"
                     : "border border-white/10 text-white/55"
                 }`}
               >
@@ -436,7 +436,7 @@ export function RecommendationStudio({
                 onClick={() => setActiveFilter("saved")}
                 className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
                   activeFilter === "saved"
-                    ? "bg-[#de8eff] text-black"
+                    ? "bg-[var(--primary)] text-black"
                     : "border border-white/10 text-white/55"
                 }`}
               >
@@ -473,7 +473,7 @@ export function RecommendationStudio({
           <article className="onochu-panel rounded-[1.75rem] p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                   Feed context
                 </p>
                 <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
@@ -561,8 +561,8 @@ export function RecommendationStudio({
               </div>
             </article>
 
-            <article className="rounded-[1.75rem] border border-[#de8eff]/16 bg-[#de8eff]/8 p-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+            <article className="rounded-[1.75rem] border border-[color:rgba(213,140,116,0.16)] bg-[color:rgba(213,140,116,0.08)] p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                 Contribute next
               </p>
               <h2 className="onochu-display mt-3 text-2xl font-bold uppercase text-white">
@@ -581,7 +581,7 @@ export function RecommendationStudio({
               <div className="mt-5 flex flex-wrap gap-3">
                 <Link
                   href="/recommendations/new"
-                  className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                  className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
                 >
                   Open create route
                 </Link>

@@ -194,7 +194,7 @@ export function RecommendationComposer({
 
   const statusTone =
     saveStatus.type === "success"
-      ? "border-[#de8eff]/30 bg-[#de8eff]/10 text-[#f4d2ff]"
+      ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[color:var(--paper)]"
       : saveStatus.type === "error"
         ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
         : "border-white/10 bg-white/4 text-white/68";
@@ -202,7 +202,7 @@ export function RecommendationComposer({
   return (
     <section id="compose-panel" className="onochu-panel rounded-[2rem] p-6 md:p-8">
       <header className="mb-8">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
           New Recommendation
         </p>
         <h2 className="onochu-display mt-3 text-4xl font-bold uppercase leading-[0.9] text-white md:text-5xl">
@@ -210,26 +210,26 @@ export function RecommendationComposer({
           <br />
           in under a minute.
         </h2>
-        <div className="mt-5 h-1 w-12 bg-[#de8eff]" />
+        <div className="mt-5 h-1 w-12 bg-[var(--primary)]" />
         <p className="mt-5 text-sm leading-7 text-white/65">
           현재 로그인 개념은 없어서 local mock 기준 작성자는 {currentMemberName}
           으로 가정합니다. 중요한 건 곡, 왜 골랐는지, 어디서 들을지 세 가지입니다.
         </p>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
           <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               01
             </p>
             <p className="mt-2 text-sm text-white/72">곡명과 아티스트</p>
           </div>
           <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               02
             </p>
             <p className="mt-2 text-sm text-white/72">왜 이 곡인지 한 줄</p>
           </div>
           <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               03
             </p>
             <p className="mt-2 text-sm text-white/72">
@@ -413,7 +413,7 @@ export function RecommendationComposer({
           <button
             type="submit"
             disabled={isSaving || isPending}
-            className="onochu-glow flex-[1.4] rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-8 py-5 text-sm font-extrabold uppercase tracking-[0.2em] text-black disabled:opacity-60"
+            className="onochu-glow flex-[1.4] rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-8 py-5 text-sm font-extrabold uppercase tracking-[0.2em] text-black disabled:opacity-60"
           >
             {isSaving || isPending ? "Posting..." : "Post now"}
           </button>

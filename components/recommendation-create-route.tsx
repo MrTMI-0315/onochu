@@ -123,14 +123,14 @@ export function RecommendationCreateRoute({
               <p className="mt-2 text-sm leading-7 text-white/62">
                 {activeTheme.relatedEvent ?? activeTheme.activationWindow}
               </p>
-              <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                 {themeParticipationCount} linked recs in this theme
               </p>
             </div>
           ) : null}
           <Link
             href="/recommendations"
-            className="inline-flex rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 transition hover:border-[#de8eff]/30 hover:text-white"
+            className="inline-flex rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
           >
             Back to feed
           </Link>
@@ -146,7 +146,7 @@ export function RecommendationCreateRoute({
 
         <div className="space-y-6">
           <section className="onochu-panel rounded-[2rem] p-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
               Route intent
             </p>
             <h2 className="onochu-display mt-3 text-3xl font-bold uppercase text-white">
@@ -196,7 +196,7 @@ export function RecommendationCreateRoute({
           <section className="onochu-panel rounded-[2rem] p-6">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                   Latest submission
                 </p>
                 <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">

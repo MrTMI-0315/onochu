@@ -241,7 +241,7 @@ export function ProfileEditForm({
 
   const statusTone =
     saveStatus.type === "success"
-      ? "border-[#de8eff]/30 bg-[#de8eff]/10 text-[#f4d2ff]"
+      ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[color:var(--paper)]"
       : saveStatus.type === "error"
         ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
         : "border-white/10 bg-white/4 text-white/68";
@@ -251,10 +251,10 @@ export function ProfileEditForm({
       <div className="mx-auto max-w-3xl space-y-8">
         <section className="flex flex-col items-center gap-5 text-center">
           <div className="relative">
-            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,#de8eff_0%,#202020_70%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(188,19,254,0.25)]">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,var(--paper)_0%,var(--primary)_28%,var(--surface)_72%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(213,140,116,0.22)]">
               {nickname.slice(0, 2).toUpperCase() || "ME"}
             </div>
-            <div className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-[11px] font-bold uppercase text-black">
+            <div className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] text-[11px] font-bold uppercase text-black">
               Edit
             </div>
           </div>
@@ -298,8 +298,8 @@ export function ProfileEditForm({
           </div>
 
           <div className="grid w-full gap-3 sm:grid-cols-[0.8fr_1.2fr]">
-            <div className="rounded-[1.25rem] border border-[#de8eff]/18 bg-[#de8eff]/8 p-4 text-left">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <div className="rounded-[1.25rem] border border-[color:rgba(213,140,116,0.18)] bg-[color:rgba(213,140,116,0.08)] p-4 text-left">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
                 Completion
               </p>
               <p className="mt-2 text-3xl font-bold text-white">
@@ -314,7 +314,7 @@ export function ProfileEditForm({
               <button
                 type="button"
                 onClick={handleResetProfileDraft}
-                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
               >
                 Reset profile
               </button>
@@ -324,7 +324,7 @@ export function ProfileEditForm({
 
         <section className="grid gap-6 md:grid-cols-2">
           <label className="flex flex-col gap-2 text-sm text-white/78">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               Nickname
             </span>
             <input
@@ -340,7 +340,7 @@ export function ProfileEditForm({
           </label>
 
           <div className="flex flex-col gap-2 text-sm text-white/78">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               Primary platform
             </span>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -354,7 +354,7 @@ export function ProfileEditForm({
                     onClick={() => setMainPlatform(value)}
                     className={`rounded-[1rem] border px-3 py-4 text-center text-[11px] font-bold uppercase tracking-[0.16em] transition ${
                       isActive
-                        ? "border-[#de8eff]/30 bg-[#de8eff]/12 text-[#de8eff]"
+                        ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[var(--primary)]"
                         : "border-white/8 bg-[#111111] text-white/55"
                     }`}
                   >
@@ -373,7 +373,7 @@ export function ProfileEditForm({
           </div>
 
           <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               Short bio
             </span>
             <textarea
@@ -386,7 +386,7 @@ export function ProfileEditForm({
           </label>
 
           <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               Favorite genres
             </span>
             <input
@@ -400,7 +400,7 @@ export function ProfileEditForm({
         </section>
 
         <section className="space-y-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
             Quick vibe selection
           </p>
           <div className="flex flex-wrap gap-2">
@@ -425,7 +425,7 @@ export function ProfileEditForm({
 
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-3">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               Playlist links
             </span>
             <button
@@ -469,7 +469,7 @@ export function ProfileEditForm({
           <button
             type="submit"
             disabled={isSaving || isPending}
-            className="onochu-glow w-full rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-5 text-base font-bold uppercase tracking-[0.16em] text-black disabled:opacity-60"
+            className="onochu-glow w-full rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-6 py-5 text-base font-bold uppercase tracking-[0.16em] text-black disabled:opacity-60"
           >
             {isSaving || isPending ? "Saving..." : "Initialize profile"}
           </button>
