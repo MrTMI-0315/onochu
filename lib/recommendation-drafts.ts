@@ -5,6 +5,7 @@ import type {
   SongRecommendation,
   ThemeSpotlight,
 } from "@/lib/types";
+import { normalizePlatformLinkMap } from "@/lib/platform-links";
 
 export type StoredRecommendationState = {
   version: number;
@@ -63,6 +64,10 @@ export function createRecommendationFromDraft(
     createdAt: new Date().toISOString(),
     reactionCount: 0,
     saveCount: 0,
+    alternatePlatformUrls: normalizePlatformLinkMap(
+      draft.alternatePlatformUrls,
+      draft.platform,
+    ),
     themeId: activeTheme?.id,
     themeTitle: activeTheme?.title,
     themePhaseLabel: activeTheme?.phaseLabel,

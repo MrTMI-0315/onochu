@@ -2,7 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { platformLabels } from "@/lib/mock-data";
-import type { MusicPlatform, RecommendationDraftInput } from "@/lib/types";
+import { normalizePlatformLinkMap } from "@/lib/platform-links";
+import type {
+  MusicPlatform,
+  PlatformLinkMap,
+  RecommendationDraftInput,
+} from "@/lib/types";
 
 type RecommendationComposerProps = {
   currentMemberName: string;
@@ -15,6 +20,7 @@ type ComposerErrors = {
   artistName?: string;
   url?: string;
   comment?: string;
+  alternatePlatformUrls?: string;
 };
 
 type SaveStatus =
@@ -34,6 +40,9 @@ export function RecommendationComposer({
   const [artistName, setArtistName] = useState("");
   const [platform, setPlatform] = useState<MusicPlatform>("spotify");
   const [url, setUrl] = useState("");
+  const [alternatePlatformUrls, setAlternatePlatformUrls] = useState<PlatformLinkMap>(
+    {},
+  );
   const [comment, setComment] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [errors, setErrors] = useState<ComposerErrors>({});
@@ -47,12 +56,16 @@ export function RecommendationComposer({
   const platformOptions = Object.entries(platformLabels) as Array<
     [MusicPlatform, string]
   >;
+  const alternatePlatformOptions = platformOptions.filter(
+    ([value]) => value !== "other",
+  );
 
   function clearFormFields() {
     setTrackTitle("");
     setArtistName("");
     setPlatform("spotify");
     setUrl("");
+    setAlternatePlatformUrls({});
     setComment("");
     setSelectedTags([]);
   }
@@ -72,6 +85,13 @@ export function RecommendationComposer({
         ? currentTags.filter((currentTag) => currentTag !== tag)
         : [...currentTags, tag],
     );
+  }
+
+  function updateAlternatePlatformUrl(targetPlatform: MusicPlatform, value: string) {
+    setAlternatePlatformUrls((currentLinks) => ({
+      ...currentLinks,
+      [targetPlatform]: value,
+    }));
   }
 
   function validateForm() {
@@ -97,6 +117,26 @@ export function RecommendationComposer({
 
     if (comment.trim().length === 0) {
       nextErrors.comment = "한 줄 코멘트는 비워둘 수 없습니다.";
+    }
+
+    const hasInvalidAlternateLink = Object.entries(alternatePlatformUrls).some(
+      ([targetPlatform, value]) => {
+        if (targetPlatform === platform || value.trim().length === 0) {
+          return false;
+        }
+
+        try {
+          new URL(value.trim());
+          return false;
+        } catch {
+          return true;
+        }
+      },
+    );
+
+    if (hasInvalidAlternateLink) {
+      nextErrors.alternatePlatformUrls =
+        "선택 입력인 alternate platform links도 올바른 URL 형식이어야 합니다.";
     }
 
     return nextErrors;
@@ -133,6 +173,10 @@ export function RecommendationComposer({
       url: url.trim(),
       comment: comment.trim(),
       moodTags: selectedTags,
+      alternatePlatformUrls: normalizePlatformLinkMap(
+        alternatePlatformUrls,
+        platform,
+      ),
     };
 
     startTransition(() => {
@@ -188,7 +232,9 @@ export function RecommendationComposer({
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
               03
             </p>
-            <p className="mt-2 text-sm text-white/72">원본 링크와 태그</p>
+            <p className="mt-2 text-sm text-white/72">
+              원본 링크와 optional alternate links
+            </p>
           </div>
         </div>
       </header>
@@ -264,6 +310,53 @@ export function RecommendationComposer({
             ) : null}
           </label>
         </div>
+
+        <section className="space-y-4 rounded-[1.5rem] border border-white/8 bg-white/3 p-5">
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+              Alternate platform links
+            </span>
+            <p className="text-sm leading-7 text-white/58">
+              선택 입력입니다. 추천을 보는 멤버가 자기 플랫폼으로 바로 이어질 수
+              있게 필요한 링크만 더 붙일 수 있습니다.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {alternatePlatformOptions.map(([value, label]) => {
+              const isSourcePlatform = value === platform;
+
+              return (
+                <label key={value} className="flex flex-col gap-2">
+                  <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+                    {label}
+                    {isSourcePlatform ? " (source handled above)" : " (optional)"}
+                  </span>
+                  <input
+                    value={alternatePlatformUrls[value] ?? ""}
+                    onChange={(event) =>
+                      updateAlternatePlatformUrl(value, event.target.value)
+                    }
+                    className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20 disabled:cursor-not-allowed disabled:opacity-45"
+                    placeholder={
+                      isSourcePlatform
+                        ? "Original link already covers this platform"
+                        : `Paste ${label} link if you have it`
+                    }
+                    type="url"
+                    disabled={isSourcePlatform}
+                  />
+                </label>
+              );
+            })}
+          </div>
+
+          {errors.alternatePlatformUrls ? (
+            <span className="text-xs text-rose-200">
+              {errors.alternatePlatformUrls}
+            </span>
+          ) : null}
+        </section>
 
         <label className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">

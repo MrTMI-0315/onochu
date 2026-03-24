@@ -119,8 +119,9 @@ export function RecommendationCreateRoute({
             </h2>
             <p className="mt-4 text-sm leading-7 text-white/68">
               곡명, 아티스트, 링크, 코멘트만 채우면 등록이 끝나게 유지했습니다.
-              저장 후에는 `/recommendations`에서 draft preview와 피드 삽입 상태를
-              바로 확인할 수 있습니다.
+              필요하면 alternate links를 더 붙여서 다른 플랫폼 사용자도 바로
+              이어질 수 있게 만들 수 있습니다. 저장 후에는 `/recommendations`
+              에서 draft preview와 피드 삽입 상태를 바로 확인할 수 있습니다.
             </p>
             {activeTheme ? (
               <p className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/62">

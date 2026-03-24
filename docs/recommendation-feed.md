@@ -14,6 +14,7 @@
 - weekly theme hero / theme selects
 - active theme relatedEvent / activationWindow / curator note
 - dedicated recommendation create route 진입 CTA
+- recommendation create에서 optional alternate platform links 입력
 - 최근 추천곡 카드 리스트
 - 첫 스크롤에서 실제 추천 카드가 먼저 보여야 하는 browse-first 정보 구조
 - all / saved recommendation filter
@@ -24,6 +25,7 @@
 - fire / save interaction
 - 외부 링크 이동
 - active theme에서 작성된 draft는 theme metadata를 함께 가진다
+- active theme draft는 필요 시 alternate platform links도 함께 가진다
 
 ## Card Fields
 
@@ -58,6 +60,7 @@
 - feed는 browse-first, 작성은 `/recommendations/new` 중심으로 분리한다.
 - save interaction은 다시 보기 위한 personal revisit flow로 이어져야 한다.
 - 저장된 곡이 없을 때도 save 목적을 설명하는 empty guidance가 필요하다.
+- 추천 등록은 원본 링크 1개로 끝낼 수 있지만, 필요하면 alternate platform links를 선택적으로 추가할 수 있어야 한다.
 - 저장된 draft는 localStorage 기준으로 새로고침 이후에도 local feed 최상단에 유지된다.
 - local draft가 추가되면 feed 상단 카드와 파생 통계가 함께 갱신되어야 한다.
 - fire와 save는 browser storage 기준으로 새로고침 뒤에도 active state와 count 변화가 유지되어야 한다.
