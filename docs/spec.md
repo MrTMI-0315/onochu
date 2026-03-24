@@ -269,6 +269,9 @@ type ThemeSpotlight = {
 
 - theme 운영은 아직 manual/mock 수준이며 admin-grade workflow는 없음
 - GitHub Login Connection 부재로 Git-integrated import path는 아직 검증하지 않음
+- profile는 아직 브라우저 재방문 기준의 local persistence가 없음
+- saved recommendation을 다시 꺼내 보는 personal revisit flow가 약함
+- draft recommendation과 active theme 연결은 설명 위주이며 metadata 축적은 아직 약함
 
 ## 16. MVP Acceptance Criteria
 

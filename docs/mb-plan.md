@@ -125,3 +125,159 @@
 - Verification:
   - `npm run lint`
   - `npm run build`
+
+## MB 31
+
+- 제목: Define Post-Rebuild Delivery Sequence
+- Goal:
+  - PRD v0.3 기준으로 MB 31~40의 구현 순서를 확정한다.
+- Scope:
+  - `docs/mb-plan.md`
+  - `docs/spec.md`
+- Acceptance Criteria:
+  - MB 31~40이 persistence, save flow, theme, QA, deploy 기준으로 번호화된다.
+  - 현재 제품의 남은 가치 검증 축이 문서에 반영된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 32
+
+- 제목: Add Local Profile Persistence
+- Goal:
+  - `/profile/edit` 저장 결과를 browser storage에 유지해 프로필 축적 경험을 만든다.
+- Scope:
+  - `components/profile-edit-form.tsx`
+  - `lib/profile-drafts.ts`
+  - `lib/types.ts`
+- Acceptance Criteria:
+  - 프로필 저장 후 새로고침해도 마지막 입력 상태가 복원된다.
+  - validation과 local-only 설명이 유지된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 33
+
+- 제목: Add Profile Completion and Reset Controls
+- Goal:
+  - 프로필 저장 상태를 더 이해하기 쉽게 completion summary와 reset action을 추가한다.
+- Scope:
+  - `components/profile-edit-form.tsx`
+  - `docs/profile-edit.md`
+- Acceptance Criteria:
+  - completion summary가 보인다.
+  - local reset action이 동작한다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 34
+
+- 제목: Add Saved Recommendation Filter
+- Goal:
+  - `/recommendations`에서 저장한 곡만 모아 다시 보기 쉬운 필터를 추가한다.
+- Scope:
+  - `components/recommendation-studio.tsx`
+  - `lib/recommendation-drafts.ts`
+  - `docs/recommendation-feed.md`
+- Acceptance Criteria:
+  - all / saved filter가 존재한다.
+  - save interaction 결과가 filter에 반영된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 35
+
+- 제목: Surface Saved Shelf and Empty Guidance
+- Goal:
+  - 저장한 추천곡을 feed 상단에서 재진입 가능한 shelf로 노출한다.
+- Scope:
+  - `components/recommendation-studio.tsx`
+  - `docs/recommendation-feed.md`
+- Acceptance Criteria:
+  - saved recommendation shelf가 생긴다.
+  - 저장된 곡이 없을 때 guidance가 보인다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 36
+
+- 제목: Attach Theme Metadata to Draft Recommendations
+- Goal:
+  - 새로 작성한 recommendation이 현재 active theme 맥락을 함께 가지도록 만든다.
+- Scope:
+  - `lib/types.ts`
+  - `lib/recommendation-drafts.ts`
+  - `components/recommendation-card.tsx`
+- Acceptance Criteria:
+  - local draft recommendation에 theme metadata가 기록된다.
+  - 카드에서 theme badge를 읽을 수 있다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 37
+
+- 제목: Show Theme Participation Summary
+- Goal:
+  - active theme와 연결된 추천 수와 참여 흐름을 feed/create route에서 더 직접적으로 보여 준다.
+- Scope:
+  - `components/recommendation-studio.tsx`
+  - `components/recommendation-create-route.tsx`
+  - `docs/recommendation-feed.md`
+- Acceptance Criteria:
+  - theme participation summary가 보인다.
+  - create route에서 현재 테마와 작성 결과의 연결 이유가 더 명확해진다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 38
+
+- 제목: Refresh v0.3 Route QA After Post-Rebuild Changes
+- Goal:
+  - MB 31~37 이후 route QA 기준선을 다시 맞춘다.
+- Scope:
+  - `docs/qa-v0.3.md`
+- Acceptance Criteria:
+  - 주요 route smoke 결과가 최신 상태로 반영된다.
+  - 남은 blocker가 갱신된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+  - Playwright smoke
+
+## MB 39
+
+- 제목: Redeploy Production After UX and Persistence Updates
+- Goal:
+  - post-rebuild 상태를 production에 다시 배포한다.
+- Scope:
+  - `docs/deployment.md`
+  - 필요 시 `README.md`
+- Acceptance Criteria:
+  - production deploy가 완료된다.
+  - production smoke evidence가 남는다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+  - `npx vercel --prod --yes`
+
+## MB 40
+
+- 제목: Refresh Product Baseline Docs for Phase 2
+- Goal:
+  - MB 31~39 결과를 바탕으로 다음 phase 기준선을 문서에 반영한다.
+- Scope:
+  - `docs/spec.md`
+  - `docs/mb-plan.md`
+  - `README.md`
+- Acceptance Criteria:
+  - current repository baseline과 remaining gaps가 최신화된다.
+  - phase 2용 다음 MB 제안이 문서에 남는다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
