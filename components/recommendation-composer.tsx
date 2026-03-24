@@ -162,17 +162,35 @@ export function RecommendationComposer({
           New Recommendation
         </p>
         <h2 className="onochu-display mt-3 text-4xl font-bold uppercase leading-[0.9] text-white md:text-5xl">
-          Curate The
+          Post a track
           <br />
-          <span className="bg-gradient-to-r from-[#de8eff] to-[#b90afc] bg-clip-text text-transparent">
-            Soundscape.
-          </span>
+          in under a minute.
         </h2>
         <div className="mt-5 h-1 w-12 bg-[#de8eff]" />
         <p className="mt-5 text-sm leading-7 text-white/65">
           현재 로그인 개념은 없어서 local mock 기준 작성자는 {currentMemberName}
-          으로 가정합니다.
+          으로 가정합니다. 중요한 건 곡, 왜 골랐는지, 어디서 들을지 세 가지입니다.
         </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              01
+            </p>
+            <p className="mt-2 text-sm text-white/72">곡명과 아티스트</p>
+          </div>
+          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              02
+            </p>
+            <p className="mt-2 text-sm text-white/72">왜 이 곡인지 한 줄</p>
+          </div>
+          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              03
+            </p>
+            <p className="mt-2 text-sm text-white/72">원본 링크와 태그</p>
+          </div>
+        </div>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-8">
@@ -250,7 +268,7 @@ export function RecommendationComposer({
         <label className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
             <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
-              The vibe
+              Why this track
             </span>
             <span className="text-[10px] uppercase tracking-[0.16em] text-white/30">
               {comment.length}/{MAX_COMMENT_LENGTH}

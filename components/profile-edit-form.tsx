@@ -166,25 +166,39 @@ export function ProfileEditForm({
       <div className="mx-auto max-w-3xl space-y-8">
         <section className="flex flex-col items-center gap-5 text-center">
           <div className="relative">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,#de8eff_0%,#202020_70%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(188,19,254,0.25)]">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,#de8eff_0%,#202020_70%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(188,19,254,0.25)]">
               {nickname.slice(0, 2).toUpperCase() || "ME"}
             </div>
-            <div className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-black">
+            <div className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-[11px] font-bold uppercase text-black">
               Edit
             </div>
           </div>
 
           <div>
             <h2 className="onochu-display text-4xl font-bold uppercase text-white">
-              Identity Setup
+              Let members know
+              <br />
+              how to start with you.
             </h2>
             <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/40">
-              Craft your digital taste presence
+              nickname, platform, one link first
             </p>
           </div>
 
           <div className={`w-full rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
             {saveStatus.message}
+          </div>
+
+          <div className="grid w-full gap-3 sm:grid-cols-3">
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
+              닉네임이 보여야 합니다.
+            </div>
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
+              주 플랫폼이 보여야 합니다.
+            </div>
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
+              링크 하나면 시작할 수 있습니다.
+            </div>
           </div>
         </section>
 

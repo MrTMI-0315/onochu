@@ -44,8 +44,8 @@ export function RecommendationCreateRoute({
   return (
     <PageShell
       eyebrow="Recommendation Create"
-      title="Post a recommendation in its own route."
-      description="feed 안의 quick draft와 별개로, PRD v0.3가 요구한 독립 등록 경로를 열었습니다. 저장은 같은 browser storage를 사용하므로 등록 뒤 feed 최상단에서 바로 이어집니다."
+      title="One clean route for posting a recommendation."
+      description="feed에서 읽는 흐름을 방해하지 않도록 작성은 별도 route로 분리했습니다. 저장은 같은 browser storage를 사용하므로 등록 뒤 feed 최상단에서 바로 이어집니다."
       aside={
         <div className="space-y-4">
           <div className="rounded-[1.25rem] bg-white/5 p-4">
@@ -99,13 +99,24 @@ export function RecommendationCreateRoute({
               Route intent
             </p>
             <h2 className="onochu-display mt-3 text-3xl font-bold uppercase text-white">
-              Faster than a chat scroll.
+              One clean submission flow.
             </h2>
             <p className="mt-4 text-sm leading-7 text-white/68">
-              곡명, 아티스트, 플랫폼, 링크, 코멘트만 있으면 등록을 끝낼 수 있게
-              유지했습니다. 저장 후에는 `/recommendations`에서 draft preview와
-              피드 삽입 상태를 바로 확인할 수 있습니다.
+              곡명, 아티스트, 링크, 코멘트만 채우면 등록이 끝나게 유지했습니다.
+              저장 후에는 `/recommendations`에서 draft preview와 피드 삽입 상태를
+              바로 확인할 수 있습니다.
             </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-sm text-white/72">
+                song first
+              </div>
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-sm text-white/72">
+                reason second
+              </div>
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-sm text-white/72">
+                link last
+              </div>
+            </div>
             {activeTheme?.curatorNote ? (
               <p className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/62">
                 {activeTheme.curatorNote}

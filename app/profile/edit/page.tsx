@@ -9,7 +9,7 @@ export default function ProfileEditPage() {
     <PageShell
       eyebrow="Profile Setup"
       title="Build a taste profile with minimal friction."
-      description="입력 부담은 낮게 유지하되, 닉네임과 링크 검증은 놓치지 않는 onboarding 형태로 정리했습니다. 현재 저장은 local mock flow로만 동작합니다."
+      description="닉네임, 플랫폼, 링크 하나를 먼저 채우고 나머지는 천천히 덧붙이는 onboarding 형태로 정리했습니다. 현재 저장은 local mock flow로만 동작합니다."
       aside={
         <div className="space-y-4">
           <div className="rounded-[1.25rem] bg-white/5 p-4">
