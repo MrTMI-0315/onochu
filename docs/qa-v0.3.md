@@ -25,11 +25,14 @@
 - active theme hero, saved shelf, all/saved filter, feed cards, profile CTA, fire/save 버튼 확인
 - theme-aware storage migration 후 `v4 / browser storage active`, `3 theme-linked recs / 3 contributors` 표시 확인
 - save 전 empty guidance가 보이고, saved shelf가 personal revisit queue 역할을 하는 구조 확인
+- profile에서 저장한 `mainPlatform` 기준으로 card CTA가 `Play on Apple Music` 또는 `Search Apple Music`으로 해석되는 것 확인
+- fallback 상태에서 `Search fallback` 라벨이 surface에 보이는 것 확인
 
 ### `/recommendations/new`
 
 - PASS
 - 독립 등록 route, local-only preview 설명, active theme context, linked rec count, feed 복귀 링크 확인
+- optional alternate platform links 입력이 보이고, Apple Music alternate link를 저장한 뒤 preview CTA가 Apple Music 기준으로 바뀌는 것 확인
 
 ### `/members`
 
@@ -47,6 +50,7 @@
 - PASS
 - nickname, platform, bio, genre, playlist link 입력 surface와 local validation 구조 확인
 - `v1 / profile browser storage active`, completion summary, reset profile action surface 확인
+- 저장한 `mainPlatform`이 recommendation feed card CTA 해석에 연결되는 것 확인
 
 ## Production Smoke
 
@@ -59,8 +63,9 @@
 - PASS: `/members/kai`
 - PASS: `/profile/edit`
 - PASS: production `/recommendations`에서 saved shelf, `v4` storage marker, `3 theme-linked recs / 3 contributors` 확인
-- PASS: production `/recommendations/new`에서 linked rec count와 theme-aware create context 확인
-- PASS: production `/profile/edit`에서 `v1` profile storage summary, completion, reset surface 확인
+- PASS: production `/recommendations`에서 Apple Music preferred platform 기준 CTA와 `Search fallback` 라벨 확인
+- PASS: production `/recommendations/new`에서 optional alternate links 입력과 draft preview의 Apple Music CTA 확인
+- PASS: production `/profile/edit`에서 `v1` profile storage summary, completion, reset surface와 main platform save 확인
 
 ### `not-found`
 
@@ -87,9 +92,10 @@
 - non-blocking:
   - theme 운영 흐름은 여전히 manual/mock 수준
   - persistence는 recommendation/profile 모두 browser-local 범위에 머물러 있음
+  - exact cross-platform mapping은 user-provided alternate link 또는 platform search fallback 기준이다
   - GitHub Login Connection 부재로 Git-integrated import path는 아직 검증하지 않음
 
 ## Summary
 
 - PRD v0.3 route 기준 주요 화면은 현재 구현 범위 안에서 탐색 가능
-- production deployment와 route smoke evidence를 확보했고, post-rebuild 로컬 QA 기준선도 갱신했다
+- production deployment와 route smoke evidence를 확보했고, cross-platform recommendation access 흐름까지 QA 기준선에 포함했다

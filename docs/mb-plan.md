@@ -394,3 +394,12 @@
   - `npm run lint`
   - `npm run build`
   - Playwright smoke
+
+## Completed MB 41-46
+
+- `MB 41` cross-platform recommendation access model 정의
+- `MB 42` recommendation create alternate platform links 입력
+- `MB 43` viewer platform 우선 recommendation CTA
+- `MB 44` profile main platform과 recommendation CTA 연결
+- `MB 45` unresolved platform fallback UX
+- `MB 46` cross-platform recommendation flow QA / deploy refresh

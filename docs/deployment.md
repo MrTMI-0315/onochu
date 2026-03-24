@@ -16,7 +16,7 @@
 - production deployment status:
   - deployed on 2026-03-25
   - production url: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/EaxMiK9TNQawJKCY1cFAXFGR8PTX)
+  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/7E8EJTKA44973gf3HahyekBNE2dj)
 
 ## Why This Repo Is Deployable
 
@@ -72,7 +72,7 @@
   - `npx vercel --prod --yes`
 - result:
   - production alias: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - production deployment url: [https://onochu-4esvzi8xz-episteme1999-9155s-projects.vercel.app](https://onochu-4esvzi8xz-episteme1999-9155s-projects.vercel.app)
+  - production deployment url: [https://onochu-l0lt11ze0-episteme1999-9155s-projects.vercel.app](https://onochu-l0lt11ze0-episteme1999-9155s-projects.vercel.app)
 - note:
   - GitHub Login Connection 부재로 repository link 단계에서 400 경고가 있었지만, CLI upload 방식으로 production 배포 자체는 성공했다.
   - 로컬에는 `.vercel`이 생성됐고 `.gitignore`에 ignore 규칙이 추가됐다.
@@ -82,15 +82,15 @@
 - `/`
   - landing hero, CTA, featured theme 노출 확인
 - `/recommendations`
-  - saved shelf, all/saved filter, theme participation summary, fire/save UI 노출 확인
+  - saved shelf, all/saved filter, theme participation summary, fire/save UI, viewer platform CTA 노출 확인
 - `/recommendations/new`
-  - active theme linked rec count와 theme-aware create flow 확인
+  - active theme linked rec count, optional alternate links, theme-aware create flow 확인
 - `/members`
   - directory list와 filter surface 확인
 - `/members/kai`
   - conversation starter와 reply CTA 확인
 - `/profile/edit`
-  - profile form 노출 확인
+  - profile form과 main platform save flow 확인
 
 ## Executed Production Smoke
 
@@ -102,7 +102,9 @@
 - PASS: `/profile/edit`
 - PASS: landing의 post-rebuild CTA / featured recommendation 구조 확인
 - PASS: recommendation feed의 `v4` storage marker와 `3 theme-linked recs / 3 contributors` 확인
-- PASS: profile edit의 `v1` profile storage summary / completion / reset surface 확인
+- PASS: recommendation feed의 Apple Music preferred platform CTA와 `Search fallback` 라벨 확인
+- PASS: recommendation create에서 optional alternate links 입력 후 draft preview CTA가 Apple Music 기준으로 바뀌는 것 확인
+- PASS: profile edit의 `v1` profile storage summary / completion / reset surface와 main platform save 확인
 
 ## CLI Fallback
 
