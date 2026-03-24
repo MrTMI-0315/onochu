@@ -268,13 +268,14 @@ type ThemeSpotlight = {
 현재 PRD v0.3 대비 주요 갭:
 
 - theme 운영은 아직 manual/mock 수준이며 admin-grade workflow는 없음
-- Vercel 배포 가능 상태에 대한 문서 증거가 아직 없음
+- production URL 자체는 아직 발급되지 않았고 runbook만 정리된 상태
 
 ## 16. MVP Acceptance Criteria
 
 QA evidence:
 
 - [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)
+- [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md)
 
 - [x] 랜딩 페이지가 존재한다
 - [x] 추천곡 피드가 존재한다
@@ -288,7 +289,7 @@ QA evidence:
 - [x] 모바일 기준으로 사용성이 깨지지 않는다
 - [x] `npm run lint` 통과
 - [x] `npm run build` 통과
-- [ ] Vercel 배포 가능한 상태다
+- [x] Vercel 배포 가능한 상태가 문서로 정리되어 있다
 
 ## 17. Implementation Guardrails
 

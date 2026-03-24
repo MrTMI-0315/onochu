@@ -64,12 +64,13 @@
 ## Remaining Gaps
 
 - blocker:
-  - Vercel 배포 문서와 운영 체크리스트가 아직 없어 배포 가능 상태 증거가 부족함
+  - 없음
 - non-blocking:
+  - 실제 production URL은 아직 발급하지 않았고 runbook만 정리된 상태
   - theme 운영 흐름은 여전히 manual/mock 수준
   - persistence와 auth는 local/mock 범위에 머물러 있음
 
 ## Summary
 
 - PRD v0.3 route 기준 주요 화면은 현재 구현 범위 안에서 탐색 가능
-- 남은 핵심 blocker는 배포/운영 문서 정리 1건으로 축소
+- 배포/운영 문서 blocker는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md) 추가로 해소

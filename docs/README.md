@@ -7,6 +7,7 @@
 ```text
 docs
 |-- README.md
+|-- deployment.md
 |-- landing.md
 |-- mb-plan.md
 |-- member-directory.md
@@ -22,6 +23,7 @@ docs
 ## Document Purpose
 
 - `mb-plan.md`: MB 단위 작업 계획, 완료 기준, 커밋 규칙
+- `deployment.md`: Vercel 배포 설정과 smoke runbook
 - `prd.md`: PRD v0.3 저장소 반영본
 - `spec.md`: PRD 기반 MVP 제품 명세와 현재 갭 정리
 - `qa-v0.3.md`: route별 QA 결과, mobile smoke, blocker 정리
