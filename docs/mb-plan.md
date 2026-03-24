@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-21
+## Completed MB 01-22
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -29,27 +29,7 @@
 - `MB 19` theme / event connection surface 강화
 - `MB 20` shared data model / docs 정렬
 - `MB 21` connection-first profile / feed flow 강화
-
-## MB 22
-
-- 제목: v0.3 Acceptance Criteria QA Pass
-- Goal:
-  - PRD v0.3 AC 기준으로 구현 상태를 재점검하고 남은 갭을 줄인다.
-- Scope:
-  - 전체 route QA
-  - mobile usability
-  - AC 문서 체크리스트
-- Deliverables:
-  - AC 체크 결과
-  - gap list
-  - 마지막 수정 묶음
-- Acceptance Criteria:
-  - route별 AC 체크가 문서화된다.
-  - mobile usability를 다시 확인한다.
-  - 남은 blocker가 1개 이하로 줄어든다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+- `MB 22` v0.3 acceptance criteria QA pass
 
 ## MB 23
 

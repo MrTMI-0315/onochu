@@ -141,7 +141,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                     Why start here
                   </p>
                   <p className="mt-3 text-sm leading-7 text-white/68">
-                    이 프로필은 최근 추천, mood 태그, 반응 수를 함께 보여 줘서
+                    이 프로필은 최근 추천, mood 태그, 반응 수를 함께 보여 줘서{" "}
                     {member.nickname}의 취향이 어떤 곡에서 커뮤니티 반응으로 이어졌는지 바로
                     읽을 수 있습니다.
                   </p>
@@ -259,7 +259,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   {featuredRecommendation.trackTitle} · {featuredRecommendation.artistName}
                 </p>
                 <p className="mt-3 text-sm leading-7 text-white/68">
-                  &ldquo;{featuredRecommendation.comment}&rdquo;에서 시작하면
+                  &ldquo;{featuredRecommendation.comment}&rdquo;에서 시작하면{" "}
                   {member.nickname}가 지금 어떤 mood로 추천하는지 가장 빨리 파악할 수 있습니다.
                 </p>
               </div>

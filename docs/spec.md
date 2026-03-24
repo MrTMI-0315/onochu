@@ -272,6 +272,10 @@ type ThemeSpotlight = {
 
 ## 16. MVP Acceptance Criteria
 
+QA evidence:
+
+- [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)
+
 - [x] 랜딩 페이지가 존재한다
 - [x] 추천곡 피드가 존재한다
 - [x] 추천곡 등록 페이지가 존재한다

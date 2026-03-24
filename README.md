@@ -21,6 +21,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - theme/event connection surface 강화 완료
 - shared data model과 docs를 v0.3 기준으로 추가 정렬 완료
 - connection-first profile/feed flow 강화 완료
+- v0.3 route QA와 mobile pass 문서화 완료
 - 배포 문서 정리는 아직 남은 갭
 
 ## Documents
@@ -28,6 +29,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md): PRD v0.3 저장소 반영본
 - [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md): MB 단위 작업 계획과 완료 기준
 - [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md): PRD를 구현 기준으로 재구성한 제품 명세
+- [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md): route별 QA 결과와 blocker 정리
 - [`docs/README.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/README.md): 기능별 문서 트리 인덱스
 - [`docs/landing.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/landing.md): 랜딩 페이지 요구사항
 - [`docs/member-directory.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/member-directory.md): 멤버 디렉터리 요구사항
@@ -49,6 +51,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
     |-- member-profile.md
     |-- prd.md
     |-- profile-edit.md
+    |-- qa-v0.3.md
     |-- recommendation-feed.md
     |-- shared.md
     `-- spec.md
@@ -69,6 +72,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
 - `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.
 - `/members/[id]`에서는 추천 수 외에 reaction/save aggregate, conversation starter, reply CTA도 함께 보입니다.
+- route별 QA 결과와 남은 blocker는 [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)에 정리했습니다.
 - 현재 구현은 mock data 기반 MVP입니다.
 
 ## Commit Rule
@@ -79,6 +83,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 22` 기준으로 route별 acceptance criteria QA와 mobile usability 점검
-2. 남은 PRD v0.3 갭을 route별 체크리스트로 정리
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 23` 기준으로 Vercel 배포 준비와 최종 실행 가이드 정리
+2. [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md) 기준 blocker 1건인 배포 문서 증거를 해소
 3. Vercel 배포 문서와 최종 QA 근거 정리
