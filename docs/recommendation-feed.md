@@ -13,9 +13,9 @@
 
 - weekly theme hero / theme selects
 - active theme relatedEvent / activationWindow / curator note
-- local mock recommendation compose panel
-- 독립 recommendation create route 진입 CTA
+- dedicated recommendation create route 진입 CTA
 - 최근 추천곡 카드 리스트
+- 첫 스크롤에서 실제 추천 카드가 먼저 보여야 하는 browse-first 정보 구조
 - 곡명, 아티스트, 작성자
 - 추천인 프로필 진입 CTA
 - 플랫폼, 코멘트, 무드 태그
@@ -35,7 +35,6 @@
 ## States
 
 - weekly theme 기본 상태
-- compose idle / saving / success / error 상태
 - draft preview 상태
 - local feed insertion simulation 상태
 - top pick / contributor / mood / total recs 재계산 상태
@@ -52,7 +51,7 @@
 - 누가 추천했는지가 카드에서 바로 보여야 한다.
 - 추천 카드에서 프로필 이동 이유가 짧게 설명되어야 한다.
 - 모바일에서 한 카드당 정보 밀도가 과하지 않도록 조정한다.
-- 작성 플로우는 현재 local mock validation 까지만 포함한다.
+- feed는 browse-first, 작성은 `/recommendations/new` 중심으로 분리한다.
 - 저장된 draft는 localStorage 기준으로 새로고침 이후에도 local feed 최상단에 유지된다.
 - local draft가 추가되면 feed 상단 카드와 파생 통계가 함께 갱신되어야 한다.
 - fire와 save는 browser storage 기준으로 새로고침 뒤에도 active state와 count 변화가 유지되어야 한다.

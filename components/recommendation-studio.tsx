@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { RecommendationCard } from "@/components/recommendation-card";
-import { RecommendationComposer } from "@/components/recommendation-composer";
 import {
   getActiveThemeSpotlight,
   getMemberName,
@@ -11,7 +10,6 @@ import {
 } from "@/lib/mock-data";
 import {
   createEmptyRecommendationEngagementState,
-  createRecommendationFromDraft,
   loadStoredRecommendationState,
   persistStoredRecommendationState,
   RECOMMENDATION_STORAGE_VERSION,
@@ -21,7 +19,6 @@ import type {
   MemberProfile,
   RecommendationEngagementAction,
   RecommendationEngagementState,
-  RecommendationDraftInput,
   SongRecommendation,
 } from "@/lib/types";
 
@@ -92,31 +89,18 @@ export function RecommendationStudio({
       new Set(localRecommendations.flatMap((recommendation) => recommendation.moodTags)),
     ).slice(0, 8);
   }, [localRecommendations]);
+
   const activeTheme = getActiveThemeSpotlight() ?? themeSpotlights[0];
   const queuedThemes = themeSpotlights.filter(
     (themeSpotlight) => themeSpotlight.id !== activeTheme.id,
   );
-
-  const topPick = localRecommendations[0];
   const contributingMembers = useMemo(() => {
     return new Set(localRecommendations.map((recommendation) => recommendation.memberId))
       .size;
   }, [localRecommendations]);
-
-  function handleDraftSaved(draft: RecommendationDraftInput) {
-    const nextDraft = createRecommendationFromDraft(draft, currentMember);
-
-    setLatestDraft(nextDraft);
-    setEngagementByRecommendationId((currentEngagement) => ({
-      ...currentEngagement,
-      [nextDraft.id]: createEmptyRecommendationEngagementState(),
-    }));
-    setLocalRecommendations((currentRecommendations) => [
-      nextDraft,
-      ...currentRecommendations,
-    ]);
-    setStorageMessage("saved to browser storage");
-  }
+  const topPick = localRecommendations[0];
+  const featuredRecommendations = localRecommendations.slice(0, 4);
+  const remainingRecommendations = localRecommendations.slice(4);
 
   function handleResetStorage() {
     resetStoredRecommendationState();
@@ -175,44 +159,93 @@ export function RecommendationStudio({
   return (
     <main className="min-h-screen px-4 pb-28 pt-24 text-stone-100 md:px-6 md:pb-12 md:pt-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-8">
-        <section className="onochu-panel relative overflow-hidden rounded-[2rem] p-7 md:grid md:grid-cols-[1.3fr_0.7fr] md:gap-5 md:p-8">
+        <section className="onochu-panel relative overflow-hidden rounded-[2rem] p-6 md:p-8">
           <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[#de8eff]/10 blur-[100px]" />
-          <div className="flex flex-col gap-4">
-            <span className="onochu-eyebrow">Recommendation Feed</span>
-            <div className="flex flex-col gap-3">
-              <h1 className="onochu-display text-4xl font-semibold uppercase leading-[0.95] text-white md:text-6xl">
-                The feed behind this week&apos;s obsession.
-              </h1>
-              <p className="max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-                weekly theme, editorial picks, contributor context, 그리고 local
-                mock composer까지 하나의 recommendation surface 안에 묶었습니다.
-              </p>
-            </div>
-          </div>
+          <div className="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-sm bg-[#de8eff] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
+                  {activeTheme.phaseLabel ?? "Current Theme"}
+                </span>
+                {activeTheme.relatedEvent ? (
+                  <span className="rounded-sm border border-white/12 bg-black/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/72">
+                    {activeTheme.relatedEvent}
+                  </span>
+                ) : null}
+              </div>
+              <div>
+                <span className="onochu-eyebrow">Recommendation Feed</span>
+                <h1 className="onochu-display mt-4 max-w-3xl text-4xl font-semibold uppercase leading-[0.95] text-white md:text-6xl">
+                  Hear the song, meet the person, keep the context.
+                </h1>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
+                  곡과 추천 이유를 먼저 읽고, 반응한 뒤, 추천인 프로필로
+                  자연스럽게 이어지는 흐름에만 집중하도록 피드 구조를
+                  압축했습니다.
+                </p>
+              </div>
 
-          <aside className="onochu-panel-soft rounded-[1.75rem] p-5">
-            <div className="space-y-4">
-              <div className="rounded-[1.25rem] bg-white/5 p-4">
-                <p className="text-3xl font-bold text-white">
-                  {localRecommendations.length}
-                </p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Total recs
-                </p>
+              <div className="flex flex-wrap gap-2">
+                {activeTheme.activationWindow ? (
+                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                    {activeTheme.activationWindow}
+                  </span>
+                ) : null}
+                {activeTheme.participantSummary ? (
+                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
+                    {activeTheme.participantSummary}
+                  </span>
+                ) : null}
+              </div>
+
+              {activeTheme.curatorNote ? (
+                <div className="max-w-2xl rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
+                  {activeTheme.curatorNote}
+                </div>
+              ) : null}
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/recommendations/new"
+                  className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                >
+                  Add your pick
+                </Link>
+                <a
+                  href="#feed-start"
+                  className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"
+                >
+                  Jump to feed
+                </a>
+              </div>
+            </div>
+
+            <aside className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-[1.25rem] bg-white/5 p-4">
+                  <p className="text-3xl font-bold text-white">
+                    {localRecommendations.length}
+                  </p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                    Total recs
+                  </p>
+                </div>
+                <div className="rounded-[1.25rem] bg-white/5 p-4">
+                  <p className="text-3xl font-bold text-white">
+                    {contributingMembers}
+                  </p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                    Contributors
+                  </p>
+                </div>
               </div>
               <div className="rounded-[1.25rem] bg-white/5 p-4">
-                <p className="text-3xl font-bold text-white">
-                  {contributingMembers}
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Feed rule
                 </p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Active contributors
-                </p>
-              </div>
-              <div className="rounded-[1.25rem] bg-white/5 p-4">
-                <p className="text-sm leading-7 text-white/65">
-                  compose flow는 local state 안에서 top pick, mood highlights,
-                  contributor count까지 함께 다시 계산하고 브라우저에
-                  유지합니다.
+                <p className="mt-2 text-sm leading-7 text-white/68">
+                  browse-first 구조를 유지하고 작성은 독립 route에서 처리합니다.
+                  local draft와 engagement는 같은 browser storage를 공유합니다.
                 </p>
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
                   v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
@@ -222,11 +255,11 @@ export function RecommendationStudio({
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                   Current campaign
                 </p>
-                <p className="mt-2 text-sm font-semibold text-white">
-                  {activeTheme.relatedEvent ?? activeTheme.title}
+                <p className="mt-2 text-base font-semibold text-white">
+                  {activeTheme.title}
                 </p>
                 <p className="mt-2 text-sm leading-7 text-white/62">
-                  {activeTheme.participantSummary}
+                  {activeTheme.relatedEvent ?? activeTheme.participantSummary}
                 </p>
               </div>
               <button
@@ -236,166 +269,119 @@ export function RecommendationStudio({
               >
                 Reset local feed
               </button>
-            </div>
-          </aside>
-        </section>
-
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[#131313] p-4 md:p-6">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(222,142,255,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))]" />
-          <div className="relative flex min-h-[22rem] flex-col justify-end rounded-[1.5rem] bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.84)_100%),linear-gradient(135deg,#44344e_0%,#1a1a1a_45%,#101010_100%)] p-6 md:min-h-[26rem] md:p-8">
-            <div className="flex flex-wrap gap-2">
-              <span className="w-fit rounded-sm bg-[#de8eff] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
-                {activeTheme.phaseLabel ?? "Current Theme"}
-              </span>
-              {activeTheme.relatedEvent ? (
-                <span className="w-fit rounded-sm border border-white/12 bg-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
-                  {activeTheme.relatedEvent}
-                </span>
-              ) : null}
-            </div>
-            <h2 className="onochu-display mt-4 max-w-2xl text-4xl font-bold uppercase leading-[0.92] text-white md:text-6xl">
-              {activeTheme.title}
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/68">
-              {activeTheme.description}
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {activeTheme.activationWindow ? (
-                <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
-                  {activeTheme.activationWindow}
-                </span>
-              ) : null}
-              {activeTheme.participantSummary ? (
-                <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
-                  {activeTheme.participantSummary}
-                </span>
-              ) : null}
-            </div>
-            {activeTheme.curatorNote ? (
-              <div className="mt-5 max-w-2xl rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
-                {activeTheme.curatorNote}
-              </div>
-            ) : null}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link
-                href={activeTheme.ctaHref ?? "/recommendations/new"}
-                className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
-              >
-                {activeTheme.ctaLabel ?? "Open create route"}
-              </Link>
-              <a
-                href="#compose-panel"
-                className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"
-              >
-                Join this theme now
-              </a>
-            </div>
+            </aside>
           </div>
         </section>
 
-        <section id="theme-selects" className="space-y-5">
+        {latestDraft ? (
+          <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                  Latest local draft
+                </p>
+                <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
+                  Ready At The Top Of The Feed
+                </h2>
+              </div>
+              <Link
+                href="/recommendations/new"
+                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[#de8eff]/30 hover:text-white"
+              >
+                Open create route
+              </Link>
+            </div>
+            <RecommendationCard recommendation={latestDraft} linkToMember={false} />
+          </section>
+        ) : null}
+
+        <section id="feed-start" className="space-y-5">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <h2 className="onochu-display text-2xl font-bold uppercase text-white md:text-3xl">
-                Theme Selects
+              <span className="onochu-eyebrow">Start here</span>
+              <h2 className="onochu-display mt-2 text-3xl font-bold uppercase text-white md:text-4xl">
+                What the club is listening to now.
               </h2>
-              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
-                Event-linked curation queue
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
+                첫 카드부터 곡, 이유, 추천인 흐름이 바로 보이도록 최근 추천을
+                위로 올렸습니다.
               </p>
             </div>
-            <a
-              href="#feed-start"
-              className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45"
+            <Link
+              href="/recommendations/new"
+              className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
             >
-              View all
-            </a>
+              Post yours
+            </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {[activeTheme, ...queuedThemes].map((themeSpotlight, index) => (
-              <article
-                key={themeSpotlight.id}
-                className={`overflow-hidden rounded-[1.5rem] border border-white/6 p-4 ${
-                  index === 0
-                    ? "col-span-2 row-span-2 min-h-[18rem] bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.8)_100%),linear-gradient(135deg,#4f1f65_0%,#1d1d1d_50%,#0f0f0f_100%)]"
-                    : "aspect-square bg-white/4"
-                } ${index === 0 ? "" : "aspect-square"}`}
-              >
-                <div className="flex h-full flex-col justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/8 text-[#de8eff]">
-                    {index === 0 ? "L" : index === 1 ? "Q" : "A"}
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
-                      {themeSpotlight.phaseLabel ?? (themeSpotlight.isActive ? "Live" : "Queued")}
-                    </p>
-                    <h3 className="onochu-display mt-2 text-lg font-bold uppercase text-white">
-                      {themeSpotlight.title}
-                    </h3>
-                    <p className="mt-2 text-xs uppercase tracking-[0.16em] text-white/45">
-                      {themeSpotlight.relatedEvent ?? "Weekly curation"}
-                    </p>
-                    {index === 0 ? (
-                      <p className="mt-4 max-w-sm text-sm leading-7 text-white/65">
-                        {themeSpotlight.description}
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {featuredRecommendations.map((recommendation) => (
+              <RecommendationCard
+                key={recommendation.id}
+                recommendation={recommendation}
+                engagement={
+                  engagementByRecommendationId[recommendation.id] ??
+                  createEmptyRecommendationEngagementState()
+                }
+                linkToMember
+                onToggleEngagement={handleToggleEngagement}
+              />
             ))}
-
-            <article className="col-span-2 flex items-center gap-4 rounded-[1.5rem] border border-white/6 bg-[linear-gradient(90deg,rgba(222,142,255,0.12),rgba(255,255,255,0.01))] p-4">
-              <div className="flex -space-x-2">
-                {allMembers.slice(0, 3).map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-[10px] font-bold uppercase text-black"
-                  >
-                    {member.nickname.slice(0, 2)}
-                  </div>
-                ))}
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm text-white">
-                  <span className="font-bold">{contributingMembers} members</span>{" "}
-                  currently contributing
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.16em] text-white/45">
-                  {activeTheme.relatedEvent ?? "Weekly theme"} /{" "}
-                  {activeTheme.activationWindow ?? "ongoing"}
-                </p>
-              </div>
-            </article>
           </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-          <article className="relative overflow-hidden rounded-[2rem] border border-white/6 bg-[#131313] p-6">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(222,142,255,0.18),transparent_38%)]" />
-            <div className="relative flex h-full flex-col gap-5">
-              <span className="onochu-eyebrow">Top editorial pick</span>
+        <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+          <article className="onochu-panel rounded-[1.75rem] p-5">
+            <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="onochu-display text-4xl font-bold uppercase text-white">
-                  {topPick.trackTitle}
-                </h2>
-                <p className="mt-2 text-sm uppercase tracking-[0.2em] text-white/40">
-                  {topPick.artistName}
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+                  Feed context
                 </p>
+                <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
+                  Top pick and queue
+                </h2>
               </div>
-              <p className="max-w-xl text-sm leading-7 text-white/68">
+              <Link
+                href="/recommendations/new"
+                className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45"
+              >
+                Create route
+              </Link>
+            </div>
+
+            <div className="mt-5 rounded-[1.5rem] border border-white/8 bg-white/4 p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+                Top editorial pick
+              </p>
+              <h3 className="onochu-display mt-3 text-3xl font-bold uppercase text-white">
+                {topPick.trackTitle}
+              </h3>
+              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/40">
+                {topPick.artistName}
+              </p>
+              <p className="mt-4 text-sm leading-7 text-white/68">
                 &ldquo;{topPick.comment}&rdquo;
               </p>
-              <div className="flex flex-wrap gap-2">
-                {topPick.moodTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {queuedThemes.map((themeSpotlight) => (
+                <article
+                  key={themeSpotlight.id}
+                  className="rounded-[1.25rem] border border-white/8 bg-black/20 p-4"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
+                    {themeSpotlight.phaseLabel ?? "Queued"}
+                  </p>
+                  <h3 className="mt-2 text-sm font-semibold text-white">
+                    {themeSpotlight.title}
+                  </h3>
+                  <p className="mt-2 text-xs uppercase tracking-[0.16em] text-white/42">
+                    {themeSpotlight.relatedEvent ?? "Weekly curation"}
+                  </p>
+                </article>
+              ))}
             </div>
           </article>
 
@@ -436,65 +422,58 @@ export function RecommendationStudio({
                 ))}
               </div>
             </article>
+
+            <article className="rounded-[1.75rem] border border-[#de8eff]/16 bg-[#de8eff]/8 p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                Contribute next
+              </p>
+              <h2 className="onochu-display mt-3 text-2xl font-bold uppercase text-white">
+                Use the dedicated create route.
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-white/68">
+                feed에서는 지금 흐르는 추천을 읽는 데 집중하고, 작성은 별도
+                화면에서 빠르게 끝내도록 분리했습니다. 현재 작성자는{" "}
+                {currentMember.nickname}으로 가정합니다.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  href="/recommendations/new"
+                  className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                >
+                  Open create route
+                </Link>
+                <span className="rounded-full border border-white/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
+                  {allMembers.length} member profiles seeded
+                </span>
+              </div>
+            </article>
           </div>
         </section>
 
-        <RecommendationComposer
-          currentMemberName={currentMember.nickname}
-          moodSuggestions={moodHighlights}
-          onDraftSaved={handleDraftSaved}
-        />
-
-        {latestDraft ? (
-          <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
-                  Draft preview
-                </p>
-                <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
-                  Inserted At The Top
-                </h2>
-              </div>
-              <span className="rounded-full border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
-                Local only
-              </span>
+        {remainingRecommendations.length > 0 ? (
+          <section className="space-y-5">
+            <div>
+              <span className="onochu-eyebrow">Archive continues</span>
+              <h2 className="onochu-display mt-2 text-3xl font-bold uppercase text-white">
+                Keep digging.
+              </h2>
             </div>
-
-            <RecommendationCard recommendation={latestDraft} linkToMember={false} />
+            <div className="grid gap-4 lg:grid-cols-2">
+              {remainingRecommendations.map((recommendation) => (
+                <RecommendationCard
+                  key={recommendation.id}
+                  recommendation={recommendation}
+                  engagement={
+                    engagementByRecommendationId[recommendation.id] ??
+                    createEmptyRecommendationEngagementState()
+                  }
+                  linkToMember
+                  onToggleEngagement={handleToggleEngagement}
+                />
+              ))}
+            </div>
           </section>
         ) : null}
-
-        <section className="onochu-panel rounded-[2rem] p-8 text-center">
-          <h2 className="onochu-display text-3xl font-bold uppercase text-white">
-            Shape The Vibe
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/62">
-            이번 weekly theme를 정의하는 트랙이나 이야기가 있다면 compose panel에
-            남겨 두고 다음 iteration에서 실제 persistence로 이어갈 수 있습니다.
-          </p>
-          <a
-            href="#compose-panel"
-            className="onochu-glow mt-8 inline-flex rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
-          >
-            Contribute to theme
-          </a>
-        </section>
-
-        <section id="feed-start" className="grid gap-4 lg:grid-cols-2">
-          {localRecommendations.map((recommendation) => (
-            <RecommendationCard
-              key={recommendation.id}
-              recommendation={recommendation}
-              engagement={
-                engagementByRecommendationId[recommendation.id] ??
-                createEmptyRecommendationEngagementState()
-              }
-              linkToMember
-              onToggleEngagement={handleToggleEngagement}
-            />
-          ))}
-        </section>
       </div>
     </main>
   );

@@ -35,21 +35,93 @@
 
 ## MB 25
 
-- 제목: Decide Persistence Transition
+- 제목: Simplify Recommendation Feed Information Architecture
 - Goal:
-  - local/mock 상태를 실제 persistence 단계로 옮길지 범위를 결정하고 첫 slice를 시작한다.
+  - `/recommendations` 첫 스크롤에서 실제 추천 카드가 먼저 보이도록 정보 구조를 정리한다.
 - Scope:
-  - recommendation drafts
-  - profile save flow
-  - data layer plan
-- Deliverables:
-  - persistence strategy
-  - first implementation slice or spec update
-  - rollout guardrails
+  - `components/recommendation-studio.tsx`
+  - `docs/recommendation-feed.md`
 - Acceptance Criteria:
-  - 어떤 데이터부터 실제 저장으로 옮길지 결정된다.
-  - local-only 상태와 production 상태의 차이가 문서화된다.
-  - 다음 구현 MB가 1개 이상 정의된다.
+  - feed 상단에서 hero, stats, theme, compose 중복이 줄어든다.
+  - 작성은 `/recommendations/new` CTA 중심으로 유도된다.
+  - 첫 추천 카드가 더 이른 위치에 노출된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 26
+
+- 제목: Refine Recommendation Card Hierarchy
+- Goal:
+  - recommendation card에서 곡, 추천인, 이유, 행동 우선순위를 더 선명하게 만든다.
+- Scope:
+  - `components/recommendation-card.tsx`
+  - `docs/recommendation-feed.md`
+- Acceptance Criteria:
+  - 카드에서 곡/추천 이유/사람 탐색 흐름이 더 직접적으로 읽힌다.
+  - 보조 메타데이터가 1차 정보보다 덜 강조된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 27
+
+- 제목: Strengthen Connection-First Member Profile
+- Goal:
+  - member profile을 통계 대시보드보다 대화 시작점처럼 보이도록 재정렬한다.
+- Scope:
+  - `app/members/[id]/page.tsx`
+  - `docs/member-profile.md`
+- Acceptance Criteria:
+  - 추천으로 이 사람을 이해하는 흐름이 상단에서 바로 읽힌다.
+  - featured recommendation / reply CTA가 더 전면에 배치된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 28
+
+- 제목: Compress Member Directory Filters
+- Goal:
+  - `/members`에서 필터 부담을 줄이고 카드 스캔 속도를 높인다.
+- Scope:
+  - `components/member-directory-client.tsx`
+  - `docs/member-directory.md`
+- Acceptance Criteria:
+  - 모바일에서 필터보다 카드가 먼저 읽히는 체감이 강화된다.
+  - 장르 필터는 기본/확장 상태가 구분된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 29
+
+- 제목: Reframe Landing Around Primary Actions
+- Goal:
+  - 랜딩을 문제 정의와 핵심 CTA 중심으로 압축한다.
+- Scope:
+  - `app/page.tsx`
+  - `docs/landing.md`
+- Acceptance Criteria:
+  - 랜딩 섹션 수가 줄고 메시지 우선순위가 명확해진다.
+  - recommendation/member 진입 CTA가 더 직접적으로 드러난다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 30
+
+- 제목: Polish Contribution and Profile Forms
+- Goal:
+  - recommendation create / profile edit 입력 UX를 더 짧고 명확하게 다듬는다.
+- Scope:
+  - `components/recommendation-create-route.tsx`
+  - `components/recommendation-composer.tsx`
+  - `components/profile-edit-form.tsx`
+  - `docs/profile-edit.md`
+- Acceptance Criteria:
+  - 작성/프로필 입력의 목적과 완료 경로가 더 빠르게 이해된다.
+  - 보조 설명은 유지하되 시각적 부담이 줄어든다.
 - Verification:
   - `npm run lint`
   - `npm run build`
