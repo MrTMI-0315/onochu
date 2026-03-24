@@ -8,6 +8,7 @@
 
 - `MusicPlatform`
 - `PlaylistLink`
+- `PlatformLinkMap`
 - `MemberProfile`
 - `SongRecommendation`
 - `RecommendationEngagementState`
@@ -27,6 +28,7 @@
 - `createdAt`
 - `reactionCount`
 - `saveCount`
+- `alternatePlatformUrls?`
 
 ### `ThemeSpotlight` Shared Metadata
 
@@ -64,5 +66,7 @@
 - 초기 데이터는 local mock data 기준
 - recommendation reactions / saves와 draft state는 browser storage 기준으로 유지 가능
 - active theme와 recommendation create route는 같은 `ThemeSpotlight` 기준선을 공유
+- recommendation은 원본 플랫폼 링크 외에 optional alternate platform links를 가질 수 있다
+- viewer는 자신의 `mainPlatform` 기준으로 recommendation CTA를 우선 해석할 수 있다
 - 추후 Supabase 연동 가능성을 고려해 UI와 데이터 계층을 분리
 - 외부 플랫폼 API는 MVP 범위에서 제외

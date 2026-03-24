@@ -103,6 +103,7 @@ Onochu는 링크 전달보다 사람 사이의 맥락 있는 연결을 우선한
   - 플랫폼
   - 외부 링크
 - 가벼운 반응 / 저장 UI
+- viewer platform 기준 CTA 해석
 - 추천인에서 사람 탐색으로 이어지는 흐름
 - theme / featured section
 
@@ -117,6 +118,8 @@ Onochu는 링크 전달보다 사람 사이의 맥락 있는 연결을 우선한
   - 코멘트
 - 선택 입력:
   - 무드 / 장르 태그
+- 선택 입력:
+  - alternate platform links
 - quick draft와 독립 등록 route가 공용 저장 흐름을 사용할 수 있어야 한다.
 
 ### 10.4 Member Directory
@@ -204,6 +207,7 @@ type SongRecommendation = {
   createdAt: string;
   reactionCount: number;
   saveCount: number;
+  alternatePlatformUrls?: Partial<Record<MusicPlatform, string>>;
 };
 
 type ThemeSpotlight = {
@@ -280,6 +284,7 @@ type ThemeSpotlight = {
 - member identity와 저장 상태가 실제 계정 체계 없이 브라우저 컨텍스트에만 묶여 있음
 - theme 운영 데이터를 수정하는 별도 운영 surface가 없음
 - analytics / retention validation은 아직 문서 수준이고 실제 수집 계층이 없음
+- exact cross-platform track mapping은 아직 manual link attach + search fallback 수준임
 
 ## 16. MVP Acceptance Criteria
 
@@ -311,6 +316,8 @@ QA evidence:
 
 ## 18. Phase 2 Direction
 
+- recommendation 1건에 대해 source link와 alternate platform links를 함께 유지한다.
+- viewer `mainPlatform` 기준으로 recommendation open CTA를 해석한다.
 - browser-local persistence를 서버 저장으로 옮길 첫 slice를 정한다.
 - recommendation / profile의 약한 identity 전략을 정리해 브라우저 간 연속성을 만든다.
 - theme 운영 흐름을 문서 수동 편집이 아닌 제품 surface 안에서 관리할 수 있게 한다.

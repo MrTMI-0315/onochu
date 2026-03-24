@@ -299,80 +299,98 @@
 
 ## MB 41
 
-- 제목: Define Lightweight Identity Strategy
+- 제목: Define Cross-Platform Recommendation Access Model
 - Goal:
-  - browser-local 상태를 넘어 recommendation/profile 소유권을 유지할 최소 identity 전략을 정한다.
+  - recommendation 1건이 source link와 optional alternate platform links를 함께 가질 수 있는 최소 모델을 정한다.
 - Scope:
   - `docs/spec.md`
   - `docs/shared.md`
-  - 필요 시 `README.md`
+  - `lib/types.ts`
 - Acceptance Criteria:
-  - local-only에서 서버 저장으로 넘어갈 식별 기준이 문서화된다.
-  - auth를 과도하게 키우지 않는 Phase 2 진입 규칙이 정리된다.
+  - source platform과 viewer target platform 개념이 분리된다.
+  - automatic conversion이 아닌 manual multi-link attach 전략이 문서화된다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 42
 
-- 제목: Add Server-Backed Recommendation Persistence Slice
+- 제목: Add Optional Alternate Platform Links To Recommendation Create
 - Goal:
-  - recommendation 작성/조회 중 최소 한 축을 browser-local에서 서버 저장으로 옮긴다.
+  - recommendation create에서 원본 링크 외에 대체 플랫폼 링크를 선택 입력으로 붙일 수 있게 한다.
 - Scope:
-  - recommendation data layer 관련 코드
-  - `docs/spec.md`
+  - `components/recommendation-composer.tsx`
+  - `components/recommendation-create-route.tsx`
   - `docs/recommendation-feed.md`
 - Acceptance Criteria:
-  - 새 recommendation이 브라우저를 넘어 유지된다.
-  - local fallback 또는 migration 전략이 남는다.
+  - recommendation은 기존처럼 링크 1개만으로도 등록 가능하다.
+  - 사용자는 플랫폼별 alternate links를 선택적으로 추가할 수 있다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 43
 
-- 제목: Add Server-Backed Profile Persistence Slice
+- 제목: Resolve Recommendation CTA To Viewer Platform
 - Goal:
-  - profile edit 저장을 서버 저장으로 옮겨 멤버 identity와 연결한다.
+  - recommendation card의 메인 CTA가 viewer preferred platform을 우선 열도록 만든다.
 - Scope:
-  - profile data layer 관련 코드
-  - `docs/profile-edit.md`
-  - `docs/member-profile.md`
+  - `components/recommendation-card.tsx`
+  - `components/recommendation-studio.tsx`
+  - `docs/recommendation-feed.md`
 - Acceptance Criteria:
-  - profile 저장 결과가 같은 브라우저를 벗어나도 유지된다.
-  - 현재 local reset / completion UX와 충돌하지 않는다.
+  - viewer preferred platform이 있으면 그 링크가 CTA에 반영된다.
+  - 없으면 source/original link로 fallback 한다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 44
 
-- 제목: Add Theme Operations Surface
+- 제목: Connect Viewer Platform Preference From Profile
 - Goal:
-  - active / queued theme를 문서 수정이 아닌 제품 surface에서 운영 가능한 최소 구조로 옮긴다.
+  - profile의 main platform이 실제 recommendation open behavior에 연결되게 만든다.
 - Scope:
-  - theme 관련 UI / mock or data layer
-  - `docs/recommendation-feed.md`
-  - `docs/spec.md`
+  - `components/profile-edit-form.tsx`
+  - `lib/profile-drafts.ts`
+  - `components/recommendation-studio.tsx`
+  - `components/recommendation-create-route.tsx`
+  - `docs/profile-edit.md`
 - Acceptance Criteria:
-  - current theme와 next theme를 제품 안에서 관리할 진입점이 생긴다.
-  - event / onboarding context가 현재 feed와 계속 정렬된다.
+  - 저장된 main platform이 viewer platform preference로 반영된다.
+  - profile이 없으면 기존 fallback 동작을 유지한다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 45
 
-- 제목: Add Product Metrics Capture Baseline
+- 제목: Add Unresolved Platform Fallback UX
 - Goal:
-  - PRD v0.3 success metrics를 실제 관측 가능한 이벤트 기준으로 묶는다.
+  - preferred platform의 direct link가 없을 때 search fallback과 안내 copy를 보여 준다.
 - Scope:
-  - metrics capture 설계 또는 최소 instrumentation
-  - `docs/spec.md`
-  - `docs/qa-v0.3.md`
+  - `components/recommendation-card.tsx`
+  - `docs/recommendation-feed.md`
 - Acceptance Criteria:
-  - recommendation create, save, profile visit, theme participation 관련 측정 기준이 생긴다.
-  - production smoke와 별개로 운영 관측 기준이 문서화된다.
+  - direct link가 없을 때도 viewer가 자신의 플랫폼 search로 이어질 수 있다.
+  - fallback 이유가 카드에서 읽힌다.
 - Verification:
   - `npm run lint`
   - `npm run build`
+
+## MB 46
+
+- 제목: Validate Cross-Platform Recommendation Flow
+- Goal:
+  - recommendation create, profile preference, feed CTA의 cross-platform 흐름을 QA 기준으로 고정한다.
+- Scope:
+  - `docs/recommendation-feed.md`
+  - `docs/profile-edit.md`
+  - `docs/qa-v0.3.md`
+- Acceptance Criteria:
+  - cross-platform scenario smoke가 문서화된다.
+  - local profile preference와 recommendation CTA 연동이 검증된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+  - Playwright smoke

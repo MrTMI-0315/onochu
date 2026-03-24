@@ -10,6 +10,8 @@ export type PlaylistLink = {
   url: string;
 };
 
+export type PlatformLinkMap = Partial<Record<MusicPlatform, string>>;
+
 export type MemberProfile = {
   id: string;
   nickname: string;
@@ -33,6 +35,7 @@ export type SongRecommendation = {
   createdAt: string;
   reactionCount: number;
   saveCount: number;
+  alternatePlatformUrls?: PlatformLinkMap;
   themeId?: string;
   themeTitle?: string;
   themePhaseLabel?: string;
@@ -45,6 +48,7 @@ export type RecommendationDraftInput = {
   url: string;
   comment: string;
   moodTags: string[];
+  alternatePlatformUrls?: PlatformLinkMap;
 };
 
 export type RecommendationEngagementAction = "fire" | "save";
