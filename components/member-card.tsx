@@ -12,7 +12,7 @@ export function MemberCard({ member }: MemberCardProps) {
   return (
     <article className="group onochu-panel flex h-full flex-col gap-5 rounded-[1.75rem] p-5 transition duration-300 hover:bg-white/[0.06]">
       <div className="flex items-start gap-4">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-[#de8eff]/20 bg-[radial-gradient(circle_at_top,#de8eff_0%,#b90afc_52%,#171717_100%)] text-lg font-bold uppercase text-black shadow-[0_0_30px_rgba(188,19,254,0.18)]">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-[color:rgba(212,202,176,0.2)] bg-[radial-gradient(circle_at_top,var(--paper)_0%,var(--primary)_48%,#1f1713_100%)] text-lg font-bold uppercase text-black shadow-[0_0_30px_rgba(183,106,85,0.2)]">
           {initials}
         </div>
 
@@ -26,7 +26,7 @@ export function MemberCard({ member }: MemberCardProps) {
                 Taste archive entry
               </p>
             </div>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               {platformLabels[member.mainPlatform]}
             </span>
           </div>
@@ -57,7 +57,7 @@ export function MemberCard({ member }: MemberCardProps) {
         </a>
         <Link
           href={`/members/${member.id}`}
-          className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#de8eff] transition group-hover:translate-x-0.5"
+          className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--primary)] transition group-hover:translate-x-0.5"
         >
           View Studio
         </Link>

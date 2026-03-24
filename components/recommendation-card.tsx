@@ -57,7 +57,7 @@ export function RecommendationCard({
       count: recommendation.reactionCount,
       active: resolvedEngagement.fire,
       activeClass:
-        "border-[#ff8b72]/35 bg-[#ff8b72]/14 text-[#ffc0b1] shadow-[0_0_30px_rgba(255,139,114,0.12)]",
+        "border-[color:rgba(213,140,116,0.35)] bg-[color:rgba(213,140,116,0.16)] text-[color:var(--paper)] shadow-[0_0_30px_rgba(183,106,85,0.14)]",
     },
     {
       action: "save" as const,
@@ -65,7 +65,7 @@ export function RecommendationCard({
       count: recommendation.saveCount,
       active: resolvedEngagement.save,
       activeClass:
-        "border-[#de8eff]/35 bg-[#de8eff]/14 text-[#f2d7ff] shadow-[0_0_30px_rgba(222,142,255,0.12)]",
+        "border-[color:rgba(64,81,112,0.35)] bg-[color:rgba(64,81,112,0.18)] text-[color:var(--paper)] shadow-[0_0_30px_rgba(64,81,112,0.14)]",
     },
   ];
 
@@ -75,12 +75,12 @@ export function RecommendationCard({
         compact ? "p-5" : "p-6"
       }`}
     >
-      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#de8eff]/10 blur-3xl transition duration-300 group-hover:bg-[#de8eff]/18" />
+      <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[color:rgba(213,140,116,0.12)] blur-3xl transition duration-300 group-hover:bg-[color:rgba(213,140,116,0.2)]" />
 
       <div className="relative flex h-full flex-col gap-5">
         <div className="flex flex-wrap items-center gap-2">
           {recommendation.themeTitle ? (
-            <span className="rounded-full border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+            <span className="rounded-full border border-[color:rgba(213,140,116,0.2)] bg-[color:rgba(213,140,116,0.12)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
               {recommendation.themePhaseLabel ?? "Theme"} / {recommendation.themeTitle}
             </span>
           ) : null}
@@ -96,12 +96,12 @@ export function RecommendationCard({
           {linkToMember ? (
             <Link
               href={memberProfileHref}
-              className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
+              className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--primary)]"
             >
               Recommended by {memberName}
             </Link>
           ) : (
-            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#de8eff]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--primary)]">
               Curated by {memberName}
             </p>
           )}
@@ -163,7 +163,7 @@ export function RecommendationCard({
             {linkToMember ? (
               <Link
                 href={memberProfileHref}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/72 transition hover:border-[#de8eff]/30 hover:text-white"
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/72 transition hover:border-[color:rgba(213,140,116,0.32)] hover:text-white"
               >
                 Meet {memberName}
               </Link>
@@ -199,7 +199,7 @@ export function RecommendationCard({
               href={resolvedLink.href}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition active:scale-[0.98]"
+              className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition active:scale-[0.98]"
             >
               {resolvedLink.isFallback
                 ? `Search ${resolvedPlatformLabel}`

@@ -22,7 +22,7 @@ export function SiteNavigation() {
           </Link>
 
           <Link href="/" className="justify-self-center">
-            <span className="onochu-display text-2xl font-bold uppercase italic tracking-tight text-[#BC13FE]">
+            <span className="onochu-display text-2xl font-bold uppercase italic tracking-tight text-[var(--primary)]">
               ONOCHU
             </span>
           </Link>
@@ -37,7 +37,7 @@ export function SiteNavigation() {
                   href={item.href}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] text-black"
+                      ? "bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] text-black"
                       : "text-white/65 hover:bg-white/8 hover:text-white"
                   }`}
                 >
@@ -60,7 +60,7 @@ export function SiteNavigation() {
                 href={item.href}
                 className={`rounded-2xl px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.1em] transition ${
                   isActive
-                    ? "bg-white/8 text-[#de8eff]"
+                    ? "bg-white/8 text-[var(--primary)]"
                     : "bg-transparent text-white/40"
                 }`}
               >
