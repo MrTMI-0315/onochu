@@ -24,6 +24,10 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - v0.3 route QA와 mobile pass 문서화 완료
 - Vercel 배포 runbook 정리 완료
 - Vercel production deployment 1회 실행 완료
+- profile browser storage persistence 및 reset/completion summary 추가 완료
+- saved recommendation filter / shelf / empty guidance 추가 완료
+- draft recommendation의 theme metadata 연결 및 participation summary 추가 완료
+- post-rebuild route QA refresh 및 production redeploy 완료
 
 ## Documents
 
@@ -71,9 +75,11 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - 공통 네비게이션은 desktop top bar와 mobile bottom bar로 동작합니다.
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
 - `/recommendations`에서는 작성자 링크, fire/save 인터랙션, 무드 하이라이트, active theme event metadata가 함께 렌더링됩니다.
+- `/recommendations`에서는 saved shelf, all/saved filter, theme participation summary, fire/save persistence가 함께 동작합니다.
 - recommendation card에서는 작성자 프로필로 바로 이동하는 CTA가 함께 보입니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
 - `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.
+- `/profile/edit`에서는 browser storage 기준 hydrate, completion summary, reset profile action이 함께 동작합니다.
 - `/members/[id]`에서는 추천 수 외에 reaction/save aggregate, conversation starter, reply CTA도 함께 보입니다.
 - route별 QA 결과와 남은 blocker는 [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)에 정리했습니다.
 - Vercel import 기준 배포 절차와 smoke checklist는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md)에 정리했습니다.
@@ -88,6 +94,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 25` 기준으로 local/mock persistence 전환 범위 결정
-2. recommendation 또는 profile save 중 어떤 흐름을 먼저 실제 저장으로 옮길지 선택
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 41` 기준으로 lightweight identity 전략을 먼저 정리
+2. recommendation과 profile 중 어느 저장 축을 먼저 서버 persistence로 옮길지 결정
 3. Git-integrated import path를 검증하려면 Vercel GitHub Login Connection 연결 여부 확인

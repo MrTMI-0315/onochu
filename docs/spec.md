@@ -262,16 +262,24 @@ type ThemeSpotlight = {
 - weekly theme slot
 - `ThemeSpotlight` mock data 기반 event-linked theme surface
 - local draft preview / browser storage persistence
+- profile browser storage persistence
 - recommendation card profile CTA
 - member profile conversation starter surface
+- saved recommendation filter / saved shelf / empty guidance
+- recommendation fire / save active state 및 count persistence
+- active theme metadata가 draft recommendation에 연결되는 create flow
+- active theme linked rec / contributor summary
+- post-rebuild route QA refresh
+- production redeploy and production smoke evidence
 
 현재 PRD v0.3 대비 주요 갭:
 
 - theme 운영은 아직 manual/mock 수준이며 admin-grade workflow는 없음
 - GitHub Login Connection 부재로 Git-integrated import path는 아직 검증하지 않음
-- profile는 아직 브라우저 재방문 기준의 local persistence가 없음
-- saved recommendation을 다시 꺼내 보는 personal revisit flow가 약함
-- draft recommendation과 active theme 연결은 설명 위주이며 metadata 축적은 아직 약함
+- recommendation / profile persistence가 모두 browser-local 범위에 머물러 있음
+- member identity와 저장 상태가 실제 계정 체계 없이 브라우저 컨텍스트에만 묶여 있음
+- theme 운영 데이터를 수정하는 별도 운영 surface가 없음
+- analytics / retention validation은 아직 문서 수준이고 실제 수집 계층이 없음
 
 ## 16. MVP Acceptance Criteria
 
@@ -300,3 +308,10 @@ QA evidence:
 - 저장/반응은 local state로 시작하되 후속 persistence 이관을 막지 않아야 한다.
 - 추천 feed는 링크 저장소가 아니라 사람 탐색 surface라는 원칙을 유지한다.
 - 운영진용 기능은 수동 큐레이션 가능한 수준까지만 허용한다.
+
+## 18. Phase 2 Direction
+
+- browser-local persistence를 서버 저장으로 옮길 첫 slice를 정한다.
+- recommendation / profile의 약한 identity 전략을 정리해 브라우저 간 연속성을 만든다.
+- theme 운영 흐름을 문서 수동 편집이 아닌 제품 surface 안에서 관리할 수 있게 한다.
+- production smoke를 유지하면서 실제 사용 데이터 수집 지점을 추가한다.

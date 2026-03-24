@@ -281,3 +281,98 @@
 - Verification:
   - `npm run lint`
   - `npm run build`
+
+## Completed MB 31-40
+
+- `MB 31` post-rebuild delivery sequence 정의
+- `MB 32` profile browser storage persistence
+- `MB 33` profile completion summary / reset control
+- `MB 34` saved recommendation filter
+- `MB 35` saved shelf / empty guidance
+- `MB 36` draft recommendation theme metadata 연결
+- `MB 37` theme participation summary
+- `MB 38` post-rebuild route QA refresh
+- `MB 39` production redeploy after persistence updates
+- `MB 40` Phase 2 baseline docs refresh
+
+## Proposed Phase 2 MB 41-45
+
+## MB 41
+
+- 제목: Define Lightweight Identity Strategy
+- Goal:
+  - browser-local 상태를 넘어 recommendation/profile 소유권을 유지할 최소 identity 전략을 정한다.
+- Scope:
+  - `docs/spec.md`
+  - `docs/shared.md`
+  - 필요 시 `README.md`
+- Acceptance Criteria:
+  - local-only에서 서버 저장으로 넘어갈 식별 기준이 문서화된다.
+  - auth를 과도하게 키우지 않는 Phase 2 진입 규칙이 정리된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 42
+
+- 제목: Add Server-Backed Recommendation Persistence Slice
+- Goal:
+  - recommendation 작성/조회 중 최소 한 축을 browser-local에서 서버 저장으로 옮긴다.
+- Scope:
+  - recommendation data layer 관련 코드
+  - `docs/spec.md`
+  - `docs/recommendation-feed.md`
+- Acceptance Criteria:
+  - 새 recommendation이 브라우저를 넘어 유지된다.
+  - local fallback 또는 migration 전략이 남는다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 43
+
+- 제목: Add Server-Backed Profile Persistence Slice
+- Goal:
+  - profile edit 저장을 서버 저장으로 옮겨 멤버 identity와 연결한다.
+- Scope:
+  - profile data layer 관련 코드
+  - `docs/profile-edit.md`
+  - `docs/member-profile.md`
+- Acceptance Criteria:
+  - profile 저장 결과가 같은 브라우저를 벗어나도 유지된다.
+  - 현재 local reset / completion UX와 충돌하지 않는다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 44
+
+- 제목: Add Theme Operations Surface
+- Goal:
+  - active / queued theme를 문서 수정이 아닌 제품 surface에서 운영 가능한 최소 구조로 옮긴다.
+- Scope:
+  - theme 관련 UI / mock or data layer
+  - `docs/recommendation-feed.md`
+  - `docs/spec.md`
+- Acceptance Criteria:
+  - current theme와 next theme를 제품 안에서 관리할 진입점이 생긴다.
+  - event / onboarding context가 현재 feed와 계속 정렬된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 45
+
+- 제목: Add Product Metrics Capture Baseline
+- Goal:
+  - PRD v0.3 success metrics를 실제 관측 가능한 이벤트 기준으로 묶는다.
+- Scope:
+  - metrics capture 설계 또는 최소 instrumentation
+  - `docs/spec.md`
+  - `docs/qa-v0.3.md`
+- Acceptance Criteria:
+  - recommendation create, save, profile visit, theme participation 관련 측정 기준이 생긴다.
+  - production smoke와 별개로 운영 관측 기준이 문서화된다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
