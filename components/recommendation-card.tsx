@@ -183,14 +183,36 @@ export function RecommendationCard({
               </span>
             ) : null}
           </div>
-          <a
-            href={resolvedLink.href}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition active:scale-[0.98]"
-          >
-            {compact ? `Open ${resolvedPlatformLabel}` : `Play on ${resolvedPlatformLabel}`}
-          </a>
+          <div className="flex flex-col items-end gap-2">
+            {viewerPlatform ? (
+              <span
+                className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                  resolvedLink.isFallback
+                    ? "border border-amber-200/20 bg-amber-200/10 text-amber-100"
+                    : "border border-white/10 bg-white/5 text-white/55"
+                }`}
+              >
+                {resolvedLink.isFallback ? "Search fallback" : resolvedLink.label}
+              </span>
+            ) : null}
+            <a
+              href={resolvedLink.href}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition active:scale-[0.98]"
+            >
+              {resolvedLink.isFallback
+                ? `Search ${resolvedPlatformLabel}`
+                : compact
+                  ? `Open ${resolvedPlatformLabel}`
+                  : `Play on ${resolvedPlatformLabel}`}
+            </a>
+            {viewerPlatform ? (
+              <span className="max-w-[18rem] text-right text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">
+                {resolvedLink.helperText}
+              </span>
+            ) : null}
+          </div>
         </div>
       </div>
     </article>
