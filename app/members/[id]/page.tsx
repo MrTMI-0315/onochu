@@ -136,21 +136,48 @@ export default async function MemberPage({ params }: MemberPageProps) {
                     </span>
                   ))}
                 </div>
-                <div className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                    Why start here
-                  </p>
-                  <p className="mt-3 text-sm leading-7 text-white/68">
-                    이 프로필은 최근 추천, mood 태그, 반응 수를 함께 보여 줘서{" "}
-                    {member.nickname}의 취향이 어떤 곡에서 커뮤니티 반응으로 이어졌는지 바로
-                    읽을 수 있습니다.
-                  </p>
-                </div>
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+            {memberRecommendations.length > 0 ? (
+              <div className="rounded-[1.5rem] border border-[#de8eff]/16 bg-[#de8eff]/7 p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#de8eff]">
+                      Conversation starter
+                    </p>
+                    <p className="mt-3 text-lg font-semibold text-white">
+                      {featuredRecommendation?.trackTitle} ·{" "}
+                      {featuredRecommendation?.artistName}
+                    </p>
+                  </div>
+                  <Link
+                    href="/recommendations/new"
+                    className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[#de8eff]/30 hover:text-white"
+                  >
+                    Reply with your pick
+                  </Link>
+                </div>
+                <p className="mt-3 text-sm leading-7 text-white/68">
+                  &ldquo;{featuredRecommendation?.comment}&rdquo;에서 시작하면{" "}
+                  {member.nickname}가 지금 어떤 mood와 맥락으로 곡을 고르는지 가장
+                  빨리 파악할 수 있습니다.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {featuredRecommendation?.moodTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-[1.25rem] bg-white/4 p-4">
                 <p className="text-3xl font-bold text-white">
                   {memberRecommendations.length}
                 </p>
@@ -158,7 +185,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   Recs posted
                 </p>
               </div>
-              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+              <div className="rounded-[1.25rem] bg-white/4 p-4">
                 <p className="text-3xl font-bold text-[#ffb59d]">
                   {totalReactionCount}
                 </p>
@@ -166,7 +193,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   Reactions earned
                 </p>
               </div>
-              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+              <div className="rounded-[1.25rem] bg-white/4 p-4">
                 <p className="text-3xl font-bold text-[#de8eff]">
                   {totalSaveCount}
                 </p>
@@ -174,30 +201,53 @@ export default async function MemberPage({ params }: MemberPageProps) {
                   Saves earned
                 </p>
               </div>
-              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
-                <p className="text-3xl font-bold text-white">
-                  {member.playlistLinks.length}
-                </p>
-                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Playlist links
-                </p>
-              </div>
             </div>
 
-            <div>
+            <div className="rounded-[1.5rem] border border-white/8 bg-black/20 p-5">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                Favorite genres
+                Why open this profile
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {member.favoriteGenres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="rounded-sm border border-white/8 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
-                  >
-                    {genre}
-                  </span>
-                ))}
+              <p className="mt-3 text-sm leading-7 text-white/68">
+                최근 추천 {memberRecommendations.length}개와 주요 무드 태그를 함께
+                보면 {member.nickname}의 취향이 어떤 반응과 저장으로 이어졌는지
+                바로 읽을 수 있습니다.
+              </p>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                  Favorite genres
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {member.favoriteGenres.map((genre) => (
+                    <span
+                      key={genre}
+                      className="rounded-sm border border-white/8 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+                </div>
               </div>
+
+              {moodHighlights.length > 0 ? (
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                    Mood highlights
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {moodHighlights.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <div>
@@ -218,52 +268,6 @@ export default async function MemberPage({ params }: MemberPageProps) {
                 ))}
               </div>
             </div>
-
-            {moodHighlights.length > 0 ? (
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                  Mood highlights
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {moodHighlights.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-sm border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {memberRecommendations.length > 0 ? (
-              <div className="rounded-[1.5rem] border border-white/8 bg-black/20 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
-                  Community signal
-                </p>
-                <p className="mt-3 text-sm leading-7 text-white/68">
-                  최근 추천 {memberRecommendations.length}개가 합쳐서 반응 {totalReactionCount}
-                  회, 저장 {totalSaveCount}회를 만들었습니다. 취향이 실제 상호작용으로
-                  이어지는지 보는 기준점으로 사용합니다.
-                </p>
-              </div>
-            ) : null}
-
-            {featuredRecommendation ? (
-              <div className="rounded-[1.5rem] border border-[#de8eff]/16 bg-[#de8eff]/7 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#de8eff]">
-                  Conversation starter
-                </p>
-                <p className="mt-3 text-lg font-semibold text-white">
-                  {featuredRecommendation.trackTitle} · {featuredRecommendation.artistName}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-white/68">
-                  &ldquo;{featuredRecommendation.comment}&rdquo;에서 시작하면{" "}
-                  {member.nickname}가 지금 어떤 mood로 추천하는지 가장 빨리 파악할 수 있습니다.
-                </p>
-              </div>
-            ) : null}
 
             <div className="flex flex-wrap items-center gap-4 border-t border-white/6 pt-4">
               <Link
@@ -286,7 +290,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="onochu-display text-2xl font-bold uppercase tracking-tight text-white">
-                Recent Recommendations
+                Start With These Tracks
               </h2>
               <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/38">
                 start with the reason, then follow the person
