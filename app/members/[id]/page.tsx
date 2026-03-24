@@ -33,6 +33,14 @@ export default async function MemberPage({ params }: MemberPageProps) {
   const moodHighlights = Array.from(
     new Set(memberRecommendations.flatMap((recommendation) => recommendation.moodTags)),
   ).slice(0, 5);
+  const totalReactionCount = memberRecommendations.reduce(
+    (count, recommendation) => count + recommendation.reactionCount,
+    0,
+  );
+  const totalSaveCount = memberRecommendations.reduce(
+    (count, recommendation) => count + recommendation.saveCount,
+    0,
+  );
   const initials = member.nickname.slice(0, 2).toUpperCase();
 
   return (
@@ -109,7 +117,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
                 <p className="text-3xl font-bold text-white">
                   {memberRecommendations.length}
@@ -119,11 +127,19 @@ export default async function MemberPage({ params }: MemberPageProps) {
                 </p>
               </div>
               <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
-                <p className="text-3xl font-bold text-[#de8eff]">
-                  {member.favoriteGenres.length}
+                <p className="text-3xl font-bold text-[#ffb59d]">
+                  {totalReactionCount}
                 </p>
                 <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Genre tags
+                  Reactions earned
+                </p>
+              </div>
+              <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
+                <p className="text-3xl font-bold text-[#de8eff]">
+                  {totalSaveCount}
+                </p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  Saves earned
                 </p>
               </div>
               <div className="rounded-[1.25rem] bg-white/4 p-4 text-center">
@@ -186,6 +202,19 @@ export default async function MemberPage({ params }: MemberPageProps) {
                     </span>
                   ))}
                 </div>
+              </div>
+            ) : null}
+
+            {memberRecommendations.length > 0 ? (
+              <div className="rounded-[1.5rem] border border-white/8 bg-black/20 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                  Community signal
+                </p>
+                <p className="mt-3 text-sm leading-7 text-white/68">
+                  최근 추천 {memberRecommendations.length}개가 합쳐서 반응 {totalReactionCount}
+                  회, 저장 {totalSaveCount}회를 만들었습니다. 취향이 실제 상호작용으로
+                  이어지는지 보는 기준점으로 사용합니다.
+                </p>
               </div>
             ) : null}
 

@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-19
+## Completed MB 01-20
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -27,28 +27,7 @@
 - `MB 17` PRD v0.3 기준 문서 교체
 - `MB 18` recommendation reaction / save UI
 - `MB 19` theme / event connection surface 강화
-
-## MB 20
-
-- 제목: Data Model v0.3 Alignment
-- Goal:
-  - 문서와 코드 사이 data model 차이를 줄인다.
-- Scope:
-  - `lib/types.ts`
-  - `lib/mock-data.ts`
-  - recommendation related components
-  - `docs/shared.md`
-- Deliverables:
-  - `memberNickname` 반영
-  - `reactionCount` / `saveCount` 반영
-  - `ThemeSpotlight` mock data 정리
-- Acceptance Criteria:
-  - 코드와 문서의 타입이 크게 어긋나지 않는다.
-  - feed UI가 문서 필드를 직접 참조할 수 있다.
-  - lint/build가 유지된다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+- `MB 20` shared data model / docs 정렬
 
 ## MB 21
 

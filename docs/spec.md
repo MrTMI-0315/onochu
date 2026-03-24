@@ -199,8 +199,8 @@ type SongRecommendation = {
   comment: string;
   moodTags: string[];
   createdAt: string;
-  reactionCount?: number;
-  saveCount?: number;
+  reactionCount: number;
+  saveCount: number;
 };
 
 type ThemeSpotlight = {
@@ -209,6 +209,13 @@ type ThemeSpotlight = {
   description: string;
   relatedEvent?: string;
   isActive: boolean;
+  phaseLabel?: string;
+  activationWindow?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  curatorNote?: string;
+  participantSummary?: string;
+  highlightTags?: string[];
 };
 ```
 

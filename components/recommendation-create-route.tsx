@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
+import { getActiveThemeSpotlight } from "@/lib/mock-data";
 import { appendDraftToStoredRecommendationState } from "@/lib/recommendation-drafts";
 import type { MemberProfile, RecommendationDraftInput, SongRecommendation } from "@/lib/types";
 
@@ -21,6 +22,7 @@ export function RecommendationCreateRoute({
   const [storageMessage, setStorageMessage] = useState(
     "submit creates a local draft and inserts it into the feed storage",
   );
+  const activeTheme = getActiveThemeSpotlight();
 
   const moodSuggestions = useMemo(() => {
     return Array.from(
@@ -62,6 +64,19 @@ export function RecommendationCreateRoute({
               {storageMessage}
             </p>
           </div>
+          {activeTheme ? (
+            <div className="rounded-[1.25rem] bg-white/5 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                Active theme
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {activeTheme.title}
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/62">
+                {activeTheme.relatedEvent ?? activeTheme.activationWindow}
+              </p>
+            </div>
+          ) : null}
           <Link
             href="/recommendations"
             className="inline-flex rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70 transition hover:border-[#de8eff]/30 hover:text-white"
@@ -91,6 +106,11 @@ export function RecommendationCreateRoute({
               유지했습니다. 저장 후에는 `/recommendations`에서 draft preview와
               피드 삽입 상태를 바로 확인할 수 있습니다.
             </p>
+            {activeTheme?.curatorNote ? (
+              <p className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/62">
+                {activeTheme.curatorNote}
+              </p>
+            ) : null}
             <div className="mt-5 flex flex-wrap gap-2">
               {moodSuggestions.map((tag) => (
                 <span
