@@ -1,12 +1,12 @@
-# Onochu MB Plan v0.2
+# Onochu MB Plan v0.3
 
 ## Commit Convention
 
 - 모든 MB 완료 직후 `commit -> push origin main`을 수행한다.
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
-- 기존 번호 체계를 보존하기 위해 v0.2 기준 계획은 `MB 15`부터 이어서 사용한다.
+- 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-14
+## Completed MB 01-16
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -22,142 +22,125 @@
 - `MB 12` recommendation 파생 통계 재계산
 - `MB 13` browser storage persistence
 - `MB 14` storage version / reset control
+- `MB 15` PRD v0.2 기준 문서 재정렬
+- `MB 16` recommendation create route 분리
 
-## MB 15
+## MB 17
 
-- 제목: PRD v0.2 기준 문서 재정렬
+- 제목: PRD v0.3 기준 문서 교체
 - Goal:
-  - 새 PRD를 저장소 문서로 편입하고 SPEC 및 이후 MB를 v0.2 기준으로 다시 나눈다.
+  - connection-first 관점을 반영한 PRD v0.3를 저장소 문서 기준선으로 교체한다.
 - Scope:
   - `docs/prd.md`
   - `docs/spec.md`
   - `docs/mb-plan.md`
-  - `docs/README.md`
   - `README.md`
+  - `docs/README.md`
 - Deliverables:
-  - PRD 문서 저장소 내 편입
-  - v0.2 SPEC 재작성
-  - v0.2 남은 MB 재분해
+  - PRD v0.3 저장소 반영본
+  - v0.3 SPEC 재작성
+  - v0.3 기준 남은 MB 재분해
 - Acceptance Criteria:
-  - 저장소 안에서 PRD, SPEC, MB를 모두 읽을 수 있다.
-  - `docs/spec.md`가 v0.2 route/data/AC를 반영한다.
-  - `docs/mb-plan.md`가 `MB 16+` 작업을 정의한다.
-- Verification:
-  - `sed -n '1,260p' docs/prd.md`
-  - `sed -n '1,320p' docs/spec.md`
-  - `sed -n '1,320p' docs/mb-plan.md`
-
-## MB 16
-
-- 제목: Recommendation Create Route 분리
-- Goal:
-  - PRD v0.2가 요구하는 `/recommendations/new` 독립 등록 경로를 만든다.
-- Scope:
-  - `app/recommendations/new/*`
-  - recommendation composer 공용화
-  - navigation / CTA 연결
-- Deliverables:
-  - 독립 등록 페이지
-  - feed에서 create route 진입점
-  - 기존 composer와 공용 로직 정리
-- Acceptance Criteria:
-  - `/recommendations/new`가 존재한다.
-  - 필수 입력값 검증이 유지된다.
-  - feed와 create route가 중복 로직 없이 연결된다.
+  - 저장소 안에서 PRD/SPEC/MB가 모두 v0.3 기준을 가리킨다.
+  - 현재 구현 baseline과 남은 갭이 과장 없이 정리된다.
+  - lint/build 결과가 문서 근거로 반영된다.
 - Verification:
   - `npm run lint`
   - `npm run build`
-
-## MB 17
-
-- 제목: Lightweight Reaction / Save UI
-- Goal:
-  - 추천곡 카드에 PRD v0.2가 요구한 reaction/save UI를 추가한다.
-- Scope:
-  - recommendation card
-  - recommendation local state
-  - mock data / 타입 보강
-- Deliverables:
-  - like / fire / save 중 최소 2개 이상 동작
-  - local count 또는 active state
-  - 타입에 `reactionCount` / `saveCount` 반영
-- Acceptance Criteria:
-  - 추천곡 카드에서 가벼운 반응 또는 저장 UI가 보인다.
-  - local state 기준 상호작용이 가능하다.
-  - feed 새로고침 전후 persistence 전략과 충돌하지 않는다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+  - `sed -n '1,340p' docs/prd.md`
+  - `sed -n '1,340p' docs/spec.md`
+  - `sed -n '1,340p' docs/mb-plan.md`
 
 ## MB 18
 
-- 제목: Theme / Event 운영 슬롯 정교화
+- 제목: Lightweight Reaction / Save UI
 - Goal:
-  - 주간/행사 테마 슬롯을 운영 실험 도구 수준으로 정리한다.
+  - PRD v0.3의 connection-first 경험을 위해 추천 카드에 낮은 마찰의 반응/저장 UI를 추가한다.
 - Scope:
-  - recommendation theme section
-  - theme data model
-  - event-related copy / metadata
+  - recommendation card
+  - recommendation studio local state
+  - mock data / 타입 보강
 - Deliverables:
-  - `ThemeSpotlight` 기반 mock data
-  - 관련 event metadata 표현
-  - 운영진 관점 CTA / theme state 정리
+  - like / fire / save 중 최소 2개 이상 동작
+  - count 또는 active state
+  - local persistence와 충돌 없는 interaction
 - Acceptance Criteria:
-  - active theme slot이 명확히 보인다.
-  - 행사 연동 copy 또는 metadata를 표현할 수 있다.
-  - 향후 수동 큐레이션 확장 구조가 남아 있다.
+  - 추천 카드에서 반응 또는 저장이 가능하다.
+  - 모바일에서 탭 영역이 충분히 크다.
+  - lint/build가 유지된다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 19
 
-- 제목: Recommendation Data Model v0.2 정렬
+- 제목: Theme / Event Connection 강화
 - Goal:
-  - PRD v0.2 data model을 현재 코드와 문서에 맞게 정렬한다.
+  - 주간 테마와 행사 연계 영역을 커뮤니티 운영 도구 수준으로 강화한다.
 - Scope:
-  - `lib/types.ts`
-  - `lib/mock-data.ts`
-  - recommendation related components
-  - `docs/shared.md`
+  - recommendation theme section
+  - landing / feed theme copy
+  - theme metadata 표현
 - Deliverables:
-  - `memberNickname` field 반영 여부 정리
-  - reaction/save count 필드 반영
-  - `ThemeSpotlight` mock data 추가
+  - `ThemeSpotlight` 기반 mock data
+  - related event copy / metadata
+  - 운영진 관점 CTA 정리
 - Acceptance Criteria:
-  - 코드와 문서의 recommendation/theme 타입이 크게 어긋나지 않는다.
-  - feed UI에서 필요한 mock field를 직접 참조할 수 있다.
-  - 타입 변경 후 lint/build가 깨지지 않는다.
+  - active theme가 분명히 보인다.
+  - 행사 연계 문구와 상태를 표현할 수 있다.
+  - 신입 환영/행사 예열 같은 운영 시나리오를 담을 수 있다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 20
 
-- 제목: Member Profile / Feed 연결 정교화
+- 제목: Data Model v0.3 Alignment
 - Goal:
-  - PRD v0.2의 “사람 이해” 축을 더 명확히 드러내도록 프로필과 피드를 연결한다.
+  - 문서와 코드 사이 data model 차이를 줄인다.
 - Scope:
-  - `/members/[id]`
-  - recommendation attribution flow
-  - recent recommendations 표현
+  - `lib/types.ts`
+  - `lib/mock-data.ts`
+  - recommendation related components
+  - `docs/shared.md`
 - Deliverables:
-  - recent recommendations 시각 강조
-  - 추천인 탐색 흐름 개선
-  - 취향 파악 속도를 높이는 profile summary
+  - `memberNickname` 반영
+  - `reactionCount` / `saveCount` 반영
+  - `ThemeSpotlight` mock data 정리
 - Acceptance Criteria:
-  - 멤버 프로필에서 최근 추천곡 일부가 명확히 보인다.
-  - feed에서 추천인을 눌러 사람 탐색이 자연스럽게 이어진다.
-  - 신입 유저가 취향을 훑기 쉬운 구조가 유지된다.
+  - 코드와 문서의 타입이 크게 어긋나지 않는다.
+  - feed UI가 문서 필드를 직접 참조할 수 있다.
+  - lint/build가 유지된다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
 ## MB 21
 
-- 제목: v0.2 Acceptance Criteria QA Pass
+- 제목: Connection-First Profile / Feed Flow
 - Goal:
-  - PRD v0.2 AC 기준으로 실제 구현 상태를 체크하고 남은 갭을 줄인다.
+  - 추천인에서 사람 탐색으로 이어지는 연결 경험을 더 분명하게 만든다.
+- Scope:
+  - `/members/[id]`
+  - recommendation attribution flow
+  - member summary / recent recommendation UI
+- Deliverables:
+  - 추천인 탐색 CTA 정리
+  - 최근 추천곡 시각 강조
+  - 신입 기준 relation discovery copy 강화
+- Acceptance Criteria:
+  - feed에서 추천인을 눌러 프로필 탐색이 자연스럽다.
+  - 프로필이 정보 페이지가 아니라 대화 시작점처럼 보인다.
+  - 모바일에서 사람 탐색 흐름이 과도하게 길지 않다.
+- Verification:
+  - `npm run lint`
+  - `npm run build`
+
+## MB 22
+
+- 제목: v0.3 Acceptance Criteria QA Pass
+- Goal:
+  - PRD v0.3 AC 기준으로 구현 상태를 재점검하고 남은 갭을 줄인다.
 - Scope:
   - 전체 route QA
   - mobile usability
@@ -165,20 +148,20 @@
 - Deliverables:
   - AC 체크 결과
   - gap list
-  - 필요한 마지막 수정 묶음
+  - 마지막 수정 묶음
 - Acceptance Criteria:
   - route별 AC 체크가 문서화된다.
-  - mobile 우선 usable 상태를 다시 점검한다.
+  - mobile usability를 다시 확인한다.
   - 남은 blocker가 1개 이하로 줄어든다.
 - Verification:
   - `npm run lint`
   - `npm run build`
 
-## MB 22
+## MB 23
 
 - 제목: Vercel 배포 준비 및 최종 문서 정리
 - Goal:
-  - PRD v0.2 기준 MVP를 배포 가능한 상태로 닫는다.
+  - PRD v0.3 기준 MVP를 배포 가능한 상태로 닫는다.
 - Scope:
   - README
   - 배포 설정
