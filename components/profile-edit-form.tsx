@@ -1,7 +1,13 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { allGenres, platformLabels } from "@/lib/mock-data";
+import {
+  createProfileDraft,
+  loadStoredProfileDraft,
+  persistStoredProfileDraft,
+  PROFILE_STORAGE_VERSION,
+} from "@/lib/profile-drafts";
 import type { MusicPlatform } from "@/lib/types";
 
 type ProfileEditFormProps = {
@@ -42,6 +48,10 @@ export function ProfileEditForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [storageMessage, setStorageMessage] = useState(
+    "profile browser storage active",
+  );
+  const [hasHydrated, setHasHydrated] = useState(false);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({
     type: "idle",
     message: "현재 저장은 local mock flow로 동작합니다.",
@@ -58,6 +68,41 @@ export function ProfileEditForm({
         .filter((genre) => genre.length > 0),
     [favoriteGenres],
   );
+
+  useEffect(() => {
+    const initialDraft = {
+      nickname: initialNickname,
+      bio: initialBio,
+      favoriteGenres: initialFavoriteGenres,
+      mainPlatform: initialMainPlatform,
+      playlistLinks: initialPlaylistLinks,
+    };
+    const storedState = loadStoredProfileDraft(initialDraft);
+
+    const hydrationFrame = window.requestAnimationFrame(() => {
+      setNickname(storedState.draft.nickname);
+      setBio(storedState.draft.bio);
+      setFavoriteGenres(storedState.draft.favoriteGenres.join(", "));
+      setMainPlatform(storedState.draft.mainPlatform);
+      setPlaylistLinks(
+        storedState.draft.playlistLinks.length > 0
+          ? storedState.draft.playlistLinks
+          : initialPlaylistLinks,
+      );
+      setStorageMessage(storedState.storageMessage);
+      setHasHydrated(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(hydrationFrame);
+    };
+  }, [
+    initialBio,
+    initialFavoriteGenres,
+    initialMainPlatform,
+    initialNickname,
+    initialPlaylistLinks,
+  ]);
 
   function updatePlaylistLink(index: number, value: string) {
     setPlaylistLinks((currentLinks) =>
@@ -142,6 +187,18 @@ export function ProfileEditForm({
     });
 
     startTransition(() => {
+      const nextDraft = createProfileDraft({
+        nickname: nickname.trim(),
+        bio: bio.trim(),
+        favoriteGenres: selectedGenres,
+        mainPlatform,
+        playlistLinks: playlistLinks
+          .map((link) => link.trim())
+          .filter((link) => link.length > 0),
+      });
+
+      persistStoredProfileDraft(nextDraft);
+      setStorageMessage("saved profile to browser storage");
       setSaveStatus({
         type: "success",
         message: `저장 흐름을 확인했습니다. 마지막 저장 시각: ${new Date().toLocaleTimeString(
@@ -188,6 +245,12 @@ export function ProfileEditForm({
           <div className={`w-full rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
             {saveStatus.message}
           </div>
+
+          {hasHydrated ? (
+            <div className="w-full rounded-[1.25rem] border border-white/8 bg-white/4 px-4 py-4 text-sm text-white/68">
+              v{PROFILE_STORAGE_VERSION} / {storageMessage}
+            </div>
+          ) : null}
 
           <div className="grid w-full gap-3 sm:grid-cols-3">
             <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">

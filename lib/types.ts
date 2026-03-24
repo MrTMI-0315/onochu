@@ -65,3 +65,12 @@ export type ThemeSpotlight = {
   participantSummary?: string;
   highlightTags?: string[];
 };
+
+export type ProfileDraft = {
+  nickname: string;
+  bio: string;
+  favoriteGenres: string[];
+  mainPlatform: MusicPlatform;
+  playlistLinks: string[];
+  updatedAt: string;
+};
