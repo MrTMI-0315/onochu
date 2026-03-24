@@ -133,6 +133,9 @@ Onochu는 링크 전달보다 사람 사이의 맥락 있는 연결을 우선한
 - 짧은 소개
 - 선호 장르
 - 주 사용 플랫폼
+- reaction / save aggregate
+- conversation starter summary
+- recommendation create reply CTA
 - 최근 추천곡
 - 추천 피드에서 사람 이해로 이어지는 연결 축
 
@@ -259,10 +262,11 @@ type ThemeSpotlight = {
 - weekly theme slot
 - `ThemeSpotlight` mock data 기반 event-linked theme surface
 - local draft preview / browser storage persistence
+- recommendation card profile CTA
+- member profile conversation starter surface
 
 현재 PRD v0.3 대비 주요 갭:
 
-- feed에서 추천인 탐색은 가능하지만 connection-first 강조가 더 필요
 - theme 운영은 아직 manual/mock 수준이며 admin-grade workflow는 없음
 - Vercel 배포 가능 상태에 대한 문서 증거가 아직 없음
 

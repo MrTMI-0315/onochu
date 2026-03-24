@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-20
+## Completed MB 01-21
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -28,27 +28,7 @@
 - `MB 18` recommendation reaction / save UI
 - `MB 19` theme / event connection surface 강화
 - `MB 20` shared data model / docs 정렬
-
-## MB 21
-
-- 제목: Connection-First Profile / Feed Flow
-- Goal:
-  - 추천인에서 사람 탐색으로 이어지는 연결 경험을 더 분명하게 만든다.
-- Scope:
-  - `/members/[id]`
-  - recommendation attribution flow
-  - member summary / recent recommendation UI
-- Deliverables:
-  - 추천인 탐색 CTA 정리
-  - 최근 추천곡 시각 강조
-  - 신입 기준 relation discovery copy 강화
-- Acceptance Criteria:
-  - feed에서 추천인을 눌러 프로필 탐색이 자연스럽다.
-  - 프로필이 정보 페이지가 아니라 대화 시작점처럼 보인다.
-  - 모바일에서 사람 탐색 흐름이 과도하게 길지 않다.
-- Verification:
-  - `npm run lint`
-  - `npm run build`
+- `MB 21` connection-first profile / feed flow 강화
 
 ## MB 22
 

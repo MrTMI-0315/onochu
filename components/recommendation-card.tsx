@@ -30,6 +30,7 @@ export function RecommendationCard({
 }: RecommendationCardProps) {
   const memberName =
     recommendation.memberNickname || getMemberName(recommendation.memberId);
+  const memberProfileHref = `/members/${recommendation.memberId}`;
   const createdAt = new Intl.DateTimeFormat("ko-KR", {
     month: "2-digit",
     day: "2-digit",
@@ -70,7 +71,7 @@ export function RecommendationCard({
           <div className="min-w-0">
             {linkToMember ? (
               <Link
-                href={`/members/${recommendation.memberId}`}
+                href={memberProfileHref}
                 className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
               >
                 Recommended by {memberName}
@@ -88,6 +89,19 @@ export function RecommendationCard({
               {recommendation.trackTitle}
             </h3>
             <p className="mt-1 text-sm text-white/45">{recommendation.artistName}</p>
+            {linkToMember ? (
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <Link
+                  href={memberProfileHref}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/72 transition hover:border-[#de8eff]/30 hover:text-white"
+                >
+                  Open {memberName} profile
+                </Link>
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
+                  see recent picks and playlist links
+                </span>
+              </div>
+            ) : null}
           </div>
           <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
             {platformLabels[recommendation.platform]}

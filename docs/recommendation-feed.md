@@ -17,6 +17,7 @@
 - 독립 recommendation create route 진입 CTA
 - 최근 추천곡 카드 리스트
 - 곡명, 아티스트, 작성자
+- 추천인 프로필 진입 CTA
 - 플랫폼, 코멘트, 무드 태그
 - fire / save interaction
 - 외부 링크 이동
@@ -49,6 +50,7 @@
 ## Notes
 
 - 누가 추천했는지가 카드에서 바로 보여야 한다.
+- 추천 카드에서 프로필 이동 이유가 짧게 설명되어야 한다.
 - 모바일에서 한 카드당 정보 밀도가 과하지 않도록 조정한다.
 - 작성 플로우는 현재 local mock validation 까지만 포함한다.
 - 저장된 draft는 localStorage 기준으로 새로고침 이후에도 local feed 최상단에 유지된다.

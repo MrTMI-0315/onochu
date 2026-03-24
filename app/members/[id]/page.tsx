@@ -30,6 +30,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
   }
 
   const memberRecommendations = getRecommendationsByMemberId(member.id);
+  const featuredRecommendation = memberRecommendations[0];
   const moodHighlights = Array.from(
     new Set(memberRecommendations.flatMap((recommendation) => recommendation.moodTags)),
   ).slice(0, 5);
@@ -47,7 +48,7 @@ export default async function MemberPage({ params }: MemberPageProps) {
     <PageShell
       eyebrow={`Member / ${member.nickname}`}
       title={`${member.nickname} taste profile`}
-      description={`${member.bio} 플레이리스트 링크와 추천 흐름을 같은 화면 안에서 이어 보도록 구성했습니다.`}
+      description={`${member.bio} 이 프로필은 추천곡, 반응, 플레이리스트를 한 화면에 모아 대화 시작점을 더 빨리 찾도록 구성했습니다.`}
       aside={
         <div className="space-y-4">
           <div className="rounded-[1.25rem] bg-white/5 p-4">
@@ -66,6 +67,19 @@ export default async function MemberPage({ params }: MemberPageProps) {
               {memberRecommendations.length}
             </p>
           </div>
+          {featuredRecommendation ? (
+            <div className="rounded-[1.25rem] bg-white/5 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                Start with
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {featuredRecommendation.trackTitle}
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/62">
+                {featuredRecommendation.artistName} · {featuredRecommendation.comment}
+              </p>
+            </div>
+          ) : null}
         </div>
       }
     >
@@ -87,14 +101,22 @@ export default async function MemberPage({ params }: MemberPageProps) {
                       Curator / KNU_POW
                     </p>
                   </div>
-                  <a
-                    href={member.playlistLinks[0]?.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
-                  >
-                    Open playlist
-                  </a>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href={member.playlistLinks[0]?.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                    >
+                      Open playlist
+                    </a>
+                    <Link
+                      href="/recommendations/new"
+                      className="rounded-full border border-white/10 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/75 transition hover:border-[#de8eff]/30 hover:text-white"
+                    >
+                      Reply with your pick
+                    </Link>
+                  </div>
                 </div>
 
                 <p className="mt-4 max-w-xl text-sm leading-7 text-white/68">
@@ -113,6 +135,16 @@ export default async function MemberPage({ params }: MemberPageProps) {
                       {genre}
                     </span>
                   ))}
+                </div>
+                <div className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">
+                    Why start here
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-white/68">
+                    이 프로필은 최근 추천, mood 태그, 반응 수를 함께 보여 줘서
+                    {member.nickname}의 취향이 어떤 곡에서 커뮤니티 반응으로 이어졌는지 바로
+                    읽을 수 있습니다.
+                  </p>
                 </div>
               </div>
             </div>
@@ -218,6 +250,21 @@ export default async function MemberPage({ params }: MemberPageProps) {
               </div>
             ) : null}
 
+            {featuredRecommendation ? (
+              <div className="rounded-[1.5rem] border border-[#de8eff]/16 bg-[#de8eff]/7 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#de8eff]">
+                  Conversation starter
+                </p>
+                <p className="mt-3 text-lg font-semibold text-white">
+                  {featuredRecommendation.trackTitle} · {featuredRecommendation.artistName}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-white/68">
+                  &ldquo;{featuredRecommendation.comment}&rdquo;에서 시작하면
+                  {member.nickname}가 지금 어떤 mood로 추천하는지 가장 빨리 파악할 수 있습니다.
+                </p>
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap items-center gap-4 border-t border-white/6 pt-4">
               <Link
                 href="/members"
@@ -237,9 +284,14 @@ export default async function MemberPage({ params }: MemberPageProps) {
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="onochu-display text-2xl font-bold uppercase tracking-tight text-white">
-              Recent Recommendations
-            </h2>
+            <div>
+              <h2 className="onochu-display text-2xl font-bold uppercase tracking-tight text-white">
+                Recent Recommendations
+              </h2>
+              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/38">
+                start with the reason, then follow the person
+              </p>
+            </div>
             <Link
               href="/recommendations"
               className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#de8eff]"
