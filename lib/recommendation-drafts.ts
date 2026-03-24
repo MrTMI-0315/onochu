@@ -3,6 +3,7 @@ import type {
   RecommendationEngagementState,
   RecommendationDraftInput,
   SongRecommendation,
+  ThemeSpotlight,
 } from "@/lib/types";
 
 export type StoredRecommendationState = {
@@ -34,6 +35,7 @@ type AppendDraftInput = {
   draft: RecommendationDraftInput;
   currentMember: MemberProfile;
   initialRecommendations: SongRecommendation[];
+  activeTheme?: ThemeSpotlight | null;
 };
 
 export function createEmptyRecommendationEngagementState(): RecommendationEngagementState {
@@ -46,6 +48,7 @@ export function createEmptyRecommendationEngagementState(): RecommendationEngage
 export function createRecommendationFromDraft(
   draft: RecommendationDraftInput,
   currentMember: MemberProfile,
+  activeTheme?: ThemeSpotlight | null,
 ): SongRecommendation {
   return {
     id: `draft-${Date.now()}`,
@@ -60,6 +63,9 @@ export function createRecommendationFromDraft(
     createdAt: new Date().toISOString(),
     reactionCount: 0,
     saveCount: 0,
+    themeId: activeTheme?.id,
+    themeTitle: activeTheme?.title,
+    themePhaseLabel: activeTheme?.phaseLabel,
   };
 }
 
@@ -187,9 +193,14 @@ export function appendDraftToStoredRecommendationState({
   draft,
   currentMember,
   initialRecommendations,
+  activeTheme,
 }: AppendDraftInput) {
   const currentState = loadStoredRecommendationState(initialRecommendations);
-  const latestDraft = createRecommendationFromDraft(draft, currentMember);
+  const latestDraft = createRecommendationFromDraft(
+    draft,
+    currentMember,
+    activeTheme,
+  );
   const recommendations = [latestDraft, ...currentState.recommendations];
   const engagementByRecommendationId = {
     ...currentState.engagementByRecommendationId,

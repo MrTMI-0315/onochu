@@ -68,6 +68,11 @@ export function RecommendationCard({
 
       <div className="relative flex h-full flex-col gap-5">
         <div className="flex flex-wrap items-center gap-2">
+          {recommendation.themeTitle ? (
+            <span className="rounded-full border border-[#de8eff]/20 bg-[#de8eff]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#de8eff]">
+              {recommendation.themePhaseLabel ?? "Theme"} / {recommendation.themeTitle}
+            </span>
+          ) : null}
           <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
             {platformLabels[recommendation.platform]}
           </span>

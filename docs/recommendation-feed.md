@@ -23,6 +23,7 @@
 - 플랫폼, 코멘트, 무드 태그
 - fire / save interaction
 - 외부 링크 이동
+- active theme에서 작성된 draft는 theme metadata를 함께 가진다
 
 ## Card Fields
 

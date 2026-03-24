@@ -33,6 +33,9 @@ export type SongRecommendation = {
   createdAt: string;
   reactionCount: number;
   saveCount: number;
+  themeId?: string;
+  themeTitle?: string;
+  themePhaseLabel?: string;
 };
 
 export type RecommendationDraftInput = {

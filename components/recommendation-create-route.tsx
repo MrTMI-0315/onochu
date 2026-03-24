@@ -35,6 +35,7 @@ export function RecommendationCreateRoute({
       draft,
       currentMember,
       initialRecommendations,
+      activeTheme,
     });
 
     setLatestDraft(nextState.latestDraft);
