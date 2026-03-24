@@ -58,6 +58,9 @@
 - PASS: `/members`
 - PASS: `/members/kai`
 - PASS: `/profile/edit`
+- PASS: production `/recommendations`에서 saved shelf, `v4` storage marker, `3 theme-linked recs / 3 contributors` 확인
+- PASS: production `/recommendations/new`에서 linked rec count와 theme-aware create context 확인
+- PASS: production `/profile/edit`에서 `v1` profile storage summary, completion, reset surface 확인
 
 ### `not-found`
 
