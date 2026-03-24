@@ -18,6 +18,7 @@
 
 - PASS
 - landing hero, CTA 3종, featured theme, featured members, current feed surface 확인
+- hero artwork 이미지 노출과 parchment/clay palette 적용 후에도 CTA 가시성 유지 확인
 
 ### `/recommendations`
 
@@ -57,6 +58,7 @@
 - production url:
   - [https://onochu.vercel.app](https://onochu.vercel.app)
 - PASS: `/`
+- PASS: production landing에서 hero artwork 이미지와 primary CTA 2종 노출 확인
 - PASS: `/recommendations`
 - PASS: `/recommendations/new`
 - PASS: `/members`
@@ -78,6 +80,7 @@
 - viewport `390x844` 기준 `/recommendations` 확인
 - viewport `390x844` 기준 `/recommendations/new` 확인
 - viewport `390x844` 기준 `/profile/edit` 확인
+- viewport `390x844` 기준 landing hero artwork와 CTA 겹침/overflow 없음 확인
 - 하단 네비게이션, theme hero, saved shelf, feed card, profile persistence summary 주요 섹션이 세로 스크롤 안에서 유지되는 것 확인
 - 이번 확인 범위에서는 치명적인 overflow / hidden CTA / broken layout 미발견
 

@@ -16,7 +16,7 @@
 - production deployment status:
   - deployed on 2026-03-25
   - production url: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/7E8EJTKA44973gf3HahyekBNE2dj)
+  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/5dqZ4Ykbn3juapAUeGPHR3rtrXtv)
 
 ## Why This Repo Is Deployable
 
@@ -72,7 +72,7 @@
   - `npx vercel --prod --yes`
 - result:
   - production alias: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - production deployment url: [https://onochu-l0lt11ze0-episteme1999-9155s-projects.vercel.app](https://onochu-l0lt11ze0-episteme1999-9155s-projects.vercel.app)
+  - production deployment url: [https://onochu-8wr009bbd-episteme1999-9155s-projects.vercel.app](https://onochu-8wr009bbd-episteme1999-9155s-projects.vercel.app)
 - note:
   - GitHub Login Connection 부재로 repository link 단계에서 400 경고가 있었지만, CLI upload 방식으로 production 배포 자체는 성공했다.
   - 로컬에는 `.vercel`이 생성됐고 `.gitignore`에 ignore 규칙이 추가됐다.
@@ -95,6 +95,7 @@
 ## Executed Production Smoke
 
 - PASS: `/`
+- PASS: landing hero artwork와 parchment/clay palette 적용 후 CTA 가시성 유지 확인
 - PASS: `/recommendations`
 - PASS: `/recommendations/new`
 - PASS: `/members`

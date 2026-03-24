@@ -28,6 +28,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - saved recommendation filter / shelf / empty guidance 추가 완료
 - draft recommendation의 theme metadata 연결 및 participation summary 추가 완료
 - post-rebuild route QA refresh 및 production redeploy 완료
+- landing hero artwork 추가와 parchment/clay palette retheme 완료
 
 ## Documents
 
@@ -76,6 +77,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
 - `/recommendations`에서는 작성자 링크, fire/save 인터랙션, 무드 하이라이트, active theme event metadata가 함께 렌더링됩니다.
 - `/recommendations`에서는 saved shelf, all/saved filter, theme participation summary, fire/save persistence가 함께 동작합니다.
+- `/` 랜딩에서는 hero artwork와 parchment/clay 기반 톤이 적용된 CTA shell이 함께 렌더링됩니다.
 - recommendation card에서는 작성자 프로필로 바로 이동하는 CTA가 함께 보입니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
 - `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.

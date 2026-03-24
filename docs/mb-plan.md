@@ -403,3 +403,11 @@
 - `MB 44` profile main platform과 recommendation CTA 연결
 - `MB 45` unresolved platform fallback UX
 - `MB 46` cross-platform recommendation flow QA / deploy refresh
+
+## Completed MB 47-51
+
+- `MB 47` landing hero artwork 삽입과 tonal shell 적용
+- `MB 48` shared chrome accent retheme
+- `MB 49` recommendation / create / profile accent retheme
+- `MB 50` landing / member route accent sweep
+- `MB 51` artwork palette rollout QA / production redeploy
