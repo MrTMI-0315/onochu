@@ -366,6 +366,10 @@ export function ProfileEditForm({
             {errors.mainPlatform ? (
               <span className="text-xs text-rose-200">{errors.mainPlatform}</span>
             ) : null}
+            <span className="text-xs leading-6 text-white/48">
+              여기서 고른 플랫폼이 recommendation feed 카드의 기본 열기 플랫폼으로
+              사용됩니다.
+            </span>
           </div>
 
           <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">

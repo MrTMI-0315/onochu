@@ -1,13 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
 import { getActiveThemeSpotlight } from "@/lib/mock-data";
+import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import { appendDraftToStoredRecommendationState } from "@/lib/recommendation-drafts";
-import type { MemberProfile, RecommendationDraftInput, SongRecommendation } from "@/lib/types";
+import type {
+  MemberProfile,
+  MusicPlatform,
+  RecommendationDraftInput,
+  SongRecommendation,
+} from "@/lib/types";
 
 type RecommendationCreateRouteProps = {
   currentMember: MemberProfile;
@@ -18,6 +24,9 @@ export function RecommendationCreateRoute({
   currentMember,
   initialRecommendations,
 }: RecommendationCreateRouteProps) {
+  const [viewerPlatform, setViewerPlatform] = useState<MusicPlatform>(
+    currentMember.mainPlatform,
+  );
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
   const [themeParticipationCount, setThemeParticipationCount] = useState(
     initialRecommendations.filter(
@@ -34,6 +43,24 @@ export function RecommendationCreateRoute({
       new Set(initialRecommendations.flatMap((recommendation) => recommendation.moodTags)),
     ).slice(0, 8);
   }, [initialRecommendations]);
+
+  useEffect(() => {
+    const storedProfile = loadStoredProfileDraft({
+      nickname: currentMember.nickname,
+      bio: currentMember.bio,
+      favoriteGenres: currentMember.favoriteGenres,
+      mainPlatform: currentMember.mainPlatform,
+      playlistLinks: currentMember.playlistLinks.map((playlistLink) => playlistLink.url),
+    });
+
+    const hydrationFrame = window.requestAnimationFrame(() => {
+      setViewerPlatform(storedProfile.draft.mainPlatform);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(hydrationFrame);
+    };
+  }, [currentMember]);
 
   function handleDraftSaved(draft: RecommendationDraftInput) {
     const nextState = appendDraftToStoredRecommendationState({
@@ -67,6 +94,14 @@ export function RecommendationCreateRoute({
             </p>
             <p className="mt-2 text-xl font-semibold text-white">
               {currentMember.nickname}
+            </p>
+          </div>
+          <div className="rounded-[1.25rem] bg-white/5 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+              Viewer platform
+            </p>
+            <p className="mt-2 text-xl font-semibold text-white">
+              {viewerPlatform.replaceAll("_", " ")}
             </p>
           </div>
           <div className="rounded-[1.25rem] bg-white/5 p-4">
@@ -177,7 +212,7 @@ export function RecommendationCreateRoute({
               <RecommendationCard
                 recommendation={latestDraft}
                 linkToMember={false}
-                viewerPlatform={currentMember.mainPlatform}
+                viewerPlatform={viewerPlatform}
               />
             ) : (
               <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">

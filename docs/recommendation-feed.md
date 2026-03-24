@@ -60,6 +60,7 @@
 - 모바일에서 한 카드당 정보 밀도가 과하지 않도록 조정한다.
 - feed는 browse-first, 작성은 `/recommendations/new` 중심으로 분리한다.
 - 카드의 메인 CTA는 viewer main platform이 있으면 그 플랫폼을 먼저 열어야 한다.
+- viewer main platform은 `/profile/edit`의 저장값과 연결되어야 한다.
 - save interaction은 다시 보기 위한 personal revisit flow로 이어져야 한다.
 - 저장된 곡이 없을 때도 save 목적을 설명하는 empty guidance가 필요하다.
 - 추천 등록은 원본 링크 1개로 끝낼 수 있지만, 필요하면 alternate platform links를 선택적으로 추가할 수 있어야 한다.

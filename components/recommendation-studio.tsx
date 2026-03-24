@@ -15,8 +15,10 @@ import {
   RECOMMENDATION_STORAGE_VERSION,
   resetStoredRecommendationState,
 } from "@/lib/recommendation-drafts";
+import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import type {
   MemberProfile,
+  MusicPlatform,
   RecommendationEngagementAction,
   RecommendationEngagementState,
   SongRecommendation,
@@ -39,6 +41,9 @@ export function RecommendationStudio({
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
   const [engagementByRecommendationId, setEngagementByRecommendationId] =
     useState<Record<string, RecommendationEngagementState>>({});
+  const [viewerPlatform, setViewerPlatform] = useState<MusicPlatform>(
+    currentMember.mainPlatform,
+  );
   const [hasHydrated, setHasHydrated] = useState(false);
   const [storageMessage, setStorageMessage] = useState(
     "browser storage active",
@@ -59,6 +64,24 @@ export function RecommendationStudio({
       window.cancelAnimationFrame(hydrationFrame);
     };
   }, [initialRecommendations]);
+
+  useEffect(() => {
+    const storedProfile = loadStoredProfileDraft({
+      nickname: currentMember.nickname,
+      bio: currentMember.bio,
+      favoriteGenres: currentMember.favoriteGenres,
+      mainPlatform: currentMember.mainPlatform,
+      playlistLinks: currentMember.playlistLinks.map((playlistLink) => playlistLink.url),
+    });
+
+    const hydrationFrame = window.requestAnimationFrame(() => {
+      setViewerPlatform(storedProfile.draft.mainPlatform);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(hydrationFrame);
+    };
+  }, [currentMember]);
 
   useEffect(() => {
     if (!hasHydrated) {
@@ -330,7 +353,7 @@ export function RecommendationStudio({
             <RecommendationCard
               recommendation={latestDraft}
               linkToMember={false}
-              viewerPlatform={currentMember.mainPlatform}
+              viewerPlatform={viewerPlatform}
             />
           </section>
         ) : null}
@@ -363,7 +386,7 @@ export function RecommendationStudio({
                   key={recommendation.id}
                   recommendation={recommendation}
                   compact
-                  viewerPlatform={currentMember.mainPlatform}
+                  viewerPlatform={viewerPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()
@@ -428,7 +451,7 @@ export function RecommendationStudio({
                 <RecommendationCard
                   key={recommendation.id}
                   recommendation={recommendation}
-                  viewerPlatform={currentMember.mainPlatform}
+                  viewerPlatform={viewerPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()
@@ -583,7 +606,7 @@ export function RecommendationStudio({
                 <RecommendationCard
                   key={recommendation.id}
                   recommendation={recommendation}
-                  viewerPlatform={currentMember.mainPlatform}
+                  viewerPlatform={viewerPlatform}
                   engagement={
                     engagementByRecommendationId[recommendation.id] ??
                     createEmptyRecommendationEngagementState()
