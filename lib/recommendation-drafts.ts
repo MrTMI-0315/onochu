@@ -16,7 +16,7 @@ export type StoredRecommendationState = {
 export const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
 export const LEGACY_RECOMMENDATION_STORAGE_KEY =
   "onochu-recommendation-studio-v1";
-export const RECOMMENDATION_STORAGE_VERSION = 3;
+export const RECOMMENDATION_STORAGE_VERSION = 4;
 
 type LoadedRecommendationState = {
   recommendations: SongRecommendation[];
@@ -105,6 +105,37 @@ export function loadStoredRecommendationState(
     }
 
     if ("version" in parsedValue) {
+      if (parsedValue.version === 3) {
+        return {
+          recommendations:
+            Array.isArray(parsedValue.recommendations) &&
+            parsedValue.recommendations.length > 0
+              ? parsedValue.recommendations.map((recommendation) => {
+                  const seededRecommendation = initialRecommendations.find(
+                    (initialRecommendation) =>
+                      initialRecommendation.id === recommendation.id,
+                  );
+
+                  if (!seededRecommendation) {
+                    return recommendation;
+                  }
+
+                  return {
+                    ...seededRecommendation,
+                    ...recommendation,
+                    themeId: seededRecommendation.themeId,
+                    themeTitle: seededRecommendation.themeTitle,
+                    themePhaseLabel: seededRecommendation.themePhaseLabel,
+                  };
+                })
+              : initialRecommendations,
+          latestDraft: parsedValue.latestDraft ?? null,
+          engagementByRecommendationId:
+            parsedValue.engagementByRecommendationId ?? {},
+          storageMessage: "migrated browser storage to theme-aware state",
+        };
+      }
+
       if (parsedValue.version === 2) {
         return {
           recommendations:
