@@ -6,7 +6,7 @@
 - 커밋 메시지 형식은 `MB 00 : 작업 소제목 요약`을 사용한다.
 - 기존 번호 체계를 보존하기 위해 v0.3 기준 계획은 `MB 17`부터 이어서 사용한다.
 
-## Completed MB 01-23
+## Completed MB 01-24
 
 - `MB 01` 작업 분해와 커밋 규칙 정리
 - `MB 02` Next.js App Router 스캐폴딩
@@ -31,24 +31,25 @@
 - `MB 21` connection-first profile / feed flow 강화
 - `MB 22` v0.3 acceptance criteria QA pass
 - `MB 23` Vercel 배포 준비 / final runbook 정리
+- `MB 24` first production deployment 실행
 
-## MB 24
+## MB 25
 
-- 제목: Execute First Production Deployment
+- 제목: Decide Persistence Transition
 - Goal:
-  - 실제 Vercel production URL을 발급하고 최종 smoke evidence를 남긴다.
+  - local/mock 상태를 실제 persistence 단계로 옮길지 범위를 결정하고 첫 slice를 시작한다.
 - Scope:
-  - Vercel dashboard or CLI deploy
-  - production smoke
-  - final status doc
+  - recommendation drafts
+  - profile save flow
+  - data layer plan
 - Deliverables:
-  - production URL
-  - deploy-time smoke result
-  - final known gaps refresh
+  - persistence strategy
+  - first implementation slice or spec update
+  - rollout guardrails
 - Acceptance Criteria:
-  - production deployment가 1회 성공한다.
-  - 핵심 route smoke가 production URL에서 다시 확인된다.
-  - 문서에 production URL 또는 deploy evidence가 반영된다.
+  - 어떤 데이터부터 실제 저장으로 옮길지 결정된다.
+  - local-only 상태와 production 상태의 차이가 문서화된다.
+  - 다음 구현 MB가 1개 이상 정의된다.
 - Verification:
   - `npm run lint`
   - `npm run build`

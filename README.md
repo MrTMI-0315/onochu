@@ -23,6 +23,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - connection-first profile/feed flow 강화 완료
 - v0.3 route QA와 mobile pass 문서화 완료
 - Vercel 배포 runbook 정리 완료
+- Vercel production deployment 1회 실행 완료
 
 ## Documents
 
@@ -76,6 +77,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - `/members/[id]`에서는 추천 수 외에 reaction/save aggregate, conversation starter, reply CTA도 함께 보입니다.
 - route별 QA 결과와 남은 blocker는 [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)에 정리했습니다.
 - Vercel import 기준 배포 절차와 smoke checklist는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md)에 정리했습니다.
+- 현재 production URL은 [https://onochu.vercel.app](https://onochu.vercel.app)입니다.
 - 현재 구현은 mock data 기반 MVP입니다.
 
 ## Commit Rule
@@ -86,6 +88,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 24` 기준으로 실제 production deployment 실행
-2. production URL 기준 smoke evidence를 문서에 추가
-3. local/mock persistence를 실제 persistence 단계로 옮길지 결정
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 25` 기준으로 local/mock persistence 전환 범위 결정
+2. recommendation 또는 profile save 중 어떤 흐름을 먼저 실제 저장으로 옮길지 선택
+3. Git-integrated import path를 검증하려면 Vercel GitHub Login Connection 연결 여부 확인

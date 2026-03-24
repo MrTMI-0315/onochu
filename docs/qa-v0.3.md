@@ -9,6 +9,8 @@
 - `npm run dev`
 - Playwright desktop smoke
 - Playwright mobile smoke
+- production deploy: `npx vercel --prod --yes`
+- production smoke: `https://onochu.vercel.app`
 
 ## Route Checklist
 
@@ -44,6 +46,17 @@
 - PASS
 - nickname, platform, bio, genre, playlist link 입력 surface와 local validation 구조 확인
 
+## Production Smoke
+
+- production url:
+  - [https://onochu.vercel.app](https://onochu.vercel.app)
+- PASS: `/`
+- PASS: `/recommendations`
+- PASS: `/recommendations/new`
+- PASS: `/members`
+- PASS: `/members/kai`
+- PASS: `/profile/edit`
+
 ### `not-found`
 
 - PASS
@@ -66,11 +79,11 @@
 - blocker:
   - 없음
 - non-blocking:
-  - 실제 production URL은 아직 발급하지 않았고 runbook만 정리된 상태
   - theme 운영 흐름은 여전히 manual/mock 수준
   - persistence와 auth는 local/mock 범위에 머물러 있음
+  - GitHub Login Connection 부재로 Git-integrated import path는 아직 검증하지 않음
 
 ## Summary
 
 - PRD v0.3 route 기준 주요 화면은 현재 구현 범위 안에서 탐색 가능
-- 배포/운영 문서 blocker는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md) 추가로 해소
+- production deployment와 route smoke evidence를 확보했고, 배포/운영 문서 blocker는 해소

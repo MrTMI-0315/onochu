@@ -13,6 +13,10 @@
 - verified commands:
   - `npm run lint`
   - `npm run build`
+- production deployment status:
+  - deployed on 2026-03-24
+  - production url: [https://onochu.vercel.app](https://onochu.vercel.app)
+  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/CDz1sSrDc3e6rSnnGNchpbec531Y)
 
 ## Why This Repo Is Deployable
 
@@ -62,6 +66,17 @@
 7. `Deploy`를 실행한다.
 8. 첫 배포 완료 후 production URL에서 아래 smoke를 진행한다.
 
+## Actual Deployment Evidence
+
+- deploy command:
+  - `npx vercel --prod --yes`
+- result:
+  - production alias: [https://onochu.vercel.app](https://onochu.vercel.app)
+  - production deployment url: [https://onochu-7amr1f5d6-episteme1999-9155s-projects.vercel.app](https://onochu-7amr1f5d6-episteme1999-9155s-projects.vercel.app)
+- note:
+  - GitHub Login Connection 부재로 repository link 단계에서 400 경고가 있었지만, CLI upload 방식으로 production 배포 자체는 성공했다.
+  - 로컬에는 `.vercel`이 생성됐고 `.gitignore`에 ignore 규칙이 추가됐다.
+
 ## Post-Deploy Smoke
 
 - `/`
@@ -77,6 +92,15 @@
 - `/profile/edit`
   - profile form 노출 확인
 
+## Executed Production Smoke
+
+- PASS: `/`
+- PASS: `/recommendations`
+- PASS: `/recommendations/new`
+- PASS: `/members`
+- PASS: `/members/kai`
+- PASS: `/profile/edit`
+
 ## CLI Fallback
 
 대시보드 import 대신 CLI로 시작하려면 공식 문서 기준 `vercel` CLI를 사용할 수 있다.
@@ -88,6 +112,6 @@
 
 ## Known Limits
 
-- 아직 실제 production URL은 생성하지 않았다.
 - theme 운영 흐름은 manual/mock 수준이다.
 - persistence와 auth는 local/mock 범위에 머문다.
+- GitHub Login Connection은 아직 연결되지 않아 Git-integrated import path는 미완료 상태다.
