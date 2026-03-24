@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MemberCard } from "@/components/member-card";
 import { RecommendationCard } from "@/components/recommendation-card";
@@ -48,14 +49,15 @@ export default function HomePage() {
     <main className="px-4 pb-28 pt-24 text-white md:px-6 md:pb-12 md:pt-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-10">
         <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/5 bg-black/20 p-7 md:p-10">
-            <div className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-[#de8eff]/12 blur-[100px]" />
-            <div className="relative">
+          <div className="landing-hero-shell relative overflow-hidden rounded-[2rem] border p-7 md:p-10">
+            <div className="landing-hero-haze absolute -left-16 -top-16 h-56 w-56 rounded-full blur-[100px]" />
+            <div className="relative grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+              <div>
               <span className="onochu-eyebrow">KNU_POW Connection Layer</span>
               <h1 className="onochu-display mt-5 text-5xl font-bold uppercase leading-[0.9] md:text-7xl">
                 Stop losing
                 <br />
-                <span className="bg-gradient-to-r from-[#de8eff] to-[#b90afc] bg-clip-text text-transparent">
+                <span className="landing-hero-highlight bg-clip-text text-transparent">
                   the song,
                 </span>
                 <br />
@@ -70,13 +72,13 @@ export default function HomePage() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/recommendations"
-                  className="rounded-full bg-[linear-gradient(135deg,#de8eff_0%,#b90afc_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
+                  className="landing-primary-cta rounded-full px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
                 >
                   Open recommendation feed
                 </Link>
                 <Link
                   href="/members"
-                  className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/72"
+                  className="landing-secondary-cta rounded-full border px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em]"
                 >
                   Explore members
                 </Link>
@@ -87,9 +89,9 @@ export default function HomePage() {
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="rounded-[1.5rem] border border-white/8 bg-white/4 p-4 transition hover:border-[#de8eff]/24 hover:bg-white/6"
+                    className="landing-action-card rounded-[1.5rem] border p-4 transition"
                   >
-                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#de8eff]">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
                       Primary action
                     </p>
                     <h2 className="onochu-display mt-3 text-2xl font-bold uppercase text-white">
@@ -100,6 +102,38 @@ export default function HomePage() {
                     </p>
                   </Link>
                 ))}
+              </div>
+              </div>
+
+              <div className="relative flex justify-center lg:justify-end">
+                <div className="landing-hero-art-wrap relative w-full max-w-[25rem]">
+                  <div className="landing-hero-art-glow absolute inset-x-[12%] bottom-[8%] h-24 rounded-full blur-3xl" />
+                  <div className="landing-hero-art-panel relative overflow-hidden rounded-[2rem] border p-5">
+                    <div className="landing-hero-art-frame relative mx-auto aspect-[0.7] w-full max-w-[20rem]">
+                      <Image
+                        src="/landing-hero-art.png"
+                        alt="Headphone-wearing DJ artwork in vintage Japanese illustration style"
+                        fill
+                        priority
+                        className="object-contain object-center"
+                        sizes="(max-width: 1024px) 70vw, 28rem"
+                      />
+                    </div>
+                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-[color:var(--outline-strong)] pt-4">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
+                          Hero artwork
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+                          paper, lacquer, headphone, turntable
+                        </p>
+                      </div>
+                      <span className="rounded-full border border-[color:var(--outline-strong)] bg-[color:var(--surface-veil)] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--text-soft)]">
+                        mood anchor
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
