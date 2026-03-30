@@ -13,6 +13,7 @@ import type {
 type RecommendationCardProps = {
   recommendation: SongRecommendation;
   compact?: boolean;
+  mobileSimple?: boolean;
   linkToMember?: boolean;
   viewerPlatform?: MusicPlatform;
   engagement?: RecommendationEngagementState;
@@ -26,6 +27,7 @@ type RecommendationCardProps = {
 export function RecommendationCard({
   recommendation,
   compact = false,
+  mobileSimple = false,
   linkToMember = true,
   viewerPlatform,
   engagement,
@@ -47,6 +49,7 @@ export function RecommendationCard({
     recommendation,
     preferredPlatform: viewerPlatform,
   });
+  const initials = memberName.slice(0, 1).toUpperCase();
   const resolvedPlatformLabel = viewerPlatform
     ? platformLabels[viewerPlatform]
     : platformLabels[recommendation.platform];
@@ -68,6 +71,92 @@ export function RecommendationCard({
         "border-[color:rgba(64,81,112,0.35)] bg-[color:rgba(64,81,112,0.18)] text-[color:var(--paper)] shadow-[0_0_30px_rgba(64,81,112,0.14)]",
     },
   ];
+
+  if (mobileSimple) {
+    return (
+      <article className="mobile-card rounded-[0.28rem] p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.72)] text-sm font-semibold text-[var(--primary-strong)]">
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-[1.05rem] font-semibold text-[var(--accent-ink)]">
+                {memberName}
+              </p>
+            </div>
+          </div>
+          <a
+            href={resolvedLink.href}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-[0.2rem] border border-[rgba(109,66,60,0.12)] bg-white px-3 py-1.5 text-[0.9rem] font-medium text-[rgba(64,52,44,0.72)]"
+          >
+            {resolvedPlatformLabel}
+          </a>
+        </div>
+
+        <div className="mt-5">
+          <h3 className="text-[2.1rem] font-semibold tracking-[-0.05em] text-[var(--accent-ink)]">
+            {recommendation.trackTitle}
+          </h3>
+          <p className="mt-1 text-[0.95rem] text-[rgba(64,52,44,0.68)]">
+            {recommendation.artistName}
+          </p>
+        </div>
+
+        <p className="mt-5 text-[1rem] leading-8 text-[rgba(64,52,44,0.92)]">
+          {recommendation.comment}
+        </p>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {recommendation.moodTags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="rounded-[0.16rem] bg-[rgba(213,140,116,0.08)] px-3 py-1.5 text-[0.88rem] font-medium text-[var(--primary-strong)]"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-5">
+          <button
+            type="button"
+            disabled={!onToggleEngagement}
+            onClick={() => onToggleEngagement?.(recommendation.id, "fire")}
+            className="flex items-center gap-2 text-[1rem] text-[rgba(64,52,44,0.76)]"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+              <path
+                d="M12 20s-6.5-4.2-8.6-8.1C1.9 8.9 4 6 7.1 6c1.9 0 3.1 1 3.9 2 0.8-1 2-2 3.9-2 3.1 0 5.2 2.9 3.7 5.9C18.5 15.8 12 20 12 20Z"
+                stroke={resolvedEngagement.fire ? "var(--primary-strong)" : "rgba(64,52,44,0.62)"}
+                strokeWidth="1.8"
+                fill={resolvedEngagement.fire ? "rgba(183,106,85,0.14)" : "transparent"}
+              />
+            </svg>
+            <span>{recommendation.reactionCount}</span>
+          </button>
+
+          <button
+            type="button"
+            disabled={!onToggleEngagement}
+            onClick={() => onToggleEngagement?.(recommendation.id, "save")}
+            className="text-[rgba(64,52,44,0.76)]"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+              <path
+                d="M7 4.5h10v15l-5-3.1-5 3.1v-15Z"
+                stroke={resolvedEngagement.save ? "var(--primary-strong)" : "rgba(64,52,44,0.62)"}
+                strokeWidth="1.8"
+                fill={resolvedEngagement.save ? "rgba(183,106,85,0.14)" : "transparent"}
+              />
+            </svg>
+          </button>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article

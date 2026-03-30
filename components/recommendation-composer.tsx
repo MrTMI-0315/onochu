@@ -13,6 +13,7 @@ type RecommendationComposerProps = {
   currentMemberName: string;
   moodSuggestions: string[];
   onDraftSaved?: (draft: RecommendationDraftInput) => void;
+  mobile?: boolean;
 };
 
 type ComposerErrors = {
@@ -29,12 +30,20 @@ type SaveStatus =
   | { type: "success"; message: string }
   | { type: "error"; message: string };
 
-const MAX_COMMENT_LENGTH = 100;
+const MAX_COMMENT_LENGTH = 200;
+const platformDescriptions: Partial<Record<MusicPlatform, string>> = {
+  spotify: "Most popular streaming platform",
+  apple_music: "High-quality audio",
+  youtube_music: "Largest music library",
+  soundcloud: "Independent artists",
+  other: "Bring your own link",
+};
 
 export function RecommendationComposer({
   currentMemberName,
   moodSuggestions,
   onDraftSaved,
+  mobile = false,
 }: RecommendationComposerProps) {
   const [trackTitle, setTrackTitle] = useState("");
   const [artistName, setArtistName] = useState("");
@@ -198,6 +207,246 @@ export function RecommendationComposer({
       : saveStatus.type === "error"
         ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
         : "border-white/10 bg-white/4 text-white/68";
+
+  if (mobile) {
+    return (
+      <section className="mobile-screen pb-12 text-[var(--accent-ink)]">
+        <form onSubmit={handleSubmit}>
+          <header className="mobile-section-rule sticky top-0 z-20 flex items-center justify-between bg-[rgba(247,243,236,0.96)] px-5 py-5 backdrop-blur-xl">
+            <button
+              type="button"
+              onClick={resetForm}
+              className="text-[1.9rem] font-light text-[rgba(64,52,44,0.7)]"
+              aria-label="Close composer"
+            >
+              ×
+            </button>
+            <h1 className="text-[1.15rem] font-semibold tracking-[-0.03em]">
+              Share Recommendation
+            </h1>
+            <button
+              type="submit"
+              disabled={isSaving || isPending}
+              className="text-[1rem] font-semibold text-[var(--primary-strong)] disabled:opacity-50"
+            >
+              Share
+            </button>
+          </header>
+
+          <div className="px-6 pb-10 pt-8">
+            <p className="text-center text-[1rem] leading-8 text-[rgba(64,52,44,0.68)]">
+              Share a song and tell us why it matters to you
+            </p>
+
+            <div className="mobile-section-rule mt-8" />
+
+            <div className="mt-8 space-y-7">
+              <label className="block">
+                <span className="mb-3 block text-[1rem] font-semibold">Track title</span>
+                <input
+                  value={trackTitle}
+                  onChange={(event) => setTrackTitle(event.target.value)}
+                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                  placeholder="Song name"
+                />
+                {errors.trackTitle ? (
+                  <span className="mt-2 block text-sm text-rose-500">{errors.trackTitle}</span>
+                ) : null}
+              </label>
+
+              <label className="block">
+                <span className="mb-3 block text-[1rem] font-semibold">Artist</span>
+                <input
+                  value={artistName}
+                  onChange={(event) => setArtistName(event.target.value)}
+                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                  placeholder="Artist name"
+                />
+                {errors.artistName ? (
+                  <span className="mt-2 block text-sm text-rose-500">{errors.artistName}</span>
+                ) : null}
+              </label>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="text-[1rem] font-semibold">Your story</span>
+                <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
+                  {comment.length}/{MAX_COMMENT_LENGTH}
+                </span>
+              </div>
+              <textarea
+                value={comment}
+                onChange={(event) =>
+                  setComment(event.target.value.slice(0, MAX_COMMENT_LENGTH))
+                }
+                className="mobile-input min-h-36 w-full rounded-[0.14rem] px-5 py-4 text-[1rem] leading-8 outline-none"
+                placeholder="Why does this song matter to you? When do you listen to it?"
+              />
+              {errors.comment ? (
+                <span className="mt-2 block text-sm text-rose-500">{errors.comment}</span>
+              ) : null}
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <span className="text-[1rem] font-semibold">Mood</span>
+                <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
+                  Select up to 5
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {moodSuggestions.map((tag) => {
+                  const isActive = selectedTags.includes(tag);
+
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className={`rounded-[0.14rem] px-4 py-3 text-[0.98rem] font-medium ${
+                        isActive ? "mobile-chip-active" : "mobile-chip"
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10">
+              <span className="mb-4 block text-[1rem] font-semibold">Main platform</span>
+              <div className="space-y-3">
+                {platformOptions
+                  .filter(([value]) => value !== "other")
+                  .map(([value, label]) => {
+                    const isActive = platform === value;
+
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setPlatform(value)}
+                        className={`mobile-platform-option flex w-full items-center justify-between rounded-[0.14rem] px-5 py-5 text-left ${
+                          isActive ? "mobile-platform-option-active" : ""
+                        }`}
+                      >
+                        <div>
+                          <p
+                            className={`text-[1.02rem] font-semibold ${
+                              isActive
+                                ? "text-[var(--primary-strong)]"
+                                : "text-[var(--accent-ink)]"
+                            }`}
+                          >
+                            {label}
+                          </p>
+                          <p className="mt-1 text-[0.95rem] text-[rgba(64,52,44,0.58)]">
+                            {platformDescriptions[value]}
+                          </p>
+                        </div>
+                        <span
+                          className={`flex h-7 w-7 items-center justify-center rounded-full border ${
+                            isActive
+                              ? "border-[var(--primary-strong)] text-[var(--primary-strong)]"
+                              : "border-[rgba(109,66,60,0.18)] text-transparent"
+                          }`}
+                        >
+                          <span
+                            className={`block h-3.5 w-3.5 rounded-full ${
+                              isActive ? "bg-[var(--primary-strong)]" : "bg-transparent"
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10 space-y-5">
+              <label className="block">
+                <span className="mb-3 block text-[1rem] font-semibold">Main link</span>
+                <input
+                  value={url}
+                  onChange={(event) => setUrl(event.target.value)}
+                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                  placeholder="https://open.spotify.com/track/..."
+                  type="url"
+                />
+                {errors.url ? (
+                  <span className="mt-2 block text-sm text-rose-500">{errors.url}</span>
+                ) : null}
+              </label>
+
+              <div>
+                <span className="mb-3 block text-[1rem] font-semibold">
+                  Alternate platform links
+                </span>
+                <div className="space-y-3">
+                  {alternatePlatformOptions
+                    .filter(([value]) => value !== platform)
+                    .map(([value, label]) => (
+                      <input
+                        key={value}
+                        value={alternatePlatformUrls[value] ?? ""}
+                        onChange={(event) =>
+                          updateAlternatePlatformUrl(value, event.target.value)
+                        }
+                        className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                        placeholder={`${label} link (optional)`}
+                        type="url"
+                      />
+                    ))}
+                </div>
+                {errors.alternatePlatformUrls ? (
+                  <span className="mt-2 block text-sm text-rose-500">
+                    {errors.alternatePlatformUrls}
+                  </span>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10 space-y-4">
+              <button
+                type="submit"
+                disabled={isSaving || isPending}
+                className="w-full rounded-[0.16rem] bg-[var(--primary-strong)] px-5 py-4 text-[1.05rem] font-semibold text-[var(--paper)] disabled:opacity-60"
+              >
+                {isSaving || isPending ? "Sharing..." : "Share recommendation"}
+              </button>
+              <button
+                type="button"
+                onClick={resetForm}
+                className="mobile-input w-full rounded-[0.16rem] px-5 py-4 text-[1.05rem] font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <p className="mt-12 text-center text-[1rem] leading-8 text-[rgba(64,52,44,0.52)]">
+              Your recommendations help others discover you
+            </p>
+
+            <p className="mt-4 text-center text-sm text-[rgba(64,52,44,0.52)]">
+              {saveStatus.message.replace(currentMemberName, "you")}
+            </p>
+          </div>
+        </form>
+      </section>
+    );
+  }
 
   return (
     <section id="compose-panel" className="onochu-panel rounded-[2rem] p-6 md:p-8">
