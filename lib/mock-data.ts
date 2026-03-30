@@ -18,8 +18,10 @@ export const members: MemberProfile[] = [
     id: "kai",
     nickname: "Kai",
     bio: "밤 산책할 때 킥 드럼이 선명한 곡을 주로 모아요.",
+    mobileTagline: "City pop archaeologist, late-night FM devotee",
     favoriteGenres: ["Hip-hop", "Cloud Rap", "Alt R&B"],
     mainPlatform: "spotify",
+    sharedTrackCount: 47,
     playlistLinks: [
       {
         label: "Late Drive",
@@ -31,8 +33,10 @@ export const members: MemberProfile[] = [
     id: "yuri",
     nickname: "Yuri",
     bio: "보컬 텍스처가 예쁜 R&B와 네오소울을 자주 들어요.",
+    mobileTagline: "Velvet-toned soul collector, soft-focus curator",
     favoriteGenres: ["Neo Soul", "R&B", "Jazz Rap"],
     mainPlatform: "apple_music",
+    sharedTrackCount: 32,
     playlistLinks: [
       {
         label: "Velvet Notes",
@@ -44,8 +48,10 @@ export const members: MemberProfile[] = [
     id: "min",
     nickname: "Min",
     bio: "세트 전에 BPM 올리기 좋은 UK garage랑 house를 찾습니다.",
+    mobileTagline: "Garage warm-up selector, basement tempo chaser",
     favoriteGenres: ["UK Garage", "House", "Jersey Club"],
     mainPlatform: "soundcloud",
+    sharedTrackCount: 28,
     playlistLinks: [
       {
         label: "Warm Up Crates",
@@ -57,8 +63,10 @@ export const members: MemberProfile[] = [
     id: "seo",
     nickname: "Seo",
     bio: "가사보다 무드 먼저 듣는 편이라 드림팝도 자주 섞어요.",
+    mobileTagline: "Dream-pop drifter, moonlit playlist keeper",
     favoriteGenres: ["Dream Pop", "Indie R&B", "Lo-fi Hip-hop"],
     mainPlatform: "youtube_music",
+    sharedTrackCount: 21,
     playlistLinks: [
       {
         label: "Soft Glow",
@@ -70,8 +78,10 @@ export const members: MemberProfile[] = [
     id: "haneul",
     nickname: "Haneul",
     bio: "붐뱁 샘플링이랑 클래식한 드럼 질감을 좋아해요.",
+    mobileTagline: "Dusty sample hunter, boom-bap loyalist",
     favoriteGenres: ["Boom Bap", "Jazz Rap", "Soul"],
     mainPlatform: "spotify",
+    sharedTrackCount: 26,
     playlistLinks: [
       {
         label: "Dusty Cuts",
@@ -83,8 +93,10 @@ export const members: MemberProfile[] = [
     id: "dami",
     nickname: "Dami",
     bio: "무대 전에 에너지 올리는 트랩과 하이퍼팝을 번갈아 들어요.",
+    mobileTagline: "Stage-energy addict, hyperpop switch-hitter",
     favoriteGenres: ["Trap", "Hyperpop", "Electro"],
     mainPlatform: "spotify",
+    sharedTrackCount: 19,
     playlistLinks: [
       {
         label: "Stage Energy",
@@ -96,8 +108,10 @@ export const members: MemberProfile[] = [
     id: "woo",
     nickname: "Woo",
     bio: "한 곡을 오래 파는 편이라 라이브 버전까지 같이 저장해요.",
+    mobileTagline: "Live-cut obsessive, slow-burn archivist",
     favoriteGenres: ["Alternative Hip-hop", "Live Session", "Indie"],
     mainPlatform: "youtube_music",
+    sharedTrackCount: 17,
     playlistLinks: [
       {
         label: "Live Cuts",
@@ -109,8 +123,10 @@ export const members: MemberProfile[] = [
     id: "jiu",
     nickname: "Jiu",
     bio: "새벽 공부할 때는 앰비언트와 다운템포를 같이 들어요.",
+    mobileTagline: "After-midnight listener, ambient focus builder",
     favoriteGenres: ["Ambient", "Downtempo", "Trip-hop"],
     mainPlatform: "apple_music",
+    sharedTrackCount: 23,
     playlistLinks: [
       {
         label: "After Midnight",
@@ -122,8 +138,10 @@ export const members: MemberProfile[] = [
     id: "tae",
     nickname: "Tae",
     bio: "랩보다 사운드 디자인이 재밌는 곡을 오래 찾습니다.",
+    mobileTagline: "Sound design digger, left-field loop collector",
     favoriteGenres: ["Experimental", "Bass", "Industrial Rap"],
     mainPlatform: "soundcloud",
+    sharedTrackCount: 14,
     playlistLinks: [
       {
         label: "Left Field Finds",
@@ -135,8 +153,10 @@ export const members: MemberProfile[] = [
     id: "ria",
     nickname: "Ria",
     bio: "맑은 코드 진행의 시티팝과 R&B 교차 지점을 좋아해요.",
+    mobileTagline: "City pop daydreamer, blue-window romantic",
     favoriteGenres: ["City Pop", "R&B", "Funk"],
     mainPlatform: "spotify",
+    sharedTrackCount: 29,
     playlistLinks: [
       {
         label: "Blue Window",
@@ -157,6 +177,7 @@ const baseRecommendations: Array<
     platform: "spotify",
     url: "https://open.spotify.com/track/1TQXIltqoZ5XXyfCbAeSQQ",
     comment: "밤공기랑 패드가 자연스럽게 붙어서 산책 시작할 때 좋아요.",
+    mobileComment: "Warm pads, open streets, instant night-drive mood.",
     moodTags: ["night", "glow", "cruising"],
     createdAt: "2026-03-18T22:15:00+09:00",
   },
@@ -168,6 +189,7 @@ const baseRecommendations: Array<
     platform: "apple_music",
     url: "https://music.apple.com/us/song/can-i-call-you-rose/1510011642",
     comment: "보컬 톤이 부드럽게 밀려와서 첫 인상이 정말 좋아요.",
+    mobileComment: "Soft on first listen, but it lingers all night.",
     moodTags: ["soft", "warm", "soul"],
     createdAt: "2026-03-18T20:10:00+09:00",
   },
@@ -179,6 +201,7 @@ const baseRecommendations: Array<
     platform: "soundcloud",
     url: "https://soundcloud.com/elizarosemusic/bota-baddest-of-them-all",
     comment: "드랍 전에 몸이 먼저 반응하는 타입의 셋업 곡이에요.",
+    mobileComment: "This flips a room on before the drop even lands.",
     moodTags: ["club", "bounce", "garage"],
     createdAt: "2026-03-18T18:40:00+09:00",
   },
@@ -190,6 +213,7 @@ const baseRecommendations: Array<
     platform: "youtube_music",
     url: "https://music.youtube.com/watch?v=bn_p95HbHoQ",
     comment: "리듬은 느슨한데 집중력은 높아지는 이상한 매력이 있어요.",
+    mobileComment: "Loose rhythm, laser focus, late-hour replay value.",
     moodTags: ["floating", "late-night", "dreamy"],
     createdAt: "2026-03-17T23:20:00+09:00",
   },
@@ -201,6 +225,7 @@ const baseRecommendations: Array<
     platform: "spotify",
     url: "https://open.spotify.com/track/4q2lZIu8iC6W1acgA4aZfP",
     comment: "드럼보다 샘플이 먼저 꽂힐 때 다시 꺼내 듣는 곡입니다.",
+    mobileComment: "The sample lands first and keeps the whole track alive.",
     moodTags: ["dusty", "sample", "classic"],
     createdAt: "2026-03-17T21:00:00+09:00",
   },
@@ -212,6 +237,7 @@ const baseRecommendations: Array<
     platform: "spotify",
     url: "https://open.spotify.com/track/2pFJ0J4pK7Hn3H4JmpqYxM",
     comment: "공연 전에 텐션 최대치로 만들 때 딱 필요한 속도감이에요.",
+    mobileComment: "Pure pre-show voltage. No warm-up needed.",
     moodTags: ["high-energy", "flash", "performance"],
     createdAt: "2026-03-17T19:50:00+09:00",
   },
@@ -223,6 +249,7 @@ const baseRecommendations: Array<
     platform: "youtube_music",
     url: "https://music.youtube.com/watch?v=Kp7eSUU9oy8",
     comment: "라이브 질감 때문에 원곡과는 다른 온도가 생겨요.",
+    mobileComment: "The live version makes the song feel closer and messier.",
     moodTags: ["live", "groove", "vocals"],
     createdAt: "2026-03-17T17:30:00+09:00",
   },
@@ -234,6 +261,7 @@ const baseRecommendations: Array<
     platform: "apple_music",
     url: "https://music.apple.com/us/song/kiara/355898287",
     comment: "새벽 집중 구간에서 너무 튀지 않게 감정선만 올려줘요.",
+    mobileComment: "Steady enough for focus, deep enough for 2 a.m.",
     moodTags: ["focus", "deep", "ambient"],
     createdAt: "2026-03-17T15:00:00+09:00",
   },
@@ -245,6 +273,7 @@ const baseRecommendations: Array<
     platform: "other",
     url: "https://warp.net/products/66084-aphex-twin-drukqs",
     comment: "박자가 무너지는 것 같다가도 다시 붙는 순간이 재밌습니다.",
+    mobileComment: "It falls apart just enough to make the return hit harder.",
     moodTags: ["chaotic", "technical", "left-field"],
     createdAt: "2026-03-16T23:10:00+09:00",
   },
@@ -256,6 +285,8 @@ const baseRecommendations: Array<
     platform: "spotify",
     url: "https://open.spotify.com/track/7rU6Iebxzlvqy5t857bKFq",
     comment: "클래식하지만 질리지 않는 시티팝의 기준점 같아요.",
+    mobileComment:
+      "This became my late-night driving soundtrack. It holds loneliness and joy at once.",
     moodTags: ["city", "retro", "smooth"],
     createdAt: "2026-03-16T21:45:00+09:00",
   },
@@ -267,6 +298,7 @@ const baseRecommendations: Array<
     platform: "spotify",
     url: "https://open.spotify.com/track/5T2bqYVfJxKxV5g7k6v7kQ",
     comment: "저역이 넓게 깔려서 이어폰 테스트할 때 자주 틀어요.",
+    mobileComment: "Low-end test track, smoke in the room, repeat on.",
     moodTags: ["bass", "smoke", "low-end"],
     createdAt: "2026-03-16T19:20:00+09:00",
   },
@@ -278,6 +310,7 @@ const baseRecommendations: Array<
     platform: "apple_music",
     url: "https://music.apple.com/us/song/distance/1575704055",
     comment: "후렴보다 벌스의 숨결이 더 남는 곡이에요.",
+    mobileComment: "The verse breathes longer than the hook ever could.",
     moodTags: ["intimate", "vocals", "slow-burn"],
     createdAt: "2026-03-16T16:55:00+09:00",
   },
@@ -325,9 +358,9 @@ export const sortedRecommendations = [...recommendations].sort((left, right) =>
 export const themeSpotlights: ThemeSpotlight[] = [
   {
     id: "theme-001",
-    title: "SPRING CYPHER WARM-UP",
+    title: "Songs that feel like home",
     description:
-      "행사 전 붐뱁과 crew energy를 다시 끌어올리는 트랙을 모읍니다. 추천 자체가 공연 전 대화와 팀 바이브를 예열하는 구조를 목표로 합니다.",
+      "Share a track that gives you that warm, familiar feeling no matter where you are.",
     relatedEvent: "Spring Cipher Night",
     isActive: true,
     phaseLabel: "Live Theme",
@@ -336,7 +369,7 @@ export const themeSpotlights: ThemeSpotlight[] = [
     ctaHref: "/recommendations/new",
     curatorNote:
       "운영진이 공연 전 mood를 정리하고 신입도 쉽게 한 곡씩 얹을 수 있도록 설계한 테마입니다.",
-    participantSummary: "17 members already adding warm-up tracks",
+    participantSummary: "24 participating",
     highlightTags: ["boom bap", "crew energy", "warm-up"],
   },
   {

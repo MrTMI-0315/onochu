@@ -43,9 +43,11 @@ export function MemberDirectoryClient() {
   const mobilePlatformOptions = ["All", "Spotify", "Apple Music", "YouTube"];
 
   const memberTrackCounts = members.reduce<Record<string, number>>((counts, member) => {
-    counts[member.id] = sortedRecommendations.filter(
-      (recommendation) => recommendation.memberId === member.id,
-    ).length;
+    counts[member.id] =
+      member.sharedTrackCount ??
+      sortedRecommendations.filter(
+        (recommendation) => recommendation.memberId === member.id,
+      ).length;
     return counts;
   }, {});
 

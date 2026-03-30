@@ -16,9 +16,11 @@ export type MemberProfile = {
   id: string;
   nickname: string;
   bio: string;
+  mobileTagline?: string;
   favoriteGenres: string[];
   mainPlatform: MusicPlatform;
   playlistLinks: PlaylistLink[];
+  sharedTrackCount?: number;
   avatarUrl?: string;
 };
 
@@ -31,6 +33,7 @@ export type SongRecommendation = {
   platform: MusicPlatform;
   url: string;
   comment: string;
+  mobileComment?: string;
   moodTags: string[];
   createdAt: string;
   reactionCount: number;

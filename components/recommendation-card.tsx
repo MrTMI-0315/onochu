@@ -50,6 +50,7 @@ export function RecommendationCard({
     preferredPlatform: viewerPlatform,
   });
   const initials = memberName.slice(0, 1).toUpperCase();
+  const mobileComment = recommendation.mobileComment || recommendation.comment;
   const resolvedPlatformLabel = viewerPlatform
     ? platformLabels[viewerPlatform]
     : platformLabels[recommendation.platform];
@@ -105,8 +106,8 @@ export function RecommendationCard({
           </p>
         </div>
 
-        <p className="mt-5 text-[0.98rem] leading-[1.7] text-[rgba(64,52,44,0.92)]">
-          {recommendation.comment}
+        <p className="mt-5 max-w-[18rem] text-[0.98rem] leading-[1.7] text-[rgba(64,52,44,0.92)]">
+          {mobileComment}
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2">

@@ -369,10 +369,18 @@ export function RecommendationStudio({
 
             <div className="mobile-section-rule mt-6 flex items-center justify-between gap-4 pt-6">
               <p className="text-[1.02rem] text-[rgba(64,52,44,0.76)]">
-                <span className="font-semibold text-[var(--primary-strong)]">
-                  {activeThemeContributorCount}
-                </span>{" "}
-                participating
+                {activeTheme.participantSummary ? (
+                  <span className="font-semibold text-[var(--primary-strong)]">
+                    {activeTheme.participantSummary}
+                  </span>
+                ) : (
+                  <>
+                    <span className="font-semibold text-[var(--primary-strong)]">
+                      {activeThemeContributorCount}
+                    </span>{" "}
+                    participating
+                  </>
+                )}
               </p>
               <Link
                 href="/recommendations/new"

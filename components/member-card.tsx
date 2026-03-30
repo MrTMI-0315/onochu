@@ -36,7 +36,7 @@ export function MemberCard({
             </div>
 
             <p className="mt-2 max-w-[16rem] text-[1.02rem] font-medium leading-8 text-[rgba(64,52,44,0.78)]">
-              {member.bio}
+              {member.mobileTagline ?? member.bio}
             </p>
 
             <p className="mt-3 text-[1rem] text-[rgba(64,52,44,0.58)]">
@@ -47,7 +47,7 @@ export function MemberCard({
 
         <div className="mobile-section-rule mt-5 pt-4">
           <p className="text-[1rem] font-semibold text-[rgba(64,52,44,0.72)]">
-            {sharedTrackCount ?? 0} shared tracks
+            {member.sharedTrackCount ?? sharedTrackCount ?? 0} shared tracks
           </p>
         </div>
       </article>
