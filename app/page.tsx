@@ -25,19 +25,19 @@ export default function HomePage() {
   const featuredRecommendation = sortedRecommendations[0];
 
   return (
-    <main className="px-4 pb-24 pt-20 text-[color:var(--accent-ink)] md:px-6 md:pb-12 md:pt-24">
+    <main className="min-h-screen bg-[var(--paper)] px-6 pb-16 pt-8 text-[color:var(--accent-ink)] md:bg-transparent md:px-6 md:pb-12 md:pt-24">
       <div className="mx-auto flex max-w-6xl flex-col gap-12">
-        <section className="rounded-[2rem] border border-[color:rgba(109,66,60,0.12)] bg-[color:rgba(241,233,210,0.66)] px-5 py-7 shadow-[0_20px_60px_rgba(109,66,60,0.08)] backdrop-blur-sm md:px-8 md:py-10">
+        <section className="min-h-[calc(100svh-2.5rem)] px-0 py-4 md:min-h-0 md:rounded-[2.2rem] md:border md:border-[color:rgba(109,66,60,0.12)] md:bg-[color:rgba(241,233,210,0.74)] md:px-8 md:py-10 md:shadow-[0_20px_60px_rgba(109,66,60,0.08)] md:backdrop-blur-sm">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
             <div className="max-w-3xl">
               <div>
-                <p className="text-[2rem] font-medium tracking-[-0.04em] text-[color:var(--accent-ink)] md:text-[2.25rem]">
+                <p className="text-[2rem] font-medium tracking-[-0.055em] text-[color:var(--accent-ink)] md:text-[2.25rem]">
                   Onochu
                 </p>
-                <div className="mt-3 h-px w-14 bg-[var(--primary)]" />
+                <div className="mt-3 h-px w-14 bg-[color:rgba(183,106,85,0.55)]" />
               </div>
 
-              <h1 className="mt-16 max-w-4xl text-[3.35rem] font-medium leading-[0.96] tracking-[-0.075em] text-[color:var(--accent-ink)] md:mt-20 md:text-[4.8rem]">
+              <h1 className="mt-16 max-w-[8.8ch] text-[clamp(2.55rem,10.7vw,4.8rem)] font-medium leading-[0.96] tracking-[-0.08em] text-[color:var(--accent-ink)] md:mt-20 md:max-w-4xl">
                 Music
                 <br />
                 recommendations
@@ -47,18 +47,18 @@ export default function HomePage() {
                 chat
               </h1>
 
-              <p className="mt-10 max-w-2xl text-[1.05rem] leading-[1.7] text-[color:rgba(64,52,44,0.72)] md:text-[1.25rem]">
+              <p className="mt-10 max-w-[18.5rem] text-[1.02rem] leading-[1.65] text-[color:rgba(64,52,44,0.72)] md:max-w-2xl md:text-[1.25rem]">
                 Platform differences create friction. Onochu structures
                 recommendations so you can discover songs and the people behind
                 them.
               </p>
 
-              <div className="mt-12 flex max-w-xl flex-col gap-3">
+              <div className="mt-12 flex max-w-none flex-col gap-3 md:max-w-xl">
                 {primaryActions.map((action) => (
                   <Link
                     key={action.href}
                     href={action.href}
-                    className={`flex min-h-14 items-center justify-center rounded-[0.4rem] border px-5 text-center text-[1.05rem] font-semibold transition ${
+                    className={`flex min-h-14 items-center justify-center rounded-[0.3rem] border px-5 text-center text-[1.03rem] font-semibold transition ${
                       action.kind === "primary"
                         ? "border-[var(--primary-strong)] bg-[var(--primary-strong)] text-[color:var(--paper)]"
                         : "border-[color:rgba(109,66,60,0.16)] bg-[color:rgba(255,255,255,0.22)] text-[color:var(--accent-ink)]"

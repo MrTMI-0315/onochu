@@ -12,6 +12,7 @@ const navigationItems = [
 
 export function SiteNavigation() {
   const pathname = usePathname();
+  const hideMobileNav = pathname === "/";
 
   return (
     <>
@@ -49,7 +50,11 @@ export function SiteNavigation() {
         </div>
       </header>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 px-4 py-4 md:hidden">
+      <nav
+        className={`fixed inset-x-0 bottom-0 z-40 px-4 py-4 md:hidden ${
+          hideMobileNav ? "hidden" : ""
+        }`}
+      >
         <div className="onochu-panel mx-auto grid max-w-md grid-cols-4 gap-2 rounded-[2rem] px-3 py-3">
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
