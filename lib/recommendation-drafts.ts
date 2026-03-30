@@ -17,7 +17,7 @@ export type StoredRecommendationState = {
 export const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
 export const LEGACY_RECOMMENDATION_STORAGE_KEY =
   "onochu-recommendation-studio-v1";
-export const RECOMMENDATION_STORAGE_VERSION = 4;
+export const RECOMMENDATION_STORAGE_VERSION = 5;
 
 type LoadedRecommendationState = {
   recommendations: SongRecommendation[];
