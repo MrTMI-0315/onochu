@@ -74,14 +74,14 @@ export function RecommendationCard({
 
   if (mobileSimple) {
     return (
-      <article className="mobile-card rounded-[0.28rem] p-6">
+      <article className="mobile-card rounded-[0.16rem] p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.72)] text-sm font-semibold text-[var(--primary-strong)]">
               {initials}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[1.05rem] font-semibold text-[var(--accent-ink)]">
+              <p className="truncate text-[1.02rem] font-semibold text-[var(--accent-ink)]">
                 {memberName}
               </p>
             </div>
@@ -97,15 +97,15 @@ export function RecommendationCard({
         </div>
 
         <div className="mt-5">
-          <h3 className="text-[2.1rem] font-semibold tracking-[-0.05em] text-[var(--accent-ink)]">
+          <h3 className="text-[1.45rem] font-semibold tracking-[-0.045em] text-[var(--accent-ink)]">
             {recommendation.trackTitle}
           </h3>
-          <p className="mt-1 text-[0.95rem] text-[rgba(64,52,44,0.68)]">
+          <p className="mt-1 text-[0.98rem] text-[rgba(64,52,44,0.68)]">
             {recommendation.artistName}
           </p>
         </div>
 
-        <p className="mt-5 text-[1rem] leading-8 text-[rgba(64,52,44,0.92)]">
+        <p className="mt-5 text-[0.98rem] leading-[1.7] text-[rgba(64,52,44,0.92)]">
           {recommendation.comment}
         </p>
 
@@ -120,7 +120,7 @@ export function RecommendationCard({
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-5">
+        <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-4">
           <button
             type="button"
             disabled={!onToggleEngagement}

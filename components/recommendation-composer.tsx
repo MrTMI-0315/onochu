@@ -38,6 +38,12 @@ const platformDescriptions: Partial<Record<MusicPlatform, string>> = {
   soundcloud: "Independent artists",
   other: "Bring your own link",
 };
+const mobilePlatformOrder: MusicPlatform[] = [
+  "spotify",
+  "apple_music",
+  "youtube_music",
+  "soundcloud",
+];
 
 export function RecommendationComposer({
   currentMemberName,
@@ -324,9 +330,8 @@ export function RecommendationComposer({
             <div className="mt-10">
               <span className="mb-4 block text-[1rem] font-semibold">Main platform</span>
               <div className="space-y-3">
-                {platformOptions
-                  .filter(([value]) => value !== "other")
-                  .map(([value, label]) => {
+                {mobilePlatformOrder.map((value) => {
+                    const label = platformLabels[value];
                     const isActive = platform === value;
 
                     return (
@@ -393,9 +398,9 @@ export function RecommendationComposer({
                   Alternate platform links
                 </span>
                 <div className="space-y-3">
-                  {alternatePlatformOptions
-                    .filter(([value]) => value !== platform)
-                    .map(([value, label]) => (
+                  {mobilePlatformOrder
+                    .filter((value) => value !== platform)
+                    .map((value) => (
                       <input
                         key={value}
                         value={alternatePlatformUrls[value] ?? ""}
@@ -403,7 +408,7 @@ export function RecommendationComposer({
                           updateAlternatePlatformUrl(value, event.target.value)
                         }
                         className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
-                        placeholder={`${label} link (optional)`}
+                        placeholder={`${platformLabels[value]} link (optional)`}
                         type="url"
                       />
                     ))}

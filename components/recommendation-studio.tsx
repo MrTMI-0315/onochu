@@ -285,10 +285,10 @@ export function RecommendationStudio({
 
   return (
     <>
-      <main className="mobile-screen pb-24 pt-6 md:hidden">
+      <main className="mobile-screen pb-24 pt-5 md:hidden">
         <div className="px-5">
           <div className="flex items-center justify-between gap-4">
-            <h1 className="text-[2.2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
+            <h1 className="text-[2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
               Onochu
             </h1>
             <button
@@ -304,7 +304,7 @@ export function RecommendationStudio({
             </button>
           </div>
 
-          <div className="relative mt-6">
+          <div className="relative mt-5">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -318,7 +318,7 @@ export function RecommendationStudio({
               value={feedSearch}
               onChange={(event) => setFeedSearch(event.target.value)}
               placeholder="Search recommendations"
-              className="mobile-input w-full rounded-[0.18rem] px-12 py-4 text-[1rem] outline-none"
+              className="mobile-input w-full rounded-[0.12rem] px-12 py-4 text-[1rem] outline-none"
             />
           </div>
 
@@ -341,7 +341,7 @@ export function RecommendationStudio({
                       category.id as "all" | "jazz" | "electronic" | "rock" | "saved",
                     )
                   }
-                  className={`shrink-0 rounded-[0.16rem] px-5 py-3 text-[0.95rem] font-medium ${
+                  className={`shrink-0 rounded-[0.12rem] px-5 py-3 text-[0.95rem] font-medium ${
                     isActive ? "mobile-chip-active" : "mobile-chip"
                   }`}
                 >
@@ -355,15 +355,15 @@ export function RecommendationStudio({
         <div className="mobile-section-rule mt-5" />
 
         <div className="px-5 pt-7">
-          <section className="relative overflow-hidden rounded-[0.12rem] border border-[var(--primary-strong)] bg-[rgba(255,250,246,0.74)] p-7">
+          <section className="relative overflow-hidden rounded-[0.08rem] border border-[var(--primary-strong)] bg-[rgba(255,250,246,0.74)] p-7">
             <div className="absolute right-0 top-0 h-28 w-28 bg-[rgba(183,106,85,0.08)] [clip-path:polygon(100%_0,0_0,100%_100%)]" />
-            <span className="inline-flex rounded-[0.12rem] border border-[rgba(183,106,85,0.46)] px-4 py-2 text-[0.88rem] font-semibold tracking-[0.14em] text-[var(--primary-strong)]">
+            <span className="inline-flex rounded-[0.08rem] border border-[rgba(183,106,85,0.46)] px-4 py-2 text-[0.86rem] font-semibold tracking-[0.14em] text-[var(--primary-strong)]">
               THIS WEEK
             </span>
-            <h2 className="mt-7 max-w-[12ch] text-[2.15rem] font-medium leading-[1.14] tracking-[-0.05em] text-[var(--primary-strong)]">
+            <h2 className="mt-7 max-w-[12ch] text-[1.95rem] font-medium leading-[1.18] tracking-[-0.05em] text-[var(--primary-strong)]">
               {activeTheme.title}
             </h2>
-            <p className="mt-5 max-w-[16rem] text-[1rem] leading-8 text-[rgba(64,52,44,0.72)]">
+            <p className="mt-5 max-w-[16rem] text-[0.98rem] leading-[1.65] text-[rgba(64,52,44,0.72)]">
               {activeTheme.description}
             </p>
 

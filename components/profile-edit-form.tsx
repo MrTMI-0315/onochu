@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { allGenres, platformLabels } from "@/lib/mock-data";
 import {
   createProfileDraft,
@@ -64,13 +64,43 @@ export function ProfileEditForm({
   const platformOptions = Object.entries(platformLabels) as Array<
     [MusicPlatform, string]
   >;
-  const selectedGenres = useMemo(
-    () =>
-      favoriteGenres
-        .split(",")
-        .map((genre) => genre.trim())
-        .filter((genre) => genre.length > 0),
-    [favoriteGenres],
+  const mobilePlatformOrder: MusicPlatform[] = [
+    "spotify",
+    "apple_music",
+    "youtube_music",
+    "soundcloud",
+  ];
+  const preferredGenreOrder = [
+    "Jazz Rap",
+    "City Pop",
+    "Soul",
+    "Funk",
+    "Electro",
+    "Ambient",
+    "Dream Pop",
+    "Indie",
+    "Alternative Hip-hop",
+    "R&B",
+    "Trip-hop",
+    "Boom Bap",
+    "House",
+    "Hyperpop",
+    "Cloud Rap",
+  ];
+  const selectedGenres = favoriteGenres
+    .split(",")
+    .map((genre) => genre.trim())
+    .filter((genre) => genre.length > 0);
+  const selectedFirst = selectedGenres.filter((genre) => allGenres.includes(genre));
+  const preferred = preferredGenreOrder.filter(
+    (genre) => allGenres.includes(genre) && !selectedFirst.includes(genre),
+  );
+  const remaining = allGenres.filter(
+    (genre) => !selectedFirst.includes(genre) && !preferred.includes(genre),
+  );
+  const mobileGenreOptions = [...selectedFirst, ...preferred, ...remaining].slice(
+    0,
+    15,
   );
 
   useEffect(() => {
@@ -261,7 +291,7 @@ export function ProfileEditForm({
               className="text-[1.8rem] font-light text-[rgba(64,52,44,0.72)]"
               aria-label="Go back"
             >
-              ‹
+              ←
             </button>
             <h1 className="text-[1.15rem] font-semibold tracking-[-0.03em]">
               Edit Profile
@@ -325,7 +355,7 @@ export function ProfileEditForm({
                 </span>
               </div>
               <div className="flex flex-wrap gap-3">
-                {allGenres.map((genre) => {
+                {mobileGenreOptions.map((genre) => {
                   const isActive = selectedGenres.includes(genre);
 
                   return (
@@ -333,10 +363,10 @@ export function ProfileEditForm({
                       key={genre}
                       type="button"
                       onClick={() => toggleGenre(genre)}
-                      className={`rounded-[0.14rem] px-4 py-3 text-[0.98rem] font-medium ${
-                        isActive ? "mobile-chip-active" : "mobile-chip"
-                      }`}
-                    >
+                    className={`rounded-[0.14rem] px-4 py-3 text-[0.98rem] font-medium ${
+                      isActive ? "mobile-chip-active" : "mobile-chip"
+                    }`}
+                  >
                       {genre}
                     </button>
                   );
@@ -349,9 +379,8 @@ export function ProfileEditForm({
             <div className="mt-10">
               <span className="mb-4 block text-[1rem] font-semibold">Main platform</span>
               <div className="space-y-3">
-                {platformOptions
-                  .filter(([value]) => value !== "other")
-                  .map(([value, label]) => {
+                {mobilePlatformOrder.map((value) => {
+                    const label = platformLabels[value];
                     const isActive = mainPlatform === value;
                     const descriptions: Partial<Record<MusicPlatform, string>> = {
                       spotify: "Most popular streaming platform",

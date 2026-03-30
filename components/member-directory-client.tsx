@@ -54,7 +54,7 @@ export function MemberDirectoryClient() {
       <div className="mobile-screen pb-28 pt-6 md:hidden">
         <div className="px-5">
           <div className="flex items-center justify-between gap-4">
-            <h1 className="text-[2.2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
+            <h1 className="text-[2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
               Members
             </h1>
             <button
@@ -103,10 +103,10 @@ export function MemberDirectoryClient() {
                     key={genre}
                     type="button"
                     onClick={() => setSelectedGenre(isAll ? null : genre)}
-                    className={`shrink-0 rounded-[0.16rem] px-5 py-3 text-[0.98rem] font-medium ${
-                      isActive ? "mobile-chip-active" : "mobile-chip"
-                    }`}
-                  >
+                  className={`shrink-0 rounded-[0.12rem] px-5 py-3 text-[0.98rem] font-medium ${
+                    isActive ? "mobile-chip-active" : "mobile-chip"
+                  }`}
+                >
                     {genre}
                   </button>
                 );
@@ -139,10 +139,10 @@ export function MemberDirectoryClient() {
                         normalizedPlatform as MusicPlatform | null,
                       )
                     }
-                    className={`shrink-0 rounded-[0.16rem] px-5 py-3 text-[0.98rem] font-medium ${
-                      isActive ? "mobile-chip-active" : "mobile-chip"
-                    }`}
-                  >
+                  className={`shrink-0 rounded-[0.12rem] px-5 py-3 text-[0.98rem] font-medium ${
+                    isActive ? "mobile-chip-active" : "mobile-chip"
+                  }`}
+                >
                     {platform}
                   </button>
                 );
