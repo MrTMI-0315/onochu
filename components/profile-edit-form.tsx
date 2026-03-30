@@ -17,6 +17,7 @@ type ProfileEditFormProps = {
   initialFavoriteGenres: string[];
   initialMainPlatform: MusicPlatform;
   initialPlaylistLinks: string[];
+  mobileStandalone?: boolean;
 };
 
 type FormErrors = {
@@ -37,6 +38,7 @@ export function ProfileEditForm({
   initialFavoriteGenres,
   initialMainPlatform,
   initialPlaylistLinks,
+  mobileStandalone = false,
 }: ProfileEditFormProps) {
   const [nickname, setNickname] = useState(initialNickname);
   const [bio, setBio] = useState(initialBio);
@@ -128,7 +130,9 @@ export function ProfileEditForm({
   function toggleGenre(genre: string) {
     const nextGenres = selectedGenres.includes(genre)
       ? selectedGenres.filter((selectedGenre) => selectedGenre !== genre)
-      : [...selectedGenres, genre];
+      : selectedGenres.length >= 5
+        ? selectedGenres
+        : [...selectedGenres, genre];
 
     setFavoriteGenres(nextGenres.join(", "));
   }
@@ -245,6 +249,201 @@ export function ProfileEditForm({
       : saveStatus.type === "error"
         ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
         : "border-white/10 bg-white/4 text-white/68";
+
+  if (mobileStandalone) {
+    return (
+      <section className="mobile-screen pb-12 text-[var(--accent-ink)]">
+        <form onSubmit={handleSubmit}>
+          <header className="mobile-section-rule sticky top-0 z-20 flex items-center justify-between bg-[rgba(247,243,236,0.96)] px-5 py-5 backdrop-blur-xl">
+            <button
+              type="button"
+              onClick={() => window.history.back()}
+              className="text-[1.8rem] font-light text-[rgba(64,52,44,0.72)]"
+              aria-label="Go back"
+            >
+              ‹
+            </button>
+            <h1 className="text-[1.15rem] font-semibold tracking-[-0.03em]">
+              Edit Profile
+            </h1>
+            <button
+              type="submit"
+              disabled={isSaving || isPending}
+              className="text-[1rem] font-semibold text-[var(--primary-strong)] disabled:opacity-50"
+            >
+              Save
+            </button>
+          </header>
+
+          <div className="px-6 pb-10 pt-8">
+            <section className="flex flex-col items-center gap-4">
+              <div className="flex h-28 w-28 items-center justify-center rounded-[0.14rem] bg-[var(--primary-strong)] text-3xl font-semibold text-[var(--paper)]">
+                {nickname.slice(0, 1).toUpperCase() || "K"}
+              </div>
+              <p className="text-[1rem] text-[rgba(64,52,44,0.54)]">
+                Tap to upload photo
+              </p>
+            </section>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10 space-y-6">
+              <label className="block">
+                <span className="mb-3 block text-[1rem] font-semibold">Nickname</span>
+                <input
+                  value={nickname}
+                  onChange={(event) => setNickname(event.target.value)}
+                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                />
+                {errors.nickname ? (
+                  <span className="mt-2 block text-sm text-rose-500">{errors.nickname}</span>
+                ) : null}
+              </label>
+
+              <label className="block">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="text-[1rem] font-semibold">Bio</span>
+                  <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
+                    {bio.trim().length}/150
+                  </span>
+                </div>
+                <textarea
+                  value={bio}
+                  onChange={(event) => setBio(event.target.value.slice(0, 150))}
+                  className="mobile-input min-h-28 w-full rounded-[0.14rem] px-5 py-4 text-[1rem] leading-8 outline-none"
+                />
+              </label>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <span className="text-[1rem] font-semibold">Favorite genres</span>
+                <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
+                  Select up to 5
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {allGenres.map((genre) => {
+                  const isActive = selectedGenres.includes(genre);
+
+                  return (
+                    <button
+                      key={genre}
+                      type="button"
+                      onClick={() => toggleGenre(genre)}
+                      className={`rounded-[0.14rem] px-4 py-3 text-[0.98rem] font-medium ${
+                        isActive ? "mobile-chip-active" : "mobile-chip"
+                      }`}
+                    >
+                      {genre}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10">
+              <span className="mb-4 block text-[1rem] font-semibold">Main platform</span>
+              <div className="space-y-3">
+                {platformOptions
+                  .filter(([value]) => value !== "other")
+                  .map(([value, label]) => {
+                    const isActive = mainPlatform === value;
+                    const descriptions: Partial<Record<MusicPlatform, string>> = {
+                      spotify: "Most popular streaming platform",
+                      apple_music: "High-quality audio",
+                      youtube_music: "Largest music library",
+                      soundcloud: "Independent artists",
+                    };
+
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setMainPlatform(value)}
+                        className={`mobile-platform-option flex w-full items-center justify-between rounded-[0.14rem] px-5 py-5 text-left ${
+                          isActive ? "mobile-platform-option-active" : ""
+                        }`}
+                      >
+                        <div>
+                          <p
+                            className={`text-[1.02rem] font-semibold ${
+                              isActive
+                                ? "text-[var(--primary-strong)]"
+                                : "text-[var(--accent-ink)]"
+                            }`}
+                          >
+                            {label}
+                          </p>
+                          <p className="mt-1 text-[0.95rem] text-[rgba(64,52,44,0.58)]">
+                            {descriptions[value]}
+                          </p>
+                        </div>
+                        <span
+                          className={`flex h-7 w-7 items-center justify-center rounded-full border ${
+                            isActive
+                              ? "border-[var(--primary-strong)] text-[var(--primary-strong)]"
+                              : "border-[rgba(109,66,60,0.18)] text-transparent"
+                          }`}
+                        >
+                          <span
+                            className={`block h-3.5 w-3.5 rounded-full ${
+                              isActive ? "bg-[var(--primary-strong)]" : "bg-transparent"
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className="mobile-section-rule mt-10" />
+
+            <div className="mt-10 space-y-4">
+              <label className="block">
+                <span className="mb-3 block text-[1rem] font-semibold">Playlist link</span>
+                <input
+                  value={playlistLinks[0] ?? ""}
+                  onChange={(event) => updatePlaylistLink(0, event.target.value)}
+                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                  placeholder="https://open.spotify.com/playlist/..."
+                />
+                {errors.playlistLinks ? (
+                  <span className="mt-2 block text-sm text-rose-500">
+                    {errors.playlistLinks}
+                  </span>
+                ) : null}
+              </label>
+
+              <button
+                type="submit"
+                disabled={isSaving || isPending}
+                className="w-full rounded-[0.16rem] bg-[var(--primary-strong)] px-5 py-4 text-[1.05rem] font-semibold text-[var(--paper)] disabled:opacity-60"
+              >
+                {isSaving || isPending ? "Saving..." : "Save changes"}
+              </button>
+              <button
+                type="button"
+                onClick={handleResetProfileDraft}
+                className="mobile-input w-full rounded-[0.16rem] px-5 py-4 text-[1.05rem] font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <p className="mt-12 text-center text-[1rem] leading-8 text-[rgba(64,52,44,0.52)]">
+              Your profile helps others discover you through taste
+            </p>
+          </div>
+        </form>
+      </section>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="onochu-panel rounded-[2rem] p-6 md:p-8">

@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { MemberCard } from "@/components/member-card";
-import { allGenres, members, platformLabels } from "@/lib/mock-data";
+import {
+  allGenres,
+  members,
+  platformLabels,
+  sortedRecommendations,
+} from "@/lib/mock-data";
 import type { MusicPlatform } from "@/lib/types";
 
 const platforms = Array.from(new Set(members.map((member) => member.mainPlatform)));
@@ -34,10 +39,149 @@ export function MemberDirectoryClient() {
     selectedPlatform ? `Platform / ${platformLabels[selectedPlatform]}` : null,
   ].filter(Boolean);
   const visibleGenres = showAllGenres ? allGenres : allGenres.slice(0, 8);
+  const mobileGenreOptions = ["All", "Jazz", "City Pop", "Electronic", "Post-Punk"];
+  const mobilePlatformOptions = ["All", "Spotify", "Apple Music", "YouTube"];
+
+  const memberTrackCounts = members.reduce<Record<string, number>>((counts, member) => {
+    counts[member.id] = sortedRecommendations.filter(
+      (recommendation) => recommendation.memberId === member.id,
+    ).length;
+    return counts;
+  }, {});
 
   return (
-    <div className="space-y-8">
-      <section className="onochu-panel rounded-[2rem] p-6 md:p-7">
+    <>
+      <div className="mobile-screen pb-28 pt-6 md:hidden">
+        <div className="px-5">
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-[2.2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
+              Members
+            </h1>
+            <button
+              type="button"
+              className="flex h-10 w-10 items-center justify-center text-[rgba(64,52,44,0.65)]"
+              aria-label="More options"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                <circle cx="12" cy="5.5" r="1.7" />
+                <circle cx="12" cy="12" r="1.7" />
+                <circle cx="12" cy="18.5" r="1.7" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="relative mt-6">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[rgba(64,52,44,0.42)]"
+              fill="none"
+            >
+              <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M16 16l4.2 4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+            <input
+              id="member-search-mobile"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search by nickname"
+              className="mobile-input w-full rounded-[0.16rem] px-12 py-4 text-[1rem] outline-none"
+            />
+          </div>
+
+          <div className="mt-6">
+            <p className="text-[0.95rem] font-semibold uppercase tracking-[0.08em] text-[rgba(64,52,44,0.58)]">
+              Genre
+            </p>
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {mobileGenreOptions.map((genre) => {
+                const isAll = genre === "All";
+                const isActive = isAll ? selectedGenre === null : selectedGenre === genre;
+
+                return (
+                  <button
+                    key={genre}
+                    type="button"
+                    onClick={() => setSelectedGenre(isAll ? null : genre)}
+                    className={`shrink-0 rounded-[0.16rem] px-5 py-3 text-[0.98rem] font-medium ${
+                      isActive ? "mobile-chip-active" : "mobile-chip"
+                    }`}
+                  >
+                    {genre}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <p className="text-[0.95rem] font-semibold uppercase tracking-[0.08em] text-[rgba(64,52,44,0.58)]">
+              Platform
+            </p>
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {mobilePlatformOptions.map((platform) => {
+                const normalizedPlatform =
+                  platform === "All"
+                    ? null
+                    : platform === "YouTube"
+                      ? "youtube_music"
+                      : platform.toLowerCase().replace(" ", "_");
+                const isActive = normalizedPlatform === null
+                  ? selectedPlatform === null
+                  : selectedPlatform === normalizedPlatform;
+
+                return (
+                  <button
+                    key={platform}
+                    type="button"
+                    onClick={() =>
+                      setSelectedPlatform(
+                        normalizedPlatform as MusicPlatform | null,
+                      )
+                    }
+                    className={`shrink-0 rounded-[0.16rem] px-5 py-3 text-[0.98rem] font-medium ${
+                      isActive ? "mobile-chip-active" : "mobile-chip"
+                    }`}
+                  >
+                    {platform}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="mobile-section-rule mt-6" />
+
+        <div className="px-5 pb-28 pt-6">
+          <p className="text-[1.1rem] font-medium leading-8 text-[rgba(64,52,44,0.76)]">
+            <span className="font-semibold text-[var(--accent-ink)]">
+              {filteredMembers.length} members
+            </span>{" "}
+            sharing music that shapes their lives
+          </p>
+
+          <div className="mt-6 space-y-4">
+            {filteredMembers.length > 0 ? (
+              filteredMembers.map((member) => (
+                <MemberCard
+                  key={member.id}
+                  member={member}
+                  mobileSimple
+                  sharedTrackCount={memberTrackCounts[member.id]}
+                />
+              ))
+            ) : (
+              <div className="mobile-card rounded-[0.2rem] p-6 text-[1rem] leading-8 text-[rgba(64,52,44,0.68)]">
+                검색 조건에 맞는 멤버가 없습니다.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden space-y-8 md:block">
+        <section className="onochu-panel rounded-[2rem] p-6 md:p-7">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-4">
             <span className="onochu-eyebrow">Search the archive</span>
@@ -237,7 +381,8 @@ export function MemberDirectoryClient() {
             </div>
           </div>
         </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 }

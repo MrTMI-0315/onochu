@@ -4,10 +4,55 @@ import type { MemberProfile } from "@/lib/types";
 
 type MemberCardProps = {
   member: MemberProfile;
+  mobileSimple?: boolean;
+  sharedTrackCount?: number;
 };
 
-export function MemberCard({ member }: MemberCardProps) {
-  const initials = member.nickname.slice(0, 2).toUpperCase();
+export function MemberCard({
+  member,
+  mobileSimple = false,
+  sharedTrackCount,
+}: MemberCardProps) {
+  const initials = member.nickname.slice(0, mobileSimple ? 1 : 2).toUpperCase();
+
+  if (mobileSimple) {
+    return (
+      <article className="mobile-card rounded-[0.2rem] p-5">
+        <div className="flex items-start gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.14rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.72)] text-sm font-semibold text-[var(--primary-strong)]">
+            {initials}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="truncate text-[1.05rem] font-semibold text-[var(--accent-ink)]">
+                  {member.nickname}
+                </h2>
+              </div>
+              <span className="rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-white px-3 py-1.5 text-[0.9rem] font-medium text-[rgba(64,52,44,0.66)]">
+                {platformLabels[member.mainPlatform]}
+              </span>
+            </div>
+
+            <p className="mt-2 max-w-[16rem] text-[1.02rem] font-medium leading-8 text-[rgba(64,52,44,0.78)]">
+              {member.bio}
+            </p>
+
+            <p className="mt-3 text-[1rem] text-[rgba(64,52,44,0.58)]">
+              {member.favoriteGenres.slice(0, 3).join(" · ")}
+            </p>
+          </div>
+        </div>
+
+        <div className="mobile-section-rule mt-5 pt-4">
+          <p className="text-[1rem] font-semibold text-[rgba(64,52,44,0.72)]">
+            {sharedTrackCount ?? 0} shared tracks
+          </p>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="group onochu-panel flex h-full flex-col gap-5 rounded-[1.75rem] p-5 transition duration-300 hover:bg-white/[0.06]">
