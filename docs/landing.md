@@ -33,3 +33,4 @@
 - 섹션 수를 늘리기보다 문제 정의, 핵심 CTA, 대표 추천 1개, 멤버 스냅샷 정도로 압축하는 편이 낫다.
 - hero artwork는 종이 질감, lacquer/clay 톤, vintage headphone/turntable 무드를 기준으로 둔다.
 - 전역 팔레트는 parchment, clay brown, muted indigo, ink charcoal 조합을 우선 사용한다.
+- 2026-03-30 기준 mobile hero visual source는 첨부 스크린샷의 단정한 editorial landing 구성을 따른다.
