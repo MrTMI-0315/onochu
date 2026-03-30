@@ -5,7 +5,10 @@ import Link from "next/link";
 import { PageShell } from "@/components/page-shell";
 import { RecommendationCard } from "@/components/recommendation-card";
 import { RecommendationComposer } from "@/components/recommendation-composer";
-import { getActiveThemeSpotlight } from "@/lib/mock-data";
+import {
+  getActiveThemeSpotlight,
+  mobileMoodSuggestions,
+} from "@/lib/mock-data";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import { appendDraftToStoredRecommendationState } from "@/lib/recommendation-drafts";
 import type {
@@ -38,11 +41,7 @@ export function RecommendationCreateRoute({
   );
   const activeTheme = getActiveThemeSpotlight();
 
-  const moodSuggestions = useMemo(() => {
-    return Array.from(
-      new Set(initialRecommendations.flatMap((recommendation) => recommendation.moodTags)),
-    ).slice(0, 8);
-  }, [initialRecommendations]);
+  const moodSuggestions = useMemo(() => mobileMoodSuggestions, []);
 
   useEffect(() => {
     const storedProfile = loadStoredProfileDraft({

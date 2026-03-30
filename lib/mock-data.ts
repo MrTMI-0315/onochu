@@ -406,9 +406,39 @@ export const themeSpotlights: ThemeSpotlight[] = [
   },
 ];
 
+export const mobileMoodSuggestions = [
+  "Nostalgic",
+  "Contemplative",
+  "Melancholic",
+  "Euphoric",
+  "Energetic",
+  "Calm",
+  "Romantic",
+  "Dark",
+  "Uplifting",
+  "Experimental",
+];
+
 export const allGenres = Array.from(
-  new Set(members.flatMap((member) => member.favoriteGenres)),
-).sort();
+  new Set([
+    "Jazz",
+    "City Pop",
+    "Soul",
+    "Funk",
+    "Electronic",
+    "Ambient",
+    "Post-Punk",
+    "New Wave",
+    "Indie",
+    "Rock",
+    "Classical",
+    "Blues",
+    "Hip Hop",
+    "R&B",
+    "Folk",
+    ...members.flatMap((member) => member.favoriteGenres),
+  ]),
+);
 
 export const allPlatforms = Array.from(
   new Set(members.map((member) => member.mainPlatform)),

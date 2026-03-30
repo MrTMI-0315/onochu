@@ -71,21 +71,21 @@ export function ProfileEditForm({
     "soundcloud",
   ];
   const preferredGenreOrder = [
-    "Jazz Rap",
+    "Jazz",
     "City Pop",
     "Soul",
     "Funk",
-    "Electro",
+    "Electronic",
     "Ambient",
-    "Dream Pop",
+    "Post-Punk",
+    "New Wave",
     "Indie",
-    "Alternative Hip-hop",
+    "Rock",
+    "Classical",
+    "Blues",
+    "Hip Hop",
     "R&B",
-    "Trip-hop",
-    "Boom Bap",
-    "House",
-    "Hyperpop",
-    "Cloud Rap",
+    "Folk",
   ];
   const selectedGenres = favoriteGenres
     .split(",")
