@@ -1,6 +1,6 @@
 # Onochu QA v0.3
 
-검증 날짜: 2026-03-25
+검증 날짜: 2026-03-31
 
 ## Verification Commands
 
@@ -64,9 +64,13 @@
 - PASS: `/members`
 - PASS: `/members/kai`
 - PASS: `/profile/edit`
-- PASS: production `/recommendations`에서 saved shelf, `v4` storage marker, `3 theme-linked recs / 3 contributors` 확인
+- PASS: production `/recommendations`에서 saved shelf, `v5` storage marker, `3 theme-linked recs / 3 contributors` 확인
 - PASS: production `/recommendations`에서 Apple Music preferred platform 기준 CTA와 `Search fallback` 라벨 확인
 - PASS: production `/recommendations/new`에서 optional alternate links 입력과 draft preview의 Apple Music CTA 확인
+- PASS: production `/recommendations/new`에서 mobile `Add/Hide` 토글이 alternate links 0개 -> 3개로 바뀌는 것 확인
+- PASS: production `/recommendations/new`에서 Apple Music을 main platform으로 고르면 `Apple Music link (optional)` 입력이 사라지고 `Spotify link (optional)`가 노출되는 것 확인
+- PASS: production `/recommendations/new`에서 빈 submit 시 `곡명/아티스트/원본 링크/코멘트` validation message가 모두 노출되는 것 확인
+- PASS: production `/recommendations/new`에서 유효한 입력 후 `draft 저장 흐름을 확인했습니다. posting member:` success message 확인
 - PASS: production `/profile/edit`에서 `v1` profile storage summary, completion, reset surface와 main platform save 확인
 
 ### `not-found`
