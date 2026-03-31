@@ -60,6 +60,7 @@ export function RecommendationComposer({
   );
   const [comment, setComment] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showAlternateLinks, setShowAlternateLinks] = useState(false);
   const [errors, setErrors] = useState<ComposerErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -74,6 +75,12 @@ export function RecommendationComposer({
   const alternatePlatformOptions = platformOptions.filter(
     ([value]) => value !== "other",
   );
+  const hasAlternateLinks = mobilePlatformOrder.some(
+    (value) =>
+      value !== platform && (alternatePlatformUrls[value]?.trim().length ?? 0) > 0,
+  );
+  const shouldShowAlternateLinks =
+    showAlternateLinks || hasAlternateLinks || Boolean(errors.alternatePlatformUrls);
 
   function clearFormFields() {
     setTrackTitle("");
@@ -83,6 +90,7 @@ export function RecommendationComposer({
     setAlternatePlatformUrls({});
     setComment("");
     setSelectedTags([]);
+    setShowAlternateLinks(false);
   }
 
   function resetForm() {
@@ -394,25 +402,48 @@ export function RecommendationComposer({
               </label>
 
               <div>
-                <span className="mb-3 block text-[1rem] font-semibold">
-                  Alternate platform links
-                </span>
-                <div className="space-y-3">
-                  {mobilePlatformOrder
-                    .filter((value) => value !== platform)
-                    .map((value) => (
-                      <input
-                        key={value}
-                        value={alternatePlatformUrls[value] ?? ""}
-                        onChange={(event) =>
-                          updateAlternatePlatformUrl(value, event.target.value)
-                        }
-                        className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
-                        placeholder={`${platformLabels[value]} link (optional)`}
-                        type="url"
-                      />
-                    ))}
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <span className="block text-[1rem] font-semibold">
+                      Alternate platform links
+                    </span>
+                    <span className="mt-1 block text-[0.95rem] text-[rgba(64,52,44,0.54)]">
+                      Optional shortcuts for listeners on other apps
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowAlternateLinks((currentValue) => !currentValue)
+                    }
+                    className="rounded-[0.12rem] border border-[rgba(109,66,60,0.14)] px-4 py-2 text-[0.92rem] font-medium text-[var(--primary-strong)]"
+                  >
+                    {shouldShowAlternateLinks ? "Hide" : "Add"}
+                  </button>
                 </div>
+                {shouldShowAlternateLinks ? (
+                  <div className="mt-4 space-y-3">
+                    {mobilePlatformOrder
+                      .filter((value) => value !== platform)
+                      .map((value) => (
+                        <input
+                          key={value}
+                          value={alternatePlatformUrls[value] ?? ""}
+                          onChange={(event) =>
+                            updateAlternatePlatformUrl(value, event.target.value)
+                          }
+                          className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                          placeholder={`${platformLabels[value]} link (optional)`}
+                          type="url"
+                        />
+                      ))}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-[0.96rem] leading-7 text-[rgba(64,52,44,0.62)]">
+                    Add Apple Music, YouTube Music, or SoundCloud links only if you
+                    want cross-platform listeners to jump in faster.
+                  </p>
+                )}
                 {errors.alternatePlatformUrls ? (
                   <span className="mt-2 block text-sm text-rose-500">
                     {errors.alternatePlatformUrls}
