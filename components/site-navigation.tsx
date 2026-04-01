@@ -50,6 +50,7 @@ function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
 
 export function SiteNavigation() {
   const pathname = usePathname();
+  const hideDesktopNav = pathname === "/";
   const hideMobileNav =
     pathname === "/" ||
     pathname === "/recommendations/new" ||
@@ -57,7 +58,11 @@ export function SiteNavigation() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 hidden px-6 pt-5 md:block">
+      <header
+        className={`fixed inset-x-0 top-0 z-40 px-6 pt-5 ${
+          hideDesktopNav ? "hidden" : "hidden md:block"
+        }`}
+      >
         <div className="onochu-panel mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center rounded-full px-5 py-3 text-stone-100 shadow-2xl shadow-black/20">
           <Link href="/" className="justify-self-start text-xs font-semibold uppercase tracking-[0.24em] text-white/45">
             Taste archive
