@@ -25,9 +25,9 @@ type SectionHeaderProps = {
 
 function SectionHeader({ num, label }: SectionHeaderProps) {
   return (
-    <div className="mb-8 flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[var(--primary-strong)]">
+    <div className="mb-8 flex items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[var(--primary-strong)] md:mb-0 md:flex-col md:items-start md:gap-4">
       <span className="font-mono">{num}</span>
-      <span className="h-px w-10 bg-[var(--primary-strong)]" />
+      <span className="h-px w-10 bg-[var(--primary-strong)] md:w-14" />
       <span>{label}</span>
     </div>
   );
@@ -39,13 +39,13 @@ type NumberedListProps = {
 
 function NumberedList({ items }: NumberedListProps) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 md:gap-6">
       {items.map((item) => (
-        <div key={item.num} className="flex items-start gap-4">
+        <div key={item.num} className="flex items-start gap-4 md:gap-5">
           <div className="min-w-6 font-mono text-[0.72rem] text-[var(--primary-strong)]">
             {item.num}
           </div>
-          <p className="text-[1rem] leading-[1.65] text-[rgba(26,24,23,0.9)]">
+          <p className="text-[1rem] leading-[1.65] text-[rgba(26,24,23,0.9)] md:text-[1.05rem] md:leading-[1.75]">
             {item.text}
           </p>
         </div>
@@ -93,14 +93,18 @@ function LandingSection({
 }) {
   return (
     <section className="border-b border-[#1A1817] bg-[#EBE6D8]">
-      <div className="px-6 py-10">
-        <SectionHeader num={num} label={label} />
-        {title ? (
-          <h2 className="mb-8 max-w-[11ch] text-[clamp(1.95rem,8vw,3rem)] font-extrabold leading-[1.12] tracking-[-0.05em] text-[#1A1817]">
-            {title}
-          </h2>
-        ) : null}
-        {children}
+      <div className="px-6 py-10 md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:gap-10 md:px-8 md:py-12 lg:grid-cols-[13rem_minmax(0,1fr)] lg:px-10">
+        <div className="md:pt-2">
+          <SectionHeader num={num} label={label} />
+        </div>
+        <div className="md:max-w-3xl">
+          {title ? (
+            <h2 className="mb-8 max-w-[11ch] text-[clamp(1.95rem,8vw,3rem)] font-extrabold leading-[1.12] tracking-[-0.05em] text-[#1A1817] md:max-w-[13ch] md:text-[clamp(2.35rem,4vw,3.4rem)]">
+              {title}
+            </h2>
+          ) : null}
+          {children}
+        </div>
       </div>
     </section>
   );
