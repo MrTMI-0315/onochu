@@ -108,7 +108,7 @@ function LandingSection({
 
 export function LandingMobileVariant() {
   return (
-    <div className="relative min-h-screen bg-[#EBE6D8] text-[#1A1817]">
+    <div className="relative min-h-screen bg-[#EBE6D8] text-[#1A1817] md:px-6 md:py-8">
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10 opacity-50"
@@ -119,182 +119,218 @@ export function LandingMobileVariant() {
         }}
       />
 
-      <header className="flex items-start justify-between border-b border-[#1A1817] px-6 py-6">
-        <div className="bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]">
-          ONOCHU
-        </div>
-        <div className="text-right font-mono text-[0.68rem] leading-tight text-[#1A1817]">
-          MOBILE EDITION
-          <br />
-          COMMUNITY ARCHIVE
-        </div>
-      </header>
-
-      <main className="bg-[#EBE6D8]">
-        <section className="border-b border-[#1A1817] px-6 py-10">
-          <div className="mb-4 flex items-center gap-2 font-mono text-[0.72rem] text-[var(--primary-strong)]">
-            <span className="inline-block h-px w-8 bg-[var(--primary-strong)]" />
-            취향이 잔향이 되는 곳, Onochu
+      <div className="md:mx-auto md:max-w-6xl md:overflow-hidden md:border md:border-[#1A1817] md:bg-[#EBE6D8] md:shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
+        <header className="flex items-start justify-between border-b border-[#1A1817] px-6 py-6 md:px-8 md:py-7">
+          <div className="bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]">
+            ONOCHU
           </div>
-
-          <h1 className="max-w-[7.2ch] text-[clamp(3rem,13vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.07em] text-[#1A1817]">
-            추천곡이
+          <div className="text-right font-mono text-[0.68rem] leading-tight text-[#1A1817]">
+            MOBILE EDITION
             <br />
-            채팅에서
-            <br />
-            사라지지
-            <br />
-            않도록
-          </h1>
-
-          <p className="mt-6 max-w-[18rem] text-[1rem] leading-[1.7] text-[#8C867A]">
-            플랫폼이 달라도, 추천곡을 이어 듣고 그 음악을 좋아한 사람까지
-            발견할 수 있습니다.
-          </p>
-        </section>
-
-        <section className="relative h-[25rem] overflow-hidden border-b border-[#1A1817] bg-[#D9D2C5]">
-          <div className="absolute left-6 top-6 z-10 bg-[#1A1817] px-3 py-2 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-[#EBE6D8]">
-            Archive No. 402 / Taste Trace
+            COMMUNITY ARCHIVE
           </div>
+        </header>
 
-          <div className="relative h-full w-full">
-            <Image
-              src="/landing-hero-art.png"
-              alt="Onochu landing hero artwork"
-              fill
-              priority
-              sizes="100vw"
-              className="object-contain p-8"
-              style={{
-                filter: "sepia(0.16) contrast(1.08) brightness(0.92)",
-                mixBlendMode: "multiply",
-              }}
-            />
-          </div>
+        <main className="bg-[#EBE6D8]">
+          <section className="border-b border-[#1A1817] md:grid md:grid-cols-[minmax(0,1.02fr)_minmax(22rem,0.98fr)] md:items-stretch">
+            <div className="px-6 py-10 md:flex md:flex-col md:px-8 md:py-12 lg:px-10 lg:py-14">
+              <div className="mb-4 flex items-center gap-2 font-mono text-[0.72rem] text-[var(--primary-strong)]">
+                <span className="inline-block h-px w-8 bg-[var(--primary-strong)]" />
+                취향이 잔향이 되는 곳, Onochu
+              </div>
 
-          <div className="absolute bottom-6 right-6 flex flex-col gap-1">
-            <div className="ml-auto h-3 w-[1.9rem] border border-[#1A1817] border-t-[3px] border-t-[var(--primary-strong)] bg-[#EBE6D8]" />
-            <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
-            <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
-          </div>
-        </section>
+              <h1 className="max-w-[7.2ch] text-[clamp(3rem,13vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.07em] text-[#1A1817] md:max-w-[8.8ch] md:text-[clamp(3.5rem,6.6vw,5.8rem)]">
+                추천곡이
+                <br />
+                채팅에서
+                <br />
+                사라지지
+                <br />
+                않도록
+              </h1>
 
-        <section className="flex flex-col gap-3 px-6 py-6">
-          <CTAButton
-            href="/recommendations"
-            label="추천곡 둘러보기"
-            kind="primary"
-          />
-          <CTAButton
-            href="/members"
-            label="취향 맞는 멤버 찾기"
-            kind="secondary"
-          />
-        </section>
+              <p className="mt-6 max-w-[18rem] text-[1rem] leading-[1.7] text-[#8C867A] md:max-w-[24rem] md:text-[1.05rem]">
+                플랫폼이 달라도, 추천곡을 이어 듣고 그 음악을 좋아한 사람까지
+                발견할 수 있습니다.
+              </p>
 
-        <section className="grid grid-cols-2 gap-6 border-y border-[#1A1817] px-6 py-6">
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
-              Curated by
-            </span>
-            <span className="text-[0.9rem] font-semibold text-[#1A1817]">
-              Community archive
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
-              Listening mode
-            </span>
-            <span className="text-[0.9rem] font-semibold text-[#1A1817]">
-              Cross-platform ready
-            </span>
-          </div>
-        </section>
+              <div className="mt-10 hidden max-w-[23rem] flex-col gap-3 md:flex">
+                <CTAButton
+                  href="/recommendations"
+                  label="추천곡 둘러보기"
+                  kind="primary"
+                />
+                <CTAButton
+                  href="/members"
+                  label="취향 맞는 멤버 찾기"
+                  kind="secondary"
+                />
+              </div>
 
-        <LandingSection
-          num="02"
-          label="Problem"
-          title="사람들이 자주 겪는 문제"
-        >
-          <NumberedList items={problemItems} />
-        </LandingSection>
+              <section className="mt-10 hidden grid-cols-2 gap-6 border-t border-[#1A1817] pt-6 md:grid">
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
+                    Curated by
+                  </span>
+                  <span className="text-[0.9rem] font-semibold text-[#1A1817]">
+                    Community archive
+                  </span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
+                    Listening mode
+                  </span>
+                  <span className="text-[0.9rem] font-semibold text-[#1A1817]">
+                    Cross-platform ready
+                  </span>
+                </div>
+              </section>
+            </div>
 
-        <LandingSection
-          num="03"
-          label="How It Works"
-          title="Onochu는 이렇게 작동합니다"
-        >
-          <NumberedList items={howItWorksItems} />
-        </LandingSection>
+            <div className="relative h-[25rem] overflow-hidden border-t border-[#1A1817] bg-[#D9D2C5] md:h-full md:min-h-[42rem] md:border-l md:border-t-0">
+              <div className="absolute left-6 top-6 z-10 bg-[#1A1817] px-3 py-2 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-[#EBE6D8]">
+                Archive No. 402 / Taste Trace
+              </div>
 
-        <LandingSection
-          num="04"
-          label="Why Onochu Feels Different"
-          title="Onochu가 다른 이유"
-        >
-          <div className="flex flex-col gap-5">
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              Onochu는 흘러가버릴 링크만 남기는 곳이 아닙니다.
-            </p>
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              누가 왜 이 곡을 추천했는지도 함께 남겨, 스쳐 지나갈 추천이
-              다시 대화로 이어지게 만듭니다.
-            </p>
-          </div>
-        </LandingSection>
+              <div className="relative h-full w-full">
+                <Image
+                  src="/landing-hero-art.png"
+                  alt="Onochu landing hero artwork"
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 42vw, 100vw"
+                  className="object-contain p-8 md:p-10 lg:p-12"
+                  style={{
+                    filter: "sepia(0.16) contrast(1.08) brightness(0.92)",
+                    mixBlendMode: "multiply",
+                  }}
+                />
+              </div>
 
-        <LandingSection num="05" label="Recommendation & Playlist Sharing">
-          <div className="flex flex-col gap-5">
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              한 곡 추천에는 그때의 기분과 취향이 담깁니다.
-            </p>
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              플레이리스트에는 그 사람이 어떤 음악을 좋아하는지가 더 잘
-              보입니다.
-            </p>
-          </div>
-        </LandingSection>
+              <div className="absolute bottom-6 right-6 flex flex-col gap-1">
+                <div className="ml-auto h-3 w-[1.9rem] border border-[#1A1817] border-t-[3px] border-t-[var(--primary-strong)] bg-[#EBE6D8]" />
+                <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
+                <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
+              </div>
+            </div>
+          </section>
 
-        <LandingSection num="06" label="Where It Works Best">
-          <div className="flex flex-col gap-5">
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              동아리, 소모임, 학내 커뮤니티, 크루처럼
-            </p>
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              서로를 알아가야 하는 모임일수록, 취향은 가장 자연스러운 시작점이
-              됩니다.
-            </p>
-          </div>
-        </LandingSection>
-
-        <LandingSection
-          num="07"
-          label="Final CTA"
-          title="좋아하는 음악으로 먼저 말을 걸어보세요"
-        >
-          <div className="mb-10 flex flex-col gap-5">
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              처음부터 길게 소개하지 않아도 됩니다.
-            </p>
-            <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
-              추천곡 하나, 플레이리스트 하나로 대화를 시작해보세요.
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <CTAButton
-              href="/recommendations/new"
-              label="첫 추천 남기기"
-              kind="primary"
-            />
+          <section className="flex flex-col gap-3 px-6 py-6 md:hidden">
             <CTAButton
               href="/recommendations"
               label="추천곡 둘러보기"
+              kind="primary"
+            />
+            <CTAButton
+              href="/members"
+              label="취향 맞는 멤버 찾기"
               kind="secondary"
             />
-          </div>
-        </LandingSection>
-      </main>
+          </section>
+
+          <section className="grid grid-cols-2 gap-6 border-y border-[#1A1817] px-6 py-6 md:hidden">
+            <div className="flex flex-col gap-2">
+              <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
+                Curated by
+              </span>
+              <span className="text-[0.9rem] font-semibold text-[#1A1817]">
+                Community archive
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
+                Listening mode
+              </span>
+              <span className="text-[0.9rem] font-semibold text-[#1A1817]">
+                Cross-platform ready
+              </span>
+            </div>
+          </section>
+
+          <LandingSection
+            num="02"
+            label="Problem"
+            title="사람들이 자주 겪는 문제"
+          >
+            <NumberedList items={problemItems} />
+          </LandingSection>
+
+          <LandingSection
+            num="03"
+            label="How It Works"
+            title="Onochu는 이렇게 작동합니다"
+          >
+            <NumberedList items={howItWorksItems} />
+          </LandingSection>
+
+          <LandingSection
+            num="04"
+            label="Why Onochu Feels Different"
+            title="Onochu가 다른 이유"
+          >
+            <div className="flex flex-col gap-5">
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                Onochu는 흘러가버릴 링크만 남기는 곳이 아닙니다.
+              </p>
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                누가 왜 이 곡을 추천했는지도 함께 남겨, 스쳐 지나갈 추천이
+                다시 대화로 이어지게 만듭니다.
+              </p>
+            </div>
+          </LandingSection>
+
+          <LandingSection num="05" label="Recommendation & Playlist Sharing">
+            <div className="flex flex-col gap-5">
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                한 곡 추천에는 그때의 기분과 취향이 담깁니다.
+              </p>
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                플레이리스트에는 그 사람이 어떤 음악을 좋아하는지가 더 잘
+                보입니다.
+              </p>
+            </div>
+          </LandingSection>
+
+          <LandingSection num="06" label="Where It Works Best">
+            <div className="flex flex-col gap-5">
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                동아리, 소모임, 학내 커뮤니티, 크루처럼
+              </p>
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                서로를 알아가야 하는 모임일수록, 취향은 가장 자연스러운 시작점이
+                됩니다.
+              </p>
+            </div>
+          </LandingSection>
+
+          <LandingSection
+            num="07"
+            label="Final CTA"
+            title="좋아하는 음악으로 먼저 말을 걸어보세요"
+          >
+            <div className="mb-10 flex flex-col gap-5">
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                처음부터 길게 소개하지 않아도 됩니다.
+              </p>
+              <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
+                추천곡 하나, 플레이리스트 하나로 대화를 시작해보세요.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 md:max-w-[23rem]">
+              <CTAButton
+                href="/recommendations/new"
+                label="첫 추천 남기기"
+                kind="primary"
+              />
+              <CTAButton
+                href="/recommendations"
+                label="추천곡 둘러보기"
+                kind="secondary"
+              />
+            </div>
+          </LandingSection>
+        </main>
+      </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 h-1.5 bg-[var(--primary-strong)] md:hidden" />
     </div>
