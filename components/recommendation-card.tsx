@@ -139,26 +139,34 @@ export function RecommendationCard({
           ))}
         </div>
 
-        <div className="mt-5 rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.58)] px-4 py-3">
-          <div className="flex items-center justify-between gap-3">
+        <div className="mt-5 flex items-start justify-between gap-3 rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.58)] px-4 py-3">
+          <div className="min-w-0">
             <p className="text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-[rgba(64,52,44,0.5)]">
               Search handoff
             </p>
-            <button
-              type="button"
-              onClick={handleCopySearchQuery}
-              className="text-[0.82rem] font-semibold text-[var(--primary-strong)]"
+            <p
+              className="mt-1 truncate text-[0.94rem] leading-6 text-[rgba(64,52,44,0.8)]"
+              title={searchQuery}
             >
-              {copyStatus === "copied"
-                ? "Copied"
-                : copyStatus === "failed"
-                  ? "Retry copy"
-                  : "Copy query"}
-            </button>
+              {searchQuery}
+            </p>
+            <p className="mt-1 text-[0.8rem] leading-5 text-[rgba(64,52,44,0.56)]">
+              {resolvedLink.isFallback
+                ? `Use this to search on ${resolvedPlatformLabel}`
+                : "Keep this ready if the source link is unavailable"}
+            </p>
           </div>
-          <p className="mt-2 text-[0.94rem] leading-6 text-[rgba(64,52,44,0.78)]">
-            {searchQuery}
-          </p>
+          <button
+            type="button"
+            onClick={handleCopySearchQuery}
+            className="shrink-0 text-[0.82rem] font-semibold text-[var(--primary-strong)]"
+          >
+            {copyStatus === "copied"
+              ? "Copied"
+              : copyStatus === "failed"
+                ? "Retry"
+                : "Copy"}
+          </button>
         </div>
 
         <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-4">
