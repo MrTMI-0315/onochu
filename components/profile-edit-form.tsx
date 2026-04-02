@@ -68,6 +68,7 @@ export function ProfileEditForm({
     "spotify",
     "apple_music",
     "youtube_music",
+    "melon",
     "soundcloud",
   ];
   const preferredGenreOrder = [
@@ -386,6 +387,7 @@ export function ProfileEditForm({
                       spotify: "Most popular streaming platform",
                       apple_music: "High-quality audio",
                       youtube_music: "Largest music library",
+                      melon: "Korean streaming staple",
                       soundcloud: "Independent artists",
                     };
 

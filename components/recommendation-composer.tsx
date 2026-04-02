@@ -35,6 +35,7 @@ const platformDescriptions: Partial<Record<MusicPlatform, string>> = {
   spotify: "Most popular streaming platform",
   apple_music: "High-quality audio",
   youtube_music: "Largest music library",
+  melon: "Korean streaming staple",
   soundcloud: "Independent artists",
   other: "Bring your own link",
 };
@@ -42,6 +43,7 @@ const mobilePlatformOrder: MusicPlatform[] = [
   "spotify",
   "apple_music",
   "youtube_music",
+  "melon",
   "soundcloud",
 ];
 
@@ -440,8 +442,8 @@ export function RecommendationComposer({
                   </div>
                 ) : (
                   <p className="mt-4 text-[0.96rem] leading-7 text-[rgba(64,52,44,0.62)]">
-                    Add Apple Music, YouTube Music, or SoundCloud links only if you
-                    want cross-platform listeners to jump in faster.
+                    Add Apple Music, YouTube Music, Melon, or SoundCloud links only
+                    if you want cross-platform listeners to jump in faster.
                   </p>
                 )}
                 {errors.alternatePlatformUrls ? (

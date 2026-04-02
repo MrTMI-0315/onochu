@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { getMemberName, platformLabels } from "@/lib/mock-data";
 import { resolveRecommendationLink } from "@/lib/platform-links";
@@ -34,6 +35,9 @@ export function RecommendationCard({
   onToggleEngagement,
   showEngagementControls = true,
 }: RecommendationCardProps) {
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+    "idle",
+  );
   const memberName =
     recommendation.memberNickname || getMemberName(recommendation.memberId);
   const memberProfileHref = `/members/${recommendation.memberId}`;
@@ -51,6 +55,9 @@ export function RecommendationCard({
   });
   const initials = memberName.slice(0, 1).toUpperCase();
   const mobileComment = recommendation.mobileComment || recommendation.comment;
+  const searchQuery =
+    recommendation.searchQuery?.trim() ||
+    `${recommendation.trackTitle} ${recommendation.artistName}`.trim();
   const resolvedPlatformLabel = viewerPlatform
     ? platformLabels[viewerPlatform]
     : platformLabels[recommendation.platform];
@@ -72,6 +79,17 @@ export function RecommendationCard({
         "border-[color:rgba(64,81,112,0.35)] bg-[color:rgba(64,81,112,0.18)] text-[color:var(--paper)] shadow-[0_0_30px_rgba(64,81,112,0.14)]",
     },
   ];
+
+  async function handleCopySearchQuery() {
+    try {
+      await navigator.clipboard.writeText(searchQuery);
+      setCopyStatus("copied");
+      window.setTimeout(() => setCopyStatus("idle"), 1600);
+    } catch {
+      setCopyStatus("failed");
+      window.setTimeout(() => setCopyStatus("idle"), 2000);
+    }
+  }
 
   if (mobileSimple) {
     return (
@@ -119,6 +137,28 @@ export function RecommendationCard({
               {tag}
             </span>
           ))}
+        </div>
+
+        <div className="mt-5 rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.58)] px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-[rgba(64,52,44,0.5)]">
+              Search handoff
+            </p>
+            <button
+              type="button"
+              onClick={handleCopySearchQuery}
+              className="text-[0.82rem] font-semibold text-[var(--primary-strong)]"
+            >
+              {copyStatus === "copied"
+                ? "Copied"
+                : copyStatus === "failed"
+                  ? "Retry copy"
+                  : "Copy query"}
+            </button>
+          </div>
+          <p className="mt-2 text-[0.94rem] leading-6 text-[rgba(64,52,44,0.78)]">
+            {searchQuery}
+          </p>
         </div>
 
         <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-4">
@@ -223,6 +263,26 @@ export function RecommendationCard({
               {tag}
             </span>
           ))}
+        </div>
+
+        <div className="rounded-[1.25rem] border border-white/8 bg-white/3 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/38">
+              Search handoff
+            </p>
+            <button
+              type="button"
+              onClick={handleCopySearchQuery}
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.28)] hover:text-white"
+            >
+              {copyStatus === "copied"
+                ? "Copied"
+                : copyStatus === "failed"
+                  ? "Retry copy"
+                  : "Copy query"}
+            </button>
+          </div>
+          <p className="mt-3 text-sm leading-7 text-white/70">{searchQuery}</p>
         </div>
 
         {showEngagementControls ? (
