@@ -5,6 +5,7 @@ const SEARCH_BASE_URLS: Partial<Record<MusicPlatform, string>> = {
   apple_music: "https://music.apple.com/us/search?term=",
   youtube_music: "https://music.youtube.com/search?q=",
   soundcloud: "https://soundcloud.com/search?q=",
+  melon: "https://www.melon.com/search/total/index.htm?q=",
 };
 
 export function normalizePlatformLinkMap(
@@ -43,8 +44,7 @@ export function normalizePlatformLinkMap(
 
 export function createPlatformSearchUrl(
   platform: MusicPlatform,
-  trackTitle: string,
-  artistName: string,
+  searchQuery: string,
 ) {
   const searchBaseUrl = SEARCH_BASE_URLS[platform];
 
@@ -52,7 +52,7 @@ export function createPlatformSearchUrl(
     return null;
   }
 
-  return `${searchBaseUrl}${encodeURIComponent(`${trackTitle} ${artistName}`)}`;
+  return `${searchBaseUrl}${encodeURIComponent(searchQuery.trim())}`;
 }
 
 type ResolveRecommendationLinkInput = {
@@ -64,6 +64,10 @@ export function resolveRecommendationLink({
   recommendation,
   preferredPlatform,
 }: ResolveRecommendationLinkInput) {
+  const searchQuery =
+    recommendation.searchQuery?.trim() ||
+    `${recommendation.trackTitle} ${recommendation.artistName}`.trim();
+
   if (preferredPlatform) {
     if (preferredPlatform === recommendation.platform) {
       return {
@@ -88,8 +92,7 @@ export function resolveRecommendationLink({
 
     const preferredSearchLink = createPlatformSearchUrl(
       preferredPlatform,
-      recommendation.trackTitle,
-      recommendation.artistName,
+      searchQuery,
     );
 
     if (preferredSearchLink) {

@@ -51,6 +51,8 @@ export function createRecommendationFromDraft(
   currentMember: MemberProfile,
   activeTheme?: ThemeSpotlight | null,
 ): SongRecommendation {
+  const searchQuery = `${draft.trackTitle} ${draft.artistName}`.trim();
+
   return {
     id: `draft-${Date.now()}`,
     memberId: currentMember.id,
@@ -64,6 +66,7 @@ export function createRecommendationFromDraft(
     createdAt: new Date().toISOString(),
     reactionCount: 0,
     saveCount: 0,
+    searchQuery,
     alternatePlatformUrls: normalizePlatformLinkMap(
       draft.alternatePlatformUrls,
       draft.platform,

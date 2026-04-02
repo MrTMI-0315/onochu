@@ -1,4 +1,6 @@
 import type {
+  ArtistCollection,
+  GenreCollection,
   MemberProfile,
   MusicPlatform,
   SongRecommendation,
@@ -10,8 +12,21 @@ export const platformLabels: Record<MusicPlatform, string> = {
   youtube_music: "YouTube Music",
   apple_music: "Apple Music",
   soundcloud: "SoundCloud",
+  melon: "Melon",
   other: "Other",
 };
+
+function createRecommendationSearchQuery(trackTitle: string, artistName: string) {
+  return `${trackTitle} ${artistName}`.trim();
+}
+
+function slugifyLabel(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export const members: MemberProfile[] = [
   {
@@ -339,6 +354,10 @@ export const recommendations: SongRecommendation[] = baseRecommendations.map(
     memberNickname: getMemberName(recommendation.memberId),
     reactionCount: seededEngagementMetrics[index]?.reactionCount ?? 0,
     saveCount: seededEngagementMetrics[index]?.saveCount ?? 0,
+    searchQuery: createRecommendationSearchQuery(
+      recommendation.trackTitle,
+      recommendation.artistName,
+    ),
     themeId: liveThemeRecommendationIds.has(recommendation.id)
       ? "theme-001"
       : undefined,
@@ -353,6 +372,48 @@ export const recommendations: SongRecommendation[] = baseRecommendations.map(
 
 export const sortedRecommendations = [...recommendations].sort((left, right) =>
   right.createdAt.localeCompare(left.createdAt),
+);
+
+export const genreCollections: GenreCollection[] = [
+  {
+    id: "genre-city-pop",
+    slug: "city-pop",
+    label: "City Pop",
+    recommendationIds: ["rec-010"],
+  },
+  {
+    id: "genre-soul",
+    slug: "soul",
+    label: "Soul",
+    recommendationIds: ["rec-002", "rec-012"],
+  },
+  {
+    id: "genre-electronic",
+    slug: "electronic",
+    label: "Electronic",
+    recommendationIds: ["rec-003", "rec-008", "rec-009"],
+  },
+  {
+    id: "genre-hip-hop",
+    slug: "hip-hop",
+    label: "Hip Hop",
+    recommendationIds: ["rec-005", "rec-011"],
+  },
+  {
+    id: "genre-r-and-b",
+    slug: "r-and-b",
+    label: "R&B",
+    recommendationIds: ["rec-001", "rec-004", "rec-007"],
+  },
+];
+
+export const artistCollections: ArtistCollection[] = recommendations.map(
+  (recommendation) => ({
+    id: `artist-${slugifyLabel(recommendation.artistName)}`,
+    slug: slugifyLabel(recommendation.artistName),
+    artistName: recommendation.artistName,
+    recommendationIds: [recommendation.id],
+  }),
 );
 
 export const themeSpotlights: ThemeSpotlight[] = [
