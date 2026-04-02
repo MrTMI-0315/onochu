@@ -197,8 +197,8 @@ export function LandingMobileVariant() {
               </section>
             </div>
 
-            <div className="relative h-[25rem] overflow-hidden border-t border-[#1A1817] bg-[#D9D2C5] md:h-full md:min-h-[42rem] md:border-l md:border-t-0">
-              <div className="absolute left-6 top-6 z-10 bg-[#1A1817] px-3 py-2 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-[#EBE6D8]">
+            <div className="relative h-[23.5rem] overflow-hidden border-t border-[#1A1817] bg-[#D9D2C5] md:h-full md:min-h-[42rem] md:border-l md:border-t-0">
+              <div className="absolute left-6 top-5 z-10 bg-[#1A1817] px-3 py-2 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-[#EBE6D8]">
                 Archive No. 402 / Taste Trace
               </div>
 
@@ -209,7 +209,7 @@ export function LandingMobileVariant() {
                   fill
                   priority
                   sizes="(min-width: 768px) 42vw, 100vw"
-                  className="object-contain p-8 md:p-10 lg:p-12"
+                  className="object-contain p-6 md:p-10 lg:p-12"
                   style={{
                     filter: "sepia(0.16) contrast(1.08) brightness(0.92)",
                     mixBlendMode: "multiply",
@@ -217,7 +217,7 @@ export function LandingMobileVariant() {
                 />
               </div>
 
-              <div className="absolute bottom-6 right-6 flex flex-col gap-1">
+              <div className="absolute bottom-5 right-6 flex flex-col gap-1">
                 <div className="ml-auto h-3 w-[1.9rem] border border-[#1A1817] border-t-[3px] border-t-[var(--primary-strong)] bg-[#EBE6D8]" />
                 <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
                 <div className="h-3 w-10 border border-[#1A1817] bg-[#EBE6D8]" />
@@ -225,7 +225,7 @@ export function LandingMobileVariant() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-3 px-6 py-6 md:hidden">
+          <section className="flex flex-col gap-3 px-6 py-5 md:hidden">
             <CTAButton
               href="/recommendations"
               label="추천곡 둘러보기"
@@ -238,7 +238,7 @@ export function LandingMobileVariant() {
             />
           </section>
 
-          <section className="grid grid-cols-2 gap-6 border-y border-[#1A1817] px-6 py-6 md:hidden">
+          <section className="grid grid-cols-2 gap-6 border-y border-[#1A1817] px-6 py-5 md:hidden">
             <div className="flex flex-col gap-2">
               <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[#8C867A]">
                 Curated by
