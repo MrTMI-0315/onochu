@@ -68,7 +68,7 @@ function CTAButton({
       href={href}
       className={`flex min-h-[4rem] items-center justify-between border px-5 py-[1.1rem] text-[0.95rem] font-semibold tracking-[-0.01em] transition md:min-h-[4.1rem] ${
         kind === "primary"
-          ? "border-[#1A1817] bg-[#1A1817] text-[#F7F1E6] shadow-[inset_0_-3px_0_rgba(193,88,67,0.24)]"
+          ? "border-[var(--primary-strong)] bg-[var(--primary-strong)] text-[var(--paper)] shadow-[inset_0_-3px_0_rgba(64,52,44,0.12)]"
           : "border-[#1A1817] border-b-4 bg-[#EBE6D8] text-[#1A1817]"
       }`}
     >
