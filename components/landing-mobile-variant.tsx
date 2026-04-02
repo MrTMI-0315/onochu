@@ -66,14 +66,14 @@ function CTAButton({
   return (
     <Link
       href={href}
-      className={`flex items-center justify-between border px-5 py-[1.1rem] text-[0.95rem] font-semibold transition ${
+      className={`flex min-h-[4rem] items-center justify-between border px-5 py-[1.1rem] text-[0.95rem] font-semibold tracking-[-0.01em] transition md:min-h-[4.1rem] ${
         kind === "primary"
-          ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
+          ? "border-[#1A1817] bg-[#1A1817] text-[#F7F1E6] shadow-[inset_0_-3px_0_rgba(193,88,67,0.24)]"
           : "border-[#1A1817] border-b-4 bg-[#EBE6D8] text-[#1A1817]"
       }`}
     >
-      <span>{label}</span>
-      <span className="font-mono text-[1rem]">
+      <span className="text-[1rem]">{label}</span>
+      <span className="ml-4 font-mono text-[1rem]">
         {kind === "primary" ? "→" : "↘"}
       </span>
     </Link>
@@ -84,11 +84,13 @@ function LandingSection({
   num,
   label,
   title,
+  titleClassName,
   children,
 }: {
   num: string;
   label: string;
   title?: string;
+  titleClassName?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -99,7 +101,11 @@ function LandingSection({
         </div>
         <div className="md:max-w-3xl">
           {title ? (
-            <h2 className="mb-8 max-w-[11ch] text-[clamp(1.95rem,8vw,3rem)] font-extrabold leading-[1.12] tracking-[-0.05em] text-[#1A1817] md:max-w-[13ch] md:text-[clamp(2.35rem,4vw,3.4rem)]">
+            <h2
+              className={`mb-8 text-[clamp(1.95rem,8vw,3rem)] font-extrabold leading-[1.12] tracking-[-0.05em] text-[#1A1817] md:text-[clamp(2.35rem,4vw,3.4rem)] ${
+                titleClassName ?? "max-w-[11ch] md:max-w-[13ch]"
+              }`}
+            >
               {title}
             </h2>
           ) : null}
@@ -255,6 +261,7 @@ export function LandingMobileVariant() {
             num="02"
             label="Problem"
             title="사람들이 자주 겪는 문제"
+            titleClassName="max-w-[8ch] md:max-w-[10ch]"
           >
             <NumberedList items={problemItems} />
           </LandingSection>
@@ -263,6 +270,7 @@ export function LandingMobileVariant() {
             num="03"
             label="How It Works"
             title="Onochu는 이렇게 작동합니다"
+            titleClassName="max-w-[9ch] md:max-w-[11ch]"
           >
             <NumberedList items={howItWorksItems} />
           </LandingSection>
@@ -271,6 +279,7 @@ export function LandingMobileVariant() {
             num="04"
             label="Why Onochu Feels Different"
             title="Onochu가 다른 이유"
+            titleClassName="max-w-[10ch] md:max-w-[14ch]"
           >
             <div className="flex flex-col gap-5">
               <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
@@ -311,6 +320,7 @@ export function LandingMobileVariant() {
             num="07"
             label="Final CTA"
             title="좋아하는 음악으로 먼저 말을 걸어보세요"
+            titleClassName="max-w-[9ch] md:max-w-[12ch]"
           >
             <div className="mb-10 flex flex-col gap-5">
               <p className="text-[1rem] leading-[1.7] text-[#1A1817]">
