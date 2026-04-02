@@ -197,7 +197,7 @@ export function LandingMobileVariant() {
               </section>
             </div>
 
-            <div className="relative h-[23.5rem] overflow-hidden border-t border-[#1A1817] bg-[#D9D2C5] md:h-full md:min-h-[42rem] md:border-l md:border-t-0">
+            <div className="relative h-[23.5rem] overflow-hidden border-t border-[#1A1817] bg-[#E7E0D0] md:h-full md:min-h-[42rem] md:border-l md:border-t-0">
               <div className="absolute left-6 top-5 z-10 bg-[#1A1817] px-3 py-2 font-mono text-[0.64rem] uppercase tracking-[0.12em] text-[#EBE6D8]">
                 Archive No. 402 / Taste Trace
               </div>
@@ -209,7 +209,7 @@ export function LandingMobileVariant() {
                   fill
                   priority
                   sizes="(min-width: 768px) 42vw, 100vw"
-                  className="object-contain p-6 md:p-10 lg:p-12"
+                  className="object-contain object-bottom p-2 pt-10 md:p-6 md:pt-12 lg:p-8 lg:pt-14"
                   style={{
                     filter: "sepia(0.16) contrast(1.08) brightness(0.92)",
                     mixBlendMode: "multiply",
