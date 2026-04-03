@@ -356,8 +356,24 @@ export function RecommendationStudio({
       </main>
 
       <div className="hidden md:block">
-        <main className="min-h-screen bg-[var(--paper)] px-6 pb-28 pt-28 text-[var(--accent-ink)]">
-          <div className="mx-auto max-w-6xl border-x border-[rgba(64,52,44,0.28)]">
+        <main className="min-h-screen bg-[var(--paper)] text-[var(--accent-ink)]">
+          <div className="mx-auto max-w-5xl border-x border-[rgba(64,52,44,0.28)] bg-[#EBE6D8]">
+            <section className="border-b border-[rgba(64,52,44,0.28)] px-8 py-6">
+              <div className="flex items-start justify-between gap-4">
+                <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
+                  ONOCHU
+                </span>
+                <div className="text-right">
+                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+                    RECOMMENDATIONS
+                  </p>
+                  <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+                    SEOUL / BARCELONA
+                  </p>
+                </div>
+              </div>
+            </section>
+
             <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.1fr_0.9fr]">
               <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-14">
                 <h1 className="max-w-[7ch] text-[4.75rem] font-bold leading-[0.92] tracking-[-0.09em] text-[var(--accent-ink)]">
@@ -414,9 +430,9 @@ export function RecommendationStudio({
                   </Link>
                 </div>
               </div>
-              <div className="px-8 py-12">
+              <div className="bg-[rgba(64,52,44,0.03)] px-8 py-12">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
                     <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
                       Feed status
                     </p>
@@ -427,7 +443,7 @@ export function RecommendationStudio({
                       추천이 지금 archive에 쌓여 있습니다.
                     </p>
                   </div>
-                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
                     <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
                       Community
                     </p>
@@ -440,7 +456,7 @@ export function RecommendationStudio({
                   </div>
                 </div>
 
-                <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
                   <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
                     Runtime
                   </p>
@@ -457,7 +473,7 @@ export function RecommendationStudio({
                 </div>
 
                 {latestDraft ? (
-                  <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                  <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
                     <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
                       Latest draft
                     </p>

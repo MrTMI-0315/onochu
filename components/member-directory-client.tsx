@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { MemberCard } from "@/components/member-card";
 import {
   allGenres,
@@ -215,36 +214,24 @@ export function MemberDirectoryClient() {
       </div>
 
       <div className="hidden md:block">
-        <main className="min-h-screen bg-[var(--paper)] px-6 pb-24 pt-20 text-[var(--accent-ink)]">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-5 rounded-full border border-[rgba(64,52,44,0.18)] bg-[rgba(26,24,23,0.9)] px-5 py-3 text-[var(--paper)] shadow-[0_12px_24px_rgba(26,24,23,0.14)]">
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                <span className="justify-self-start font-mono text-[0.76rem] uppercase tracking-[0.22em] text-[rgba(241,233,210,0.82)]">
-                  Taste Archive
-                </span>
-
-                <Link href="/" className="justify-self-center text-[2rem] font-bold italic tracking-[-0.05em] text-[var(--primary)]">
+        <main className="min-h-screen bg-[var(--paper)] text-[var(--accent-ink)]">
+          <div className="mx-auto max-w-5xl border-x border-[rgba(64,52,44,0.28)] bg-[#EBE6D8]">
+            <section className="border-b border-[rgba(64,52,44,0.28)] px-8 py-6">
+              <div className="flex items-start justify-between gap-4">
+                <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
                   ONOCHU
-                </Link>
-
-                <nav className="flex items-center justify-self-end rounded-full border border-white/8 bg-[rgba(255,255,255,0.05)] p-1">
-                  <Link href="/" className="rounded-full px-4 py-2 text-sm font-medium text-[rgba(241,233,210,0.72)]">
-                    Home
-                  </Link>
-                  <Link href="/recommendations" className="rounded-full px-4 py-2 text-sm font-medium text-[rgba(241,233,210,0.72)]">
-                    Recs
-                  </Link>
-                  <Link href="/members" className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--accent-ink)]">
-                    Members
-                  </Link>
-                  <Link href="/profile" className="rounded-full px-4 py-2 text-sm font-medium text-[rgba(241,233,210,0.72)]">
-                    My Profile
-                  </Link>
-                </nav>
+                </span>
+                <div className="text-right">
+                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+                    MEMBERS
+                  </p>
+                  <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+                    SEOUL / BARCELONA
+                  </p>
+                </div>
               </div>
-            </div>
+            </section>
 
-            <div className="border-x border-[rgba(64,52,44,0.28)]">
               <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.15fr_0.85fr]">
                 <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-14">
                   <ArchiveSectionLabel number="01" label="Club Directory" />
@@ -458,7 +445,6 @@ export function MemberDirectoryClient() {
                 )}
               </section>
             </div>
-          </div>
         </main>
       </div>
     </main>
