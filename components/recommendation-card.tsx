@@ -104,7 +104,7 @@ export function RecommendationCard({
 
   if (mobileSimple) {
     return (
-      <article className="border-b border-[rgba(64,52,44,0.18)] px-4 py-6 text-[var(--accent-ink)]">
+      <article className="border-b border-[rgba(64,52,44,0.18)] px-4 py-6 text-[var(--accent-ink)] transition-colors duration-200 md:rounded-[1.2rem] md:border md:border-[rgba(64,52,44,0.16)] md:bg-[rgba(255,252,246,0.78)] md:px-5 md:py-5 md:hover:bg-[rgba(255,252,246,0.96)] md:hover:shadow-[0_18px_40px_rgba(64,52,44,0.08)]">
         <div className="flex items-center justify-between gap-4">
           <span className="bg-[var(--accent-ink)] px-3 py-1.5 text-[0.72rem] font-semibold tracking-[0.12em] text-[var(--paper)]">
             {mobileRecordId}
@@ -114,21 +114,21 @@ export function RecommendationCard({
           </span>
         </div>
 
-        <div className="mt-5 flex items-center gap-4">
+        <div className="mt-5 flex items-center gap-4 md:mt-4 md:items-start">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[rgba(64,52,44,0.24)] bg-[rgba(217,210,197,0.7)] text-[0.72rem] font-mono text-[rgba(64,52,44,0.42)]">
             ART
           </div>
           <div className="min-w-0">
-            <h3 className="text-[1.9rem] font-bold tracking-[-0.06em] text-[var(--accent-ink)]">
+            <h3 className="text-[1.9rem] font-bold tracking-[-0.06em] text-[var(--accent-ink)] md:text-[1.7rem]">
               {recommendation.trackTitle}
             </h3>
-            <p className="mt-1 text-[1rem] text-[rgba(64,52,44,0.58)]">
+            <p className="mt-1 text-[1rem] text-[rgba(64,52,44,0.58)] md:text-[0.96rem]">
               {recommendation.artistName}
             </p>
           </div>
         </div>
 
-        <ul className="mt-6 space-y-4">
+        <ul className="mt-6 space-y-4 md:mt-5 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
           <li className="space-y-1">
             <p className="text-[0.88rem] font-medium text-[rgba(64,52,44,0.56)]">
               이 곡을 남긴 사람:
@@ -167,19 +167,19 @@ export function RecommendationCard({
           </li>
         </ul>
 
-        <div className="mt-6 grid grid-cols-2 gap-2">
+        <div className="mt-6 grid grid-cols-2 gap-2 md:mt-5 md:grid-cols-4">
           <a
             href={resolvedLink.href}
             target="_blank"
             rel="noreferrer"
-            className="col-span-2 flex items-center justify-center border border-[rgba(64,52,44,0.9)] bg-[var(--accent-ink)] px-4 py-3 text-[0.95rem] font-semibold text-[var(--paper)]"
+            className="col-span-2 flex items-center justify-center border border-[rgba(64,52,44,0.9)] bg-[var(--accent-ink)] px-4 py-3 text-[0.95rem] font-semibold text-[var(--paper)] transition-colors duration-200 hover:bg-[var(--primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.38)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] md:col-span-4"
           >
             내 플랫폼에서 찾기
           </a>
           <button
             type="button"
             onClick={handleCopySearchQuery}
-            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)]"
+            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:bg-[rgba(64,52,44,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
           >
             {copyStatus === "copied"
               ? "복사됨 ✓"
@@ -191,7 +191,7 @@ export function RecommendationCard({
             href={recommendation.url}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)]"
+            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:bg-[rgba(64,52,44,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
           >
             원본 링크 열기
           </a>
@@ -199,10 +199,10 @@ export function RecommendationCard({
             type="button"
             disabled={!onToggleEngagement}
             onClick={() => onToggleEngagement?.(recommendation.id, "fire")}
-            className={`flex items-center justify-center gap-2 border px-4 py-3 text-[0.95rem] font-medium ${
+            className={`flex items-center justify-center gap-2 border px-4 py-3 text-[0.95rem] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] ${
               resolvedEngagement.fire
                 ? "border-[rgba(193,88,67,0.8)] bg-[rgba(193,88,67,0.08)] text-[var(--primary-strong)]"
-                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)]"
+                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)] hover:bg-[rgba(64,52,44,0.04)]"
             }`}
           >
             <span>🔥</span>
@@ -212,10 +212,10 @@ export function RecommendationCard({
             type="button"
             disabled={!onToggleEngagement}
             onClick={() => onToggleEngagement?.(recommendation.id, "save")}
-            className={`flex items-center justify-center border px-4 py-3 text-[0.95rem] font-medium ${
+            className={`flex items-center justify-center border px-4 py-3 text-[0.95rem] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] ${
               resolvedEngagement.save
                 ? "border-[rgba(64,52,44,0.8)] bg-[rgba(64,52,44,0.08)] text-[var(--accent-ink)]"
-                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)]"
+                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)] hover:bg-[rgba(64,52,44,0.04)]"
             }`}
           >
             {resolvedEngagement.save ? "저장됨 ✓" : "저장하기"}
@@ -225,7 +225,7 @@ export function RecommendationCard({
         {linkToMember ? (
           <Link
             href={memberProfileHref}
-            className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)]"
+            className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:text-[var(--primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] md:mt-5"
           >
             <span>이 사람의 다른 추천 보기</span>
             <span className="font-mono">→</span>
