@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
-import { allGenres, platformLabels } from "@/lib/mock-data";
 import {
   createProfileDraft,
   loadStoredProfileDraft,
   persistStoredProfileDraft,
-  PROFILE_STORAGE_VERSION,
-  resetStoredProfileDraft,
 } from "@/lib/profile-drafts";
+import { platformLabels } from "@/lib/mock-data";
 import type { MusicPlatform } from "@/lib/types";
 
 type ProfileEditFormProps = {
@@ -27,11 +25,31 @@ type FormErrors = {
   playlistLinks?: string;
 };
 
-type SaveStatus =
-  | { type: "idle"; message: string }
-  | { type: "saving"; message: string }
-  | { type: "success"; message: string }
-  | { type: "error"; message: string };
+const referenceGenres = [
+  { key: "Indie", label: "#인디" },
+  { key: "City Pop", label: "#시티팝" },
+  { key: "R&B", label: "#R&B" },
+  { key: "Jazz", label: "#재즈" },
+  { key: "Rock/Metal", label: "#록/메탈" },
+  { key: "Electronic", label: "#일렉트로니카" },
+  { key: "K-Pop", label: "#K-Pop" },
+] as const;
+
+function SectionHeader({
+  number,
+  label,
+}: {
+  number: string;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
+      <span>{number}</span>
+      <span className="h-px w-10 bg-[var(--primary-strong)]" />
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export function ProfileEditForm({
   initialNickname,
@@ -39,95 +57,43 @@ export function ProfileEditForm({
   initialFavoriteGenres,
   initialMainPlatform,
   initialPlaylistLinks,
-  mobileStandalone = false,
 }: ProfileEditFormProps) {
   const [nickname, setNickname] = useState(initialNickname);
   const [bio, setBio] = useState(initialBio);
-  const [favoriteGenres, setFavoriteGenres] = useState(
-    initialFavoriteGenres.join(", "),
-  );
   const [mainPlatform, setMainPlatform] =
     useState<MusicPlatform>(initialMainPlatform);
-  const [playlistLinks, setPlaylistLinks] = useState(initialPlaylistLinks);
+  const [playlistLinks, setPlaylistLinks] = useState(
+    initialPlaylistLinks.length > 0 ? initialPlaylistLinks : [""],
+  );
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    initialFavoriteGenres,
+  );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [storageMessage, setStorageMessage] = useState(
-    "profile browser storage active",
-  );
-  const [lastPersistedAt, setLastPersistedAt] = useState<string | null>(null);
-  const [hasHydrated, setHasHydrated] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>({
-    type: "idle",
-    message: "현재 저장은 local mock flow로 동작합니다.",
-  });
-
-  const platformOptions = Object.entries(platformLabels) as Array<
-    [MusicPlatform, string]
-  >;
-  const mobilePlatformOrder: MusicPlatform[] = [
-    "spotify",
-    "apple_music",
-    "youtube_music",
-    "melon",
-    "soundcloud",
-  ];
-  const preferredGenreOrder = [
-    "Jazz",
-    "City Pop",
-    "Soul",
-    "Funk",
-    "Electronic",
-    "Ambient",
-    "Post-Punk",
-    "New Wave",
-    "Indie",
-    "Rock",
-    "Classical",
-    "Blues",
-    "Hip Hop",
-    "R&B",
-    "Folk",
-  ];
-  const selectedGenres = favoriteGenres
-    .split(",")
-    .map((genre) => genre.trim())
-    .filter((genre) => genre.length > 0);
-  const selectedFirst = selectedGenres.filter((genre) => allGenres.includes(genre));
-  const preferred = preferredGenreOrder.filter(
-    (genre) => allGenres.includes(genre) && !selectedFirst.includes(genre),
-  );
-  const remaining = allGenres.filter(
-    (genre) => !selectedFirst.includes(genre) && !preferred.includes(genre),
-  );
-  const mobileGenreOptions = [...selectedFirst, ...preferred, ...remaining].slice(
-    0,
-    15,
-  );
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const initialDraft = {
+    const storedState = loadStoredProfileDraft({
       nickname: initialNickname,
       bio: initialBio,
       favoriteGenres: initialFavoriteGenres,
       mainPlatform: initialMainPlatform,
       playlistLinks: initialPlaylistLinks,
-    };
-    const storedState = loadStoredProfileDraft(initialDraft);
+    });
 
     const hydrationFrame = window.requestAnimationFrame(() => {
       setNickname(storedState.draft.nickname);
       setBio(storedState.draft.bio);
-      setFavoriteGenres(storedState.draft.favoriteGenres.join(", "));
+      setSelectedGenres(storedState.draft.favoriteGenres);
       setMainPlatform(storedState.draft.mainPlatform);
       setPlaylistLinks(
         storedState.draft.playlistLinks.length > 0
           ? storedState.draft.playlistLinks
-          : initialPlaylistLinks,
+          : initialPlaylistLinks.length > 0
+            ? initialPlaylistLinks
+            : [""],
       );
-      setLastPersistedAt(storedState.draft.updatedAt);
-      setStorageMessage(storedState.storageMessage);
-      setHasHydrated(true);
     });
 
     return () => {
@@ -141,32 +107,21 @@ export function ProfileEditForm({
     initialPlaylistLinks,
   ]);
 
-  function updatePlaylistLink(index: number, value: string) {
-    setPlaylistLinks((currentLinks) =>
-      currentLinks.map((link, currentIndex) =>
-        currentIndex === index ? value : link,
-      ),
-    );
-  }
-
-  function addPlaylistLink() {
-    setPlaylistLinks((currentLinks) => [...currentLinks, ""]);
-  }
-
-  function removePlaylistLink(index: number) {
-    setPlaylistLinks((currentLinks) =>
-      currentLinks.filter((_, currentIndex) => currentIndex !== index),
-    );
-  }
+  const platformOrder: MusicPlatform[] = [
+    "spotify",
+    "apple_music",
+    "youtube_music",
+    "soundcloud",
+  ];
+  const renderedPlatforms: MusicPlatform[] =
+    mainPlatform === "melon" ? [...platformOrder, "melon"] : platformOrder;
 
   function toggleGenre(genre: string) {
-    const nextGenres = selectedGenres.includes(genre)
-      ? selectedGenres.filter((selectedGenre) => selectedGenre !== genre)
-      : selectedGenres.length >= 5
-        ? selectedGenres
-        : [...selectedGenres, genre];
-
-    setFavoriteGenres(nextGenres.join(", "));
+    setSelectedGenres((currentGenres) =>
+      currentGenres.includes(genre)
+        ? currentGenres.filter((currentGenre) => currentGenre !== genre)
+        : [...currentGenres, genre],
+    );
   }
 
   function validateForm(): FormErrors {
@@ -208,105 +163,43 @@ export function ProfileEditForm({
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      setSaveStatus({
-        type: "error",
-        message: "필수 입력값과 링크 형식을 먼저 확인해 주세요.",
-      });
+      setSaveMessage("필수 입력값과 링크 형식을 먼저 확인해 주세요.");
       return;
     }
 
     setIsSaving(true);
-    setSaveStatus({
-      type: "saving",
-      message: "프로필을 local mock state 기준으로 저장 중입니다.",
-    });
+    setSaveMessage(null);
 
     await new Promise((resolve) => {
-      setTimeout(resolve, 700);
+      setTimeout(resolve, 500);
     });
 
     startTransition(() => {
-      const nextDraft = createProfileDraft({
-        nickname: nickname.trim(),
-        bio: bio.trim(),
-        favoriteGenres: selectedGenres,
-        mainPlatform,
-        playlistLinks: playlistLinks
-          .map((link) => link.trim())
-          .filter((link) => link.length > 0),
-      });
+      persistStoredProfileDraft(
+        createProfileDraft({
+          nickname: nickname.trim(),
+          bio: bio.trim(),
+          favoriteGenres: selectedGenres,
+          mainPlatform,
+          playlistLinks: playlistLinks
+            .map((link) => link.trim())
+            .filter((link) => link.length > 0),
+        }),
+      );
 
-      persistStoredProfileDraft(nextDraft);
-      setLastPersistedAt(nextDraft.updatedAt);
-      setStorageMessage("saved profile to browser storage");
-      setSaveStatus({
-        type: "success",
-        message: `저장 흐름을 확인했습니다. 마지막 저장 시각: ${new Date().toLocaleTimeString(
-          "ko-KR",
-        )}`,
-      });
       setErrors({});
+      setSaveMessage("저장되었습니다. 이제 추천을 남기고, 다른 사람의 취향도 이어서 볼 수 있습니다.");
     });
 
     setIsSaving(false);
   }
 
-  function handleResetProfileDraft() {
-    resetStoredProfileDraft();
-    setNickname(initialNickname);
-    setBio(initialBio);
-    setFavoriteGenres(initialFavoriteGenres.join(", "));
-    setMainPlatform(initialMainPlatform);
-    setPlaylistLinks(initialPlaylistLinks);
-    setErrors({});
-    setLastPersistedAt(null);
-    setStorageMessage("profile storage cleared and reset to seeded draft");
-    setSaveStatus({
-      type: "idle",
-      message: "저장된 프로필 draft를 지우고 초기 상태로 되돌렸습니다.",
-    });
-  }
-
-  const completionCount = [
-    nickname.trim().length > 0,
-    bio.trim().length > 0,
-    selectedGenres.length > 0,
-    Boolean(mainPlatform),
-    playlistLinks.some((link) => link.trim().length > 0),
-  ].filter(Boolean).length;
-
-  const statusTone =
-    saveStatus.type === "success"
-      ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[color:var(--paper)]"
-      : saveStatus.type === "error"
-        ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
-        : "border-white/10 bg-white/4 text-white/68";
-
-  if (mobileStandalone) {
-    const mobileGenreLabelMap: Record<string, string> = {
-      Indie: "#인디",
-      "City Pop": "#시티팝",
-      "Alt R&B": "#R&B",
-      Jazz: "#재즈",
-      "Rock/Metal": "#록/메탈",
-      Electronic: "#일렉트로니카",
-      "K-Pop": "#K-Pop",
-      "R&B": "#R&B",
-    };
-
-    function formatMobileGenreLabel(genre: string) {
-      if (genre.startsWith("#")) {
-        return genre;
-      }
-
-      return mobileGenreLabelMap[genre] ?? `#${genre.replace(/\s+/g, "")}`;
-    }
-
-    return (
-      <div className="relative min-h-screen bg-[#EBE6D8] text-[#1A1817] md:px-6 md:py-8">
+  return (
+    <div className="min-h-screen bg-[#1A1817] px-0 text-[#1A1817] md:px-8 md:py-8">
+      <section className="relative mx-auto min-h-screen max-w-[390px] overflow-hidden border border-[#1A1817] bg-[#EBE6D8] md:min-h-[calc(100vh-4rem)] md:rounded-[2rem] md:shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-0 -z-10 opacity-50"
+          className="pointer-events-none absolute inset-0 opacity-60"
           style={{
             backgroundImage:
               "linear-gradient(90deg, rgba(26, 24, 23, 0.04) 1px, transparent 1px)",
@@ -314,61 +207,60 @@ export function ProfileEditForm({
           }}
         />
 
-      <section className="mobile-screen bg-[var(--paper)] pb-12 text-[var(--accent-ink)] md:mx-auto md:max-w-5xl md:overflow-hidden md:border md:border-[#1A1817] md:bg-[#EBE6D8] md:pb-16 md:shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
-        <form onSubmit={handleSubmit}>
-          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6 md:px-8 md:py-7">
+        <form onSubmit={handleSubmit} className="relative">
+          <header className="border-b border-[#1A1817] px-6 py-6">
             <div className="flex items-start justify-between gap-4">
-              <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
+              <span className="bg-[#1A1817] px-3 py-2 font-mono text-[0.78rem] font-bold uppercase tracking-[0.14em] text-[#EBE6D8]">
                 ONOCHU
               </span>
-              <p className="text-right font-mono text-[0.76rem] uppercase leading-[1.25] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+              <p className="text-right font-mono text-[0.72rem] uppercase leading-[1.25] tracking-[0.08em] text-[#8C867A]">
                 ESTABLISHED 2024
                 <br />
                 SEOUL / BARCELONA
               </p>
             </div>
-          </section>
+          </header>
 
-          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12 md:px-8 md:py-14 lg:px-10">
-            <h1 className="max-w-[7ch] text-[3.2rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
-              내 취향을 남겨보세요
+          <section className="border-b border-[#1A1817] px-6 py-12">
+            <h1 className="max-w-[7ch] text-[3.15rem] font-bold leading-[1.02] tracking-[-0.07em]">
+              내 취향을
+              <br />
+              남겨보세요
             </h1>
-            <p className="mt-6 max-w-[17rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.58)] md:max-w-[28rem] md:text-[1.06rem]">
+            <p className="mt-4 max-w-[17rem] text-[0.98rem] leading-[1.7] text-[#8C867A]">
               닉네임, 플랫폼, 링크 하나면 충분합니다
               <br />
               여기서부터 취향이 쌓이기 시작합니다
             </p>
           </section>
 
-          <section className="border-b border-[rgba(64,52,44,0.28)] bg-[var(--accent-ink)] px-5 py-8 text-[var(--paper)] md:px-8 md:py-9 lg:px-10">
-            <p className="font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[rgba(235,230,216,0.84)]">
-              Notice
+          <section className="border-b border-[#1A1817] bg-[#1A1817] px-6 py-8 text-[#EBE6D8]">
+            <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em]">
+              NOTICE
             </p>
-            <p className="mt-3 text-[1rem] font-medium leading-8 text-[rgba(235,230,216,0.86)]">
+            <p className="mt-3 text-[0.95rem] font-medium leading-7 text-[rgba(235,230,216,0.9)]">
               처음이라면 간단하게 시작하세요
               <br />
               완벽하게 채우지 않아도 괜찮습니다
             </p>
           </section>
 
-          <div className="px-5 pb-8 pt-10 md:px-8 md:pb-10 md:pt-12 lg:px-10">
-            <div className="flex items-center gap-3 font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
-              <span>01</span>
-              <span className="h-px w-10 bg-[var(--primary-strong)]" />
-              <span>Profile Info</span>
-            </div>
+          <section className="border-b border-[#1A1817] px-6 py-10">
+            <SectionHeader number="01" label="Profile Info" />
 
-            <div className="mt-8 space-y-8 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-8 md:space-y-0">
+            <div className="mt-8 space-y-8">
               <label className="block">
                 <span className="mb-3 block text-[1rem] font-semibold">닉네임</span>
                 <input
                   value={nickname}
                   onChange={(event) => setNickname(event.target.value)}
                   placeholder="다른 멤버들이 부를 이름"
-                  className="mobile-input w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
+                  className="w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
                 />
                 {errors.nickname ? (
-                  <span className="mt-2 block text-sm text-rose-500">{errors.nickname}</span>
+                  <span className="mt-2 block text-sm text-[#C15843]">
+                    {errors.nickname}
+                  </span>
                 ) : null}
               </label>
 
@@ -378,31 +270,31 @@ export function ProfileEditForm({
                   value={bio}
                   onChange={(event) => setBio(event.target.value.slice(0, 150))}
                   placeholder="요즘 듣는 음악이나 취향을 한 줄로 적어보세요"
-                  className="mobile-input w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
+                  className="w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
                 />
               </label>
 
-              <div className="md:col-span-2">
+              <div>
                 <span className="block text-[1rem] font-semibold">선호 장르</span>
-                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
                   여러 개 선택할 수 있습니다
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  {mobileGenreOptions.slice(0, 7).map((genre) => {
-                    const isActive = selectedGenres.includes(genre);
+                  {referenceGenres.map((genre) => {
+                    const isActive = selectedGenres.includes(genre.key);
 
                     return (
                       <button
-                        key={genre}
+                        key={genre.key}
                         type="button"
-                        onClick={() => toggleGenre(genre)}
-                        className={`border px-4 py-3 text-[0.98rem] font-medium ${
+                        onClick={() => toggleGenre(genre.key)}
+                        className={`border px-4 py-3 text-[0.92rem] font-medium ${
                           isActive
-                            ? "border-[var(--accent-ink)] bg-[var(--accent-ink)] text-[var(--paper)]"
-                            : "border-[rgba(64,52,44,0.42)] bg-transparent text-[var(--accent-ink)]"
+                            ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
+                            : "border-[#1A1817] bg-transparent text-[#1A1817]"
                         }`}
                       >
-                        {formatMobileGenreLabel(genre)}
+                        {genre.label}
                       </button>
                     );
                   })}
@@ -411,43 +303,38 @@ export function ProfileEditForm({
 
               <div>
                 <span className="block text-[1rem] font-semibold">주 사용 플랫폼</span>
-                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
                   추천곡을 열 때 기본으로 사용할 플랫폼입니다
                 </p>
                 <div className="mt-4 space-y-3">
-                  {mobilePlatformOrder.map((value) => {
-                    const label = platformLabels[value];
-                    const isActive = mainPlatform === value;
+                  {renderedPlatforms.map((platform) => {
+                    const isActive = mainPlatform === platform;
 
                     return (
                       <button
-                        key={value}
+                        key={platform}
                         type="button"
-                        onClick={() => setMainPlatform(value)}
-                        className={`flex w-full items-center gap-4 border px-5 py-5 text-left ${
+                        onClick={() => setMainPlatform(platform)}
+                        className={`flex w-full items-center gap-4 border px-4 py-5 text-left ${
                           isActive
-                            ? "border-[rgba(193,88,67,0.58)] bg-[rgba(64,52,44,0.04)]"
-                            : "border-[rgba(64,52,44,0.42)]"
-                        }`}
+                            ? "bg-[rgba(26,24,23,0.04)]"
+                            : "bg-transparent"
+                        } border-[#1A1817]`}
                       >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[rgba(64,52,44,0.82)]">
-                          <span
-                            className={`block h-2.5 w-2.5 rounded-full ${
-                            isActive
-                              ? "bg-[var(--primary-strong)]"
-                              : "bg-transparent"
-                          }`}
-                          />
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full border border-[#1A1817]">
+                          {isActive ? (
+                            <span className="block h-2 w-2 rounded-full bg-[var(--primary-strong)]" />
+                          ) : null}
                         </span>
-                        <span className="text-[1rem] font-semibold text-[var(--accent-ink)]">
-                          {label}
+                        <span className="text-[1rem] font-medium">
+                          {platformLabels[platform]}
                         </span>
                       </button>
                     );
                   })}
                 </div>
                 {errors.mainPlatform ? (
-                  <span className="mt-2 block text-sm text-rose-500">
+                  <span className="mt-2 block text-sm text-[#C15843]">
                     {errors.mainPlatform}
                   </span>
                 ) : null}
@@ -455,294 +342,53 @@ export function ProfileEditForm({
 
               <label className="block">
                 <span className="block text-[1rem] font-semibold">플레이리스트 링크</span>
-                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
                   최소 1개 이상 필요합니다
                 </p>
                 <input
                   value={playlistLinks[0] ?? ""}
-                  onChange={(event) => updatePlaylistLink(0, event.target.value)}
-                  className="mobile-input mt-4 w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
+                  onChange={(event) =>
+                    setPlaylistLinks([event.target.value, ...playlistLinks.slice(1)])
+                  }
                   placeholder="Spotify / Apple Music / YouTube Music 등"
+                  className="mt-4 w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
                 />
                 {errors.playlistLinks ? (
-                  <span className="mt-2 block text-sm text-rose-500">
+                  <span className="mt-2 block text-sm text-[#C15843]">
                     {errors.playlistLinks}
                   </span>
                 ) : null}
               </label>
             </div>
-          </div>
+          </section>
 
-          <div className="border-t border-[rgba(64,52,44,0.28)] px-5 pb-10 pt-8 md:px-8 lg:px-10">
-            <div className="relative md:flex md:items-center md:gap-4">
-              <button
-                type="submit"
-                disabled={isSaving || isPending}
-                className="w-full bg-[var(--accent-ink)] px-5 py-5 text-[1.02rem] font-semibold text-[var(--paper)] disabled:opacity-60 md:flex-1"
-              >
-                {isSaving || isPending ? "프로필 저장 중..." : "프로필 저장하기"}
-              </button>
-              <Link
-                href="/profile"
-                className="absolute bottom-[-16px] right-0 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-[var(--paper)] shadow-[4px_4px_0_var(--accent-ink)] md:static md:bottom-auto md:right-auto md:shrink-0"
-              >
-                Profile view ↺
-              </Link>
-            </div>
-
-            <div className="mt-8 space-y-3">
-              {saveStatus.type !== "idle" ? (
-                <div className="border border-[rgba(64,52,44,0.24)] bg-[rgba(64,52,44,0.04)] px-4 py-4 text-[0.95rem] leading-7 text-[var(--accent-ink)]">
-                  {saveStatus.message}
-                </div>
-              ) : null}
-              <button
-                type="button"
-                onClick={handleResetProfileDraft}
-                className="w-full border border-[rgba(64,52,44,0.42)] px-5 py-4 text-[1rem] font-medium text-[var(--accent-ink)]"
-              >
-                입력 초기화
-              </button>
-            </div>
-          </div>
-        </form>
-      </section>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="onochu-panel rounded-[2rem] p-6 md:p-8">
-      <div className="mx-auto max-w-3xl space-y-8">
-        <section className="flex flex-col items-center gap-5 text-center">
-          <div className="relative">
-            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-dashed border-white/15 bg-[radial-gradient(circle_at_top,var(--paper)_0%,var(--primary)_28%,var(--surface)_72%)] text-3xl font-bold uppercase text-black shadow-[0_0_28px_rgba(213,140,116,0.22)]">
-              {nickname.slice(0, 2).toUpperCase() || "ME"}
-            </div>
-            <div className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] text-[11px] font-bold uppercase text-black">
-              Edit
-            </div>
-          </div>
-
-          <div>
-            <h2 className="onochu-display text-4xl font-bold uppercase text-white">
-              Let members know
-              <br />
-              how to start with you.
-            </h2>
-            <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/40">
-              nickname, platform, one link first
-            </p>
-          </div>
-
-          <div className={`w-full rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
-            {saveStatus.message}
-          </div>
-
-          {hasHydrated ? (
-            <div className="w-full rounded-[1.25rem] border border-white/8 bg-white/4 px-4 py-4 text-sm text-white/68">
-              v{PROFILE_STORAGE_VERSION} / {storageMessage}
-              {lastPersistedAt ? (
-                <span className="block pt-2 text-[11px] uppercase tracking-[0.16em] text-white/40">
-                  last persisted {new Date(lastPersistedAt).toLocaleTimeString("ko-KR")}
-                </span>
-              ) : null}
-            </div>
-          ) : null}
-
-          <div className="grid w-full gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
-              닉네임이 보여야 합니다.
-            </div>
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
-              주 플랫폼이 보여야 합니다.
-            </div>
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4 text-sm text-white/72">
-              링크 하나면 시작할 수 있습니다.
-            </div>
-          </div>
-
-          <div className="grid w-full gap-3 sm:grid-cols-[0.8fr_1.2fr]">
-            <div className="rounded-[1.25rem] border border-[color:rgba(213,140,116,0.18)] bg-[color:rgba(213,140,116,0.08)] p-4 text-left">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                Completion
-              </p>
-              <p className="mt-2 text-3xl font-bold text-white">
-                {completionCount}/5
-              </p>
-            </div>
-            <div className="flex items-center justify-between rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-              <p className="max-w-sm text-sm leading-7 text-white/68">
-                local draft가 꼬였을 때는 초기 mock profile로 바로 되돌릴 수
-                있습니다.
-              </p>
-              <button
-                type="button"
-                onClick={handleResetProfileDraft}
-                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
-              >
-                Reset profile
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-6 md:grid-cols-2">
-          <label className="flex flex-col gap-2 text-sm text-white/78">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Nickname
-            </span>
-            <input
-              value={nickname}
-              onChange={(event) => setNickname(event.target.value)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
-              name="nickname"
-              placeholder="Neon curator"
-            />
-            {errors.nickname ? (
-              <span className="text-xs text-rose-200">{errors.nickname}</span>
-            ) : null}
-          </label>
-
-          <div className="flex flex-col gap-2 text-sm text-white/78">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Primary platform
-            </span>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {platformOptions.map(([value, label]) => {
-                const isActive = mainPlatform === value;
-
-                return (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setMainPlatform(value)}
-                    className={`rounded-[1rem] border px-3 py-4 text-center text-[11px] font-bold uppercase tracking-[0.16em] transition ${
-                      isActive
-                        ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[var(--primary)]"
-                        : "border-white/8 bg-[#111111] text-white/55"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-            {errors.mainPlatform ? (
-              <span className="text-xs text-rose-200">{errors.mainPlatform}</span>
-            ) : null}
-            <span className="text-xs leading-6 text-white/48">
-              여기서 고른 플랫폼이 recommendation feed 카드의 기본 열기 플랫폼으로
-              사용됩니다.
-            </span>
-          </div>
-
-          <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Short bio
-            </span>
-            <textarea
-              value={bio}
-              onChange={(event) => setBio(event.target.value)}
-              className="min-h-32 rounded-[1.25rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
-              name="bio"
-              placeholder="Tell the archive what kind of sound you keep returning to."
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm text-white/78 md:col-span-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Favorite genres
-            </span>
-            <input
-              value={favoriteGenres}
-              onChange={(event) => setFavoriteGenres(event.target.value)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-white outline-none"
-              name="favoriteGenres"
-              placeholder="Hip-hop, Jazz Rap, Cloud Rap"
-            />
-          </label>
-        </section>
-
-        <section className="space-y-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-            Quick vibe selection
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {allGenres.slice(0, 8).map((genre) => {
-              const isActive = selectedGenres.includes(genre);
-
-              return (
-                <button
-                  key={genre}
-                  type="button"
-                  onClick={() => toggleGenre(genre)}
-                  className={`rounded-sm px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
-                    isActive ? "onochu-chip-active" : "onochu-chip"
-                  }`}
-                >
-                  {genre}
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Playlist links
-            </span>
+          <section className="px-6 pb-28 pt-8">
             <button
-              type="button"
-              onClick={addPlaylistLink}
-              className="rounded-full border border-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65"
+              type="submit"
+              disabled={isSaving || isPending}
+              className="flex w-full items-center justify-between border border-[#1A1817] bg-[#1A1817] px-5 py-5 text-[1rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
             >
-              Add link
+              <span>{isSaving || isPending ? "저장 중..." : "프로필 저장하기"}</span>
+              <span className="font-mono text-[1rem]">→</span>
             </button>
-          </div>
 
-          {playlistLinks.map((playlistLink, index) => (
-            <div
-              key={`playlist-link-${index + 1}`}
-              className="flex flex-col gap-3 sm:flex-row"
-            >
-              <input
-                value={playlistLink}
-                onChange={(event) => updatePlaylistLink(index, event.target.value)}
-                className="min-w-0 flex-1 rounded-[1rem] border border-white/8 bg-[#111111] px-4 py-4 text-sm text-white outline-none"
-                name={`playlistLink-${index + 1}`}
-                placeholder="https://..."
-              />
-              <button
-                type="button"
-                onClick={() => removePlaylistLink(index)}
-                disabled={playlistLinks.length === 1}
-                className="rounded-[1rem] border border-white/10 px-4 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white/55 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+            {saveMessage ? (
+              <div className="mt-6 border border-[#1A1817] bg-[rgba(26,24,23,0.04)] px-4 py-4 text-[0.9rem] leading-7 text-[#1A1817]">
+                {saveMessage}
+              </div>
+            ) : null}
+          </section>
+        </form>
 
-          {errors.playlistLinks ? (
-            <span className="text-xs text-rose-200">{errors.playlistLinks}</span>
-          ) : null}
-        </section>
+        <Link
+          href="/profile"
+          className="absolute bottom-10 right-4 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-[#EBE6D8] shadow-[4px_4px_0_#1A1817]"
+        >
+          SWITCH VIEW ↺
+        </Link>
 
-        <footer className="space-y-4 pt-2">
-          <button
-            type="submit"
-            disabled={isSaving || isPending}
-            className="onochu-glow w-full rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-6 py-5 text-base font-bold uppercase tracking-[0.16em] text-black disabled:opacity-60"
-          >
-            {isSaving || isPending ? "Saving..." : "Initialize profile"}
-          </button>
-          <p className="text-center text-[11px] uppercase tracking-[0.18em] text-white/35">
-            실제 persistence 없이 입력과 검증 흐름만 먼저 확인합니다.
-          </p>
-        </footer>
-      </div>
-    </form>
+        <div className="absolute inset-x-0 bottom-0 h-1.5 bg-[var(--primary-strong)]" />
+      </section>
+    </div>
   );
 }
