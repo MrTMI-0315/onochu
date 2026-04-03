@@ -303,9 +303,20 @@ export function ProfileEditForm({
     }
 
     return (
-      <section className="mobile-screen bg-[var(--paper)] pb-12 text-[var(--accent-ink)]">
+      <div className="relative min-h-screen bg-[#EBE6D8] text-[#1A1817] md:px-6 md:py-8">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 -z-10 opacity-50"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(26, 24, 23, 0.04) 1px, transparent 1px)",
+            backgroundSize: "8px 100%",
+          }}
+        />
+
+      <section className="mobile-screen bg-[var(--paper)] pb-12 text-[var(--accent-ink)] md:mx-auto md:max-w-5xl md:overflow-hidden md:border md:border-[#1A1817] md:bg-[#EBE6D8] md:pb-16 md:shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
         <form onSubmit={handleSubmit}>
-          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6">
+          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6 md:px-8 md:py-7">
             <div className="flex items-start justify-between gap-4">
               <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
                 ONOCHU
@@ -318,18 +329,18 @@ export function ProfileEditForm({
             </div>
           </section>
 
-          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12">
+          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12 md:px-8 md:py-14 lg:px-10">
             <h1 className="max-w-[7ch] text-[3.2rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
               내 취향을 남겨보세요
             </h1>
-            <p className="mt-6 max-w-[17rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.58)]">
+            <p className="mt-6 max-w-[17rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.58)] md:max-w-[28rem] md:text-[1.06rem]">
               닉네임, 플랫폼, 링크 하나면 충분합니다
               <br />
               여기서부터 취향이 쌓이기 시작합니다
             </p>
           </section>
 
-          <section className="border-b border-[rgba(64,52,44,0.28)] bg-[var(--accent-ink)] px-5 py-8 text-[var(--paper)]">
+          <section className="border-b border-[rgba(64,52,44,0.28)] bg-[var(--accent-ink)] px-5 py-8 text-[var(--paper)] md:px-8 md:py-9 lg:px-10">
             <p className="font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[rgba(235,230,216,0.84)]">
               Notice
             </p>
@@ -340,14 +351,14 @@ export function ProfileEditForm({
             </p>
           </section>
 
-          <div className="px-5 pb-8 pt-10">
+          <div className="px-5 pb-8 pt-10 md:px-8 md:pb-10 md:pt-12 lg:px-10">
             <div className="flex items-center gap-3 font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
               <span>01</span>
               <span className="h-px w-10 bg-[var(--primary-strong)]" />
               <span>Profile Info</span>
             </div>
 
-            <div className="mt-8 space-y-8">
+            <div className="mt-8 space-y-8 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-8 md:space-y-0">
               <label className="block">
                 <span className="mb-3 block text-[1rem] font-semibold">닉네임</span>
                 <input
@@ -371,30 +382,30 @@ export function ProfileEditForm({
                 />
               </label>
 
-              <div>
+              <div className="md:col-span-2">
                 <span className="block text-[1rem] font-semibold">선호 장르</span>
                 <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
                   여러 개 선택할 수 있습니다
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {mobileGenreOptions.slice(0, 7).map((genre) => {
-                  const isActive = selectedGenres.includes(genre);
+                    const isActive = selectedGenres.includes(genre);
 
-                  return (
-                    <button
-                      key={genre}
-                      type="button"
-                      onClick={() => toggleGenre(genre)}
-                      className={`border px-4 py-3 text-[0.98rem] font-medium ${
-                        isActive
-                          ? "border-[var(--accent-ink)] bg-[var(--accent-ink)] text-[var(--paper)]"
-                          : "border-[rgba(64,52,44,0.42)] bg-transparent text-[var(--accent-ink)]"
-                      }`}
-                    >
-                      {formatMobileGenreLabel(genre)}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={genre}
+                        type="button"
+                        onClick={() => toggleGenre(genre)}
+                        className={`border px-4 py-3 text-[0.98rem] font-medium ${
+                          isActive
+                            ? "border-[var(--accent-ink)] bg-[var(--accent-ink)] text-[var(--paper)]"
+                            : "border-[rgba(64,52,44,0.42)] bg-transparent text-[var(--accent-ink)]"
+                        }`}
+                      >
+                        {formatMobileGenreLabel(genre)}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -462,18 +473,18 @@ export function ProfileEditForm({
             </div>
           </div>
 
-          <div className="border-t border-[rgba(64,52,44,0.28)] px-5 pb-10 pt-8">
-            <div className="relative">
+          <div className="border-t border-[rgba(64,52,44,0.28)] px-5 pb-10 pt-8 md:px-8 lg:px-10">
+            <div className="relative md:flex md:items-center md:gap-4">
               <button
                 type="submit"
                 disabled={isSaving || isPending}
-                className="w-full bg-[var(--accent-ink)] px-5 py-5 text-[1.02rem] font-semibold text-[var(--paper)] disabled:opacity-60"
+                className="w-full bg-[var(--accent-ink)] px-5 py-5 text-[1.02rem] font-semibold text-[var(--paper)] disabled:opacity-60 md:flex-1"
               >
                 {isSaving || isPending ? "프로필 저장 중..." : "프로필 저장하기"}
               </button>
               <Link
                 href="/profile"
-                className="absolute bottom-[-16px] right-0 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-[var(--paper)] shadow-[4px_4px_0_var(--accent-ink)]"
+                className="absolute bottom-[-16px] right-0 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-[var(--paper)] shadow-[4px_4px_0_var(--accent-ink)] md:static md:bottom-auto md:right-auto md:shrink-0"
               >
                 Profile view ↺
               </Link>
@@ -496,6 +507,7 @@ export function ProfileEditForm({
           </div>
         </form>
       </section>
+      </div>
     );
   }
 

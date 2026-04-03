@@ -50,9 +50,9 @@ function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
 
 export function SiteNavigation() {
   const pathname = usePathname();
-  const hideDesktopNav = pathname === "/";
   const isProfileRoute = pathname === "/profile" || pathname === "/profile/edit";
   const isMemberDetailRoute = pathname.startsWith("/members/");
+  const hideDesktopNav = pathname === "/" || isProfileRoute || isMemberDetailRoute;
   const hideMobileNav =
     pathname === "/" ||
     pathname === "/recommendations" ||

@@ -174,8 +174,19 @@ export function ArchiveProfileView({
     : "이 사람의 취향을 따라가보세요";
 
   return (
-    <main className="mobile-screen bg-[var(--paper)] pb-14 text-[var(--accent-ink)] md:hidden">
-      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6">
+    <div className="relative min-h-screen bg-[#EBE6D8] text-[#1A1817] md:px-6 md:py-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10 opacity-50"
+        style={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(26, 24, 23, 0.04) 1px, transparent 1px)",
+          backgroundSize: "8px 100%",
+        }}
+      />
+
+      <main className="mobile-screen bg-[var(--paper)] pb-14 text-[var(--accent-ink)] md:mx-auto md:max-w-5xl md:overflow-hidden md:border md:border-[#1A1817] md:bg-[#EBE6D8] md:pb-20 md:shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
+      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6 md:px-8 md:py-7">
         <div className="flex items-start gap-4">
           <Link
             href={selfView ? "/" : "/members"}
@@ -192,22 +203,22 @@ export function ArchiveProfileView({
         </div>
       </section>
 
-      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12">
+      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12 md:px-8 md:py-14 lg:px-10">
         <h1 className="text-[3rem] font-bold leading-[0.96] tracking-[-0.08em] text-[var(--accent-ink)]">
           {formatHandle(displayMember)}
         </h1>
-        <p className="mt-6 max-w-[17rem] text-[1.04rem] leading-[1.7] text-[rgba(64,52,44,0.76)]">
+        <p className="mt-6 max-w-[17rem] text-[1.04rem] leading-[1.7] text-[rgba(64,52,44,0.76)] md:max-w-[31rem] md:text-[1.08rem]">
           {selfView ? displayMember.bio : displayMember.mobileTagline ?? displayMember.bio}
         </p>
       </section>
 
-      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-10">
+      <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-10 md:px-8 md:py-12 lg:px-10">
         <ArchiveSectionLabel number="01" label="Taste Summary" />
         <h2 className="mt-8 text-[2.15rem] font-bold leading-[1.02] tracking-[-0.07em]">
           {summaryTitle}
         </h2>
 
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-6 md:grid md:grid-cols-[minmax(0,1.25fr)_minmax(13rem,0.75fr)] md:gap-10 md:space-y-0">
           <div>
             <p className="font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[rgba(64,52,44,0.38)]">
               Tags
@@ -235,17 +246,17 @@ export function ArchiveProfileView({
         </div>
       </section>
 
-      <section className="border-b border-[rgba(64,52,44,0.28)] bg-[rgba(64,52,44,0.04)] px-5 py-10">
+      <section className="border-b border-[rgba(64,52,44,0.28)] bg-[rgba(64,52,44,0.04)] px-5 py-10 md:px-8 md:py-12 lg:px-10">
         <ArchiveSectionLabel number="02" label="Conversation Starter" />
         <h2 className="mt-8 max-w-[8ch] text-[2.35rem] font-bold leading-[1] tracking-[-0.07em]">
           {conversationTitle}
         </h2>
-        <p className="mt-4 text-[1rem] leading-7 text-[rgba(64,52,44,0.52)]">
+        <p className="mt-4 max-w-[32rem] text-[1rem] leading-7 text-[rgba(64,52,44,0.52)]">
           {conversationCopy}
         </p>
 
         {featuredRecommendation ? (
-          <article className="mt-8 border border-[rgba(64,52,44,0.28)] bg-[var(--paper)] p-5">
+          <article className="mt-8 border border-[rgba(64,52,44,0.28)] bg-[var(--paper)] p-5 md:max-w-3xl md:p-6">
             <div className="flex items-center justify-between gap-4">
               <span className="bg-[var(--accent-ink)] px-3 py-1.5 text-[0.72rem] font-semibold tracking-[0.12em] text-[var(--paper)]">
                 {featuredRecommendation.id.replace("rec-", "REC. ").toUpperCase()}
@@ -283,7 +294,7 @@ export function ArchiveProfileView({
           </article>
         ) : null}
 
-        <div className="mt-6 space-y-3">
+        <div className="mt-6 grid gap-3 md:max-w-3xl md:grid-cols-2">
           <Link
             href={primaryHref}
             className="flex min-h-[4rem] items-center justify-between border border-[rgba(64,52,44,0.9)] bg-[var(--accent-ink)] px-5 py-4 text-[1rem] font-semibold text-[var(--paper)]"
@@ -305,7 +316,7 @@ export function ArchiveProfileView({
       </section>
 
       <section className="border-b border-[rgba(64,52,44,0.28)]">
-        <div className="px-5 py-10">
+        <div className="px-5 py-10 md:px-8 md:py-12 lg:px-10">
           <ArchiveSectionLabel number="03" label="Archive" />
           <h2 className="mt-8 max-w-[8ch] text-[2.2rem] font-bold leading-[1] tracking-[-0.07em]">
             {archiveTitle}
@@ -313,10 +324,11 @@ export function ArchiveProfileView({
         </div>
 
         {archiveRecommendations.length > 0 ? (
-          archiveRecommendations.map((recommendation) => (
+          <div className="md:grid md:grid-cols-2">
+          {archiveRecommendations.map((recommendation) => (
             <article
               key={recommendation.id}
-              className="border-t border-[rgba(64,52,44,0.18)] px-5 py-8 text-[var(--accent-ink)]"
+              className="border-t border-[rgba(64,52,44,0.18)] px-5 py-8 text-[var(--accent-ink)] md:px-8 md:py-10 lg:px-10"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[rgba(64,52,44,0.24)] bg-[rgba(217,210,197,0.7)] text-[0.72rem] font-mono text-[rgba(64,52,44,0.42)]">
@@ -361,23 +373,24 @@ export function ArchiveProfileView({
                 <span>저장 {recommendation.saveCount}</span>
               </div>
             </article>
-          ))
+          ))}
+          </div>
         ) : (
-          <div className="border-t border-[rgba(64,52,44,0.18)] px-5 py-8 text-[1rem] text-[rgba(64,52,44,0.56)]">
+          <div className="border-t border-[rgba(64,52,44,0.18)] px-5 py-8 text-[1rem] text-[rgba(64,52,44,0.56)] md:px-8 lg:px-10">
             아직 남겨진 추천이 없습니다.
           </div>
         )}
 
         <Link
           href="/recommendations"
-          className="flex items-center justify-between border-t border-[rgba(64,52,44,0.18)] px-5 py-6 text-[1rem] font-medium text-[var(--accent-ink)]"
+          className="flex items-center justify-between border-t border-[rgba(64,52,44,0.18)] px-5 py-6 text-[1rem] font-medium text-[var(--accent-ink)] md:px-8 lg:px-10"
         >
           <span>{archiveMoreLabel}</span>
           <span className="font-mono">→</span>
         </Link>
       </section>
 
-      <section className="px-5 pb-24 pt-12">
+      <section className="px-5 pb-24 pt-12 md:px-8 lg:px-10">
         <p className="text-[1.2rem] font-semibold leading-8 text-[var(--accent-ink)]">
           {footerTitle}
         </p>
@@ -386,5 +399,6 @@ export function ArchiveProfileView({
         </p>
       </section>
     </main>
+    </div>
   );
 }
