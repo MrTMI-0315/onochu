@@ -53,12 +53,17 @@ export function SiteNavigation() {
   const isProfileRoute = pathname === "/profile" || pathname === "/profile/edit";
   const isMemberDetailRoute = pathname.startsWith("/members/");
   const isMembersDirectoryRoute = pathname === "/members";
+  const isRecommendationsArchiveRoute =
+    pathname === "/recommendations" || pathname === "/recommendations/new";
   const hideDesktopNav =
-    pathname === "/" || isProfileRoute || isMemberDetailRoute || isMembersDirectoryRoute;
+    pathname === "/" ||
+    isProfileRoute ||
+    isMemberDetailRoute ||
+    isMembersDirectoryRoute ||
+    isRecommendationsArchiveRoute;
   const hideMobileNav =
     pathname === "/" ||
-    pathname === "/recommendations" ||
-    pathname === "/recommendations/new" ||
+    isRecommendationsArchiveRoute ||
     isMembersDirectoryRoute ||
     isProfileRoute ||
     isMemberDetailRoute;
