@@ -7,7 +7,7 @@ const navigationItems = [
   { href: "/", label: "Home" },
   { href: "/recommendations", label: "Recs" },
   { href: "/members", label: "Members" },
-  { href: "/profile/edit", label: "My Profile" },
+  { href: "/profile", label: "My Profile" },
 ];
 
 function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
@@ -51,11 +51,14 @@ function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
 export function SiteNavigation() {
   const pathname = usePathname();
   const hideDesktopNav = pathname === "/";
+  const isProfileRoute = pathname === "/profile" || pathname === "/profile/edit";
+  const isMemberDetailRoute = pathname.startsWith("/members/");
   const hideMobileNav =
     pathname === "/" ||
     pathname === "/recommendations" ||
     pathname === "/recommendations/new" ||
-    pathname === "/profile/edit";
+    isProfileRoute ||
+    isMemberDetailRoute;
 
   return (
     <>
@@ -77,7 +80,8 @@ export function SiteNavigation() {
 
           <nav className="flex items-center justify-self-end rounded-full border border-white/5 bg-black/20 p-1">
             {navigationItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive =
+                item.href === "/profile" ? isProfileRoute : pathname === item.href;
 
               return (
                 <Link
@@ -104,7 +108,8 @@ export function SiteNavigation() {
       >
         <div className="mx-auto grid max-w-md grid-cols-4 border-t border-[color:rgba(109,66,60,0.12)] bg-[rgba(255,255,255,0.96)] px-2 py-2 shadow-[0_-6px_24px_rgba(62,52,48,0.05)] backdrop-blur-xl">
           {navigationItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === "/profile" ? isProfileRoute : pathname === item.href;
 
             return (
               <Link

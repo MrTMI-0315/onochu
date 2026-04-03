@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { allGenres, platformLabels } from "@/lib/mock-data";
 import {
@@ -282,49 +283,78 @@ export function ProfileEditForm({
         : "border-white/10 bg-white/4 text-white/68";
 
   if (mobileStandalone) {
+    const mobileGenreLabelMap: Record<string, string> = {
+      Indie: "#인디",
+      "City Pop": "#시티팝",
+      "Alt R&B": "#R&B",
+      Jazz: "#재즈",
+      "Rock/Metal": "#록/메탈",
+      Electronic: "#일렉트로니카",
+      "K-Pop": "#K-Pop",
+      "R&B": "#R&B",
+    };
+
+    function formatMobileGenreLabel(genre: string) {
+      if (genre.startsWith("#")) {
+        return genre;
+      }
+
+      return mobileGenreLabelMap[genre] ?? `#${genre.replace(/\s+/g, "")}`;
+    }
+
     return (
-      <section className="mobile-screen pb-12 text-[var(--accent-ink)]">
+      <section className="mobile-screen bg-[var(--paper)] pb-12 text-[var(--accent-ink)]">
         <form onSubmit={handleSubmit}>
-          <header className="mobile-section-rule sticky top-0 z-20 flex items-center justify-between bg-[rgba(247,243,236,0.96)] px-5 py-5 backdrop-blur-xl">
-            <button
-              type="button"
-              onClick={() => window.history.back()}
-              className="text-[1.8rem] font-light text-[rgba(64,52,44,0.72)]"
-              aria-label="Go back"
-            >
-              ←
-            </button>
-            <h1 className="text-[1.15rem] font-semibold tracking-[-0.03em]">
-              Edit Profile
-            </h1>
-            <button
-              type="submit"
-              disabled={isSaving || isPending}
-              className="text-[1rem] font-semibold text-[var(--primary-strong)] disabled:opacity-50"
-            >
-              Save
-            </button>
-          </header>
-
-          <div className="px-6 pb-10 pt-8">
-            <section className="flex flex-col items-center gap-4">
-              <div className="flex h-28 w-28 items-center justify-center rounded-[0.14rem] bg-[var(--primary-strong)] text-3xl font-semibold text-[var(--paper)]">
-                {nickname.slice(0, 1).toUpperCase() || "K"}
-              </div>
-              <p className="text-[1rem] text-[rgba(64,52,44,0.54)]">
-                Tap to upload photo
+          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6">
+            <div className="flex items-start justify-between gap-4">
+              <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
+                ONOCHU
+              </span>
+              <p className="text-right font-mono text-[0.76rem] uppercase leading-[1.25] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+                ESTABLISHED 2024
+                <br />
+                SEOUL / BARCELONA
               </p>
-            </section>
+            </div>
+          </section>
 
-            <div className="mobile-section-rule mt-10" />
+          <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12">
+            <h1 className="max-w-[7ch] text-[3.2rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+              내 취향을 남겨보세요
+            </h1>
+            <p className="mt-6 max-w-[17rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.58)]">
+              닉네임, 플랫폼, 링크 하나면 충분합니다
+              <br />
+              여기서부터 취향이 쌓이기 시작합니다
+            </p>
+          </section>
 
-            <div className="mt-10 space-y-6">
+          <section className="border-b border-[rgba(64,52,44,0.28)] bg-[var(--accent-ink)] px-5 py-8 text-[var(--paper)]">
+            <p className="font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[rgba(235,230,216,0.84)]">
+              Notice
+            </p>
+            <p className="mt-3 text-[1rem] font-medium leading-8 text-[rgba(235,230,216,0.86)]">
+              처음이라면 간단하게 시작하세요
+              <br />
+              완벽하게 채우지 않아도 괜찮습니다
+            </p>
+          </section>
+
+          <div className="px-5 pb-8 pt-10">
+            <div className="flex items-center gap-3 font-mono text-[0.76rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
+              <span>01</span>
+              <span className="h-px w-10 bg-[var(--primary-strong)]" />
+              <span>Profile Info</span>
+            </div>
+
+            <div className="mt-8 space-y-8">
               <label className="block">
-                <span className="mb-3 block text-[1rem] font-semibold">Nickname</span>
+                <span className="mb-3 block text-[1rem] font-semibold">닉네임</span>
                 <input
                   value={nickname}
                   onChange={(event) => setNickname(event.target.value)}
-                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
+                  placeholder="다른 멤버들이 부를 이름"
+                  className="mobile-input w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
                 />
                 {errors.nickname ? (
                   <span className="mt-2 block text-sm text-rose-500">{errors.nickname}</span>
@@ -332,31 +362,22 @@ export function ProfileEditForm({
               </label>
 
               <label className="block">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <span className="text-[1rem] font-semibold">Bio</span>
-                  <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
-                    {bio.trim().length}/150
-                  </span>
-                </div>
-                <textarea
+                <span className="mb-3 block text-[1rem] font-semibold">한 줄 소개</span>
+                <input
                   value={bio}
                   onChange={(event) => setBio(event.target.value.slice(0, 150))}
-                  className="mobile-input min-h-28 w-full rounded-[0.14rem] px-5 py-4 text-[1rem] leading-8 outline-none"
+                  placeholder="요즘 듣는 음악이나 취향을 한 줄로 적어보세요"
+                  className="mobile-input w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
                 />
               </label>
-            </div>
 
-            <div className="mobile-section-rule mt-10" />
-
-            <div className="mt-10">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <span className="text-[1rem] font-semibold">Favorite genres</span>
-                <span className="text-[0.95rem] text-[rgba(64,52,44,0.54)]">
-                  Select up to 5
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {mobileGenreOptions.map((genre) => {
+              <div>
+                <span className="block text-[1rem] font-semibold">선호 장르</span>
+                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                  여러 개 선택할 수 있습니다
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {mobileGenreOptions.slice(0, 7).map((genre) => {
                   const isActive = selectedGenres.includes(genre);
 
                   return (
@@ -364,85 +385,73 @@ export function ProfileEditForm({
                       key={genre}
                       type="button"
                       onClick={() => toggleGenre(genre)}
-                    className={`rounded-[0.14rem] px-4 py-3 text-[0.98rem] font-medium ${
-                      isActive ? "mobile-chip-active" : "mobile-chip"
-                    }`}
-                  >
-                      {genre}
+                      className={`border px-4 py-3 text-[0.98rem] font-medium ${
+                        isActive
+                          ? "border-[var(--accent-ink)] bg-[var(--accent-ink)] text-[var(--paper)]"
+                          : "border-[rgba(64,52,44,0.42)] bg-transparent text-[var(--accent-ink)]"
+                      }`}
+                    >
+                      {formatMobileGenreLabel(genre)}
                     </button>
                   );
                 })}
+                </div>
               </div>
-            </div>
 
-            <div className="mobile-section-rule mt-10" />
-
-            <div className="mt-10">
-              <span className="mb-4 block text-[1rem] font-semibold">Main platform</span>
-              <div className="space-y-3">
-                {mobilePlatformOrder.map((value) => {
+              <div>
+                <span className="block text-[1rem] font-semibold">주 사용 플랫폼</span>
+                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                  추천곡을 열 때 기본으로 사용할 플랫폼입니다
+                </p>
+                <div className="mt-4 space-y-3">
+                  {mobilePlatformOrder.map((value) => {
                     const label = platformLabels[value];
                     const isActive = mainPlatform === value;
-                    const descriptions: Partial<Record<MusicPlatform, string>> = {
-                      spotify: "Most popular streaming platform",
-                      apple_music: "High-quality audio",
-                      youtube_music: "Largest music library",
-                      melon: "Korean streaming staple",
-                      soundcloud: "Independent artists",
-                    };
 
                     return (
                       <button
                         key={value}
                         type="button"
                         onClick={() => setMainPlatform(value)}
-                        className={`mobile-platform-option flex w-full items-center justify-between rounded-[0.14rem] px-5 py-5 text-left ${
-                          isActive ? "mobile-platform-option-active" : ""
+                        className={`flex w-full items-center gap-4 border px-5 py-5 text-left ${
+                          isActive
+                            ? "border-[rgba(193,88,67,0.58)] bg-[rgba(64,52,44,0.04)]"
+                            : "border-[rgba(64,52,44,0.42)]"
                         }`}
                       >
-                        <div>
-                          <p
-                            className={`text-[1.02rem] font-semibold ${
-                              isActive
-                                ? "text-[var(--primary-strong)]"
-                                : "text-[var(--accent-ink)]"
-                            }`}
-                          >
-                            {label}
-                          </p>
-                          <p className="mt-1 text-[0.95rem] text-[rgba(64,52,44,0.58)]">
-                            {descriptions[value]}
-                          </p>
-                        </div>
-                        <span
-                          className={`flex h-7 w-7 items-center justify-center rounded-full border ${
-                            isActive
-                              ? "border-[var(--primary-strong)] text-[var(--primary-strong)]"
-                              : "border-[rgba(109,66,60,0.18)] text-transparent"
-                          }`}
-                        >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[rgba(64,52,44,0.82)]">
                           <span
-                            className={`block h-3.5 w-3.5 rounded-full ${
-                              isActive ? "bg-[var(--primary-strong)]" : "bg-transparent"
-                            }`}
+                            className={`block h-2.5 w-2.5 rounded-full ${
+                            isActive
+                              ? "bg-[var(--primary-strong)]"
+                              : "bg-transparent"
+                          }`}
                           />
+                        </span>
+                        <span className="text-[1rem] font-semibold text-[var(--accent-ink)]">
+                          {label}
                         </span>
                       </button>
                     );
                   })}
+                </div>
+                {errors.mainPlatform ? (
+                  <span className="mt-2 block text-sm text-rose-500">
+                    {errors.mainPlatform}
+                  </span>
+                ) : null}
               </div>
-            </div>
 
-            <div className="mobile-section-rule mt-10" />
-
-            <div className="mt-10 space-y-4">
               <label className="block">
-                <span className="mb-3 block text-[1rem] font-semibold">Playlist link</span>
+                <span className="block text-[1rem] font-semibold">플레이리스트 링크</span>
+                <p className="mt-1 text-[0.92rem] text-[rgba(64,52,44,0.48)]">
+                  최소 1개 이상 필요합니다
+                </p>
                 <input
                   value={playlistLinks[0] ?? ""}
                   onChange={(event) => updatePlaylistLink(0, event.target.value)}
-                  className="mobile-input w-full rounded-[0.14rem] px-5 py-4 text-[1rem] outline-none"
-                  placeholder="https://open.spotify.com/playlist/..."
+                  className="mobile-input mt-4 w-full rounded-none border-[0.5px] border-[rgba(64,52,44,0.5)] bg-transparent px-5 py-4 text-[1rem] outline-none"
+                  placeholder="Spotify / Apple Music / YouTube Music 등"
                 />
                 {errors.playlistLinks ? (
                   <span className="mt-2 block text-sm text-rose-500">
@@ -450,26 +459,40 @@ export function ProfileEditForm({
                   </span>
                 ) : null}
               </label>
+            </div>
+          </div>
 
+          <div className="border-t border-[rgba(64,52,44,0.28)] px-5 pb-10 pt-8">
+            <div className="relative">
               <button
                 type="submit"
                 disabled={isSaving || isPending}
-                className="w-full rounded-[0.16rem] bg-[var(--primary-strong)] px-5 py-4 text-[1.05rem] font-semibold text-[var(--paper)] disabled:opacity-60"
+                className="w-full bg-[var(--accent-ink)] px-5 py-5 text-[1.02rem] font-semibold text-[var(--paper)] disabled:opacity-60"
               >
-                {isSaving || isPending ? "Saving..." : "Save changes"}
+                {isSaving || isPending ? "프로필 저장 중..." : "프로필 저장하기"}
               </button>
+              <Link
+                href="/profile"
+                className="absolute bottom-[-16px] right-0 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-[var(--paper)] shadow-[4px_4px_0_var(--accent-ink)]"
+              >
+                Profile view ↺
+              </Link>
+            </div>
+
+            <div className="mt-8 space-y-3">
+              {saveStatus.type !== "idle" ? (
+                <div className="border border-[rgba(64,52,44,0.24)] bg-[rgba(64,52,44,0.04)] px-4 py-4 text-[0.95rem] leading-7 text-[var(--accent-ink)]">
+                  {saveStatus.message}
+                </div>
+              ) : null}
               <button
                 type="button"
                 onClick={handleResetProfileDraft}
-                className="mobile-input w-full rounded-[0.16rem] px-5 py-4 text-[1.05rem] font-medium"
+                className="w-full border border-[rgba(64,52,44,0.42)] px-5 py-4 text-[1rem] font-medium text-[var(--accent-ink)]"
               >
-                Cancel
+                입력 초기화
               </button>
             </div>
-
-            <p className="mt-12 text-center text-[1rem] leading-8 text-[rgba(64,52,44,0.52)]">
-              Your profile helps others discover you through taste
-            </p>
           </div>
         </form>
       </section>
