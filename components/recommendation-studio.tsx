@@ -5,7 +5,6 @@ import Link from "next/link";
 import { RecommendationCard } from "@/components/recommendation-card";
 import {
   getActiveThemeSpotlight,
-  getMemberName,
   themeSpotlights,
 } from "@/lib/mock-data";
 import {
@@ -122,28 +121,7 @@ export function RecommendationStudio({
     });
   }, [engagementByRecommendationId, hasHydrated, latestDraft, localRecommendations]);
 
-  const contributorCounts = useMemo(() => {
-    return localRecommendations.reduce<Record<string, number>>((counts, recommendation) => {
-      counts[recommendation.memberId] = (counts[recommendation.memberId] ?? 0) + 1;
-      return counts;
-    }, {});
-  }, [localRecommendations]);
-
-  const topContributors = useMemo(() => {
-    return Object.entries(contributorCounts)
-      .sort((left, right) => right[1] - left[1])
-      .slice(0, 3);
-  }, [contributorCounts]);
-  const moodHighlights = useMemo(() => {
-    return Array.from(
-      new Set(localRecommendations.flatMap((recommendation) => recommendation.moodTags)),
-    ).slice(0, 8);
-  }, [localRecommendations]);
-
   const activeTheme = getActiveThemeSpotlight() ?? themeSpotlights[0];
-  const queuedThemes = themeSpotlights.filter(
-    (themeSpotlight) => themeSpotlight.id !== activeTheme.id,
-  );
   const savedRecommendationIds = useMemo(() => {
     return new Set(
       Object.entries(engagementByRecommendationId)
@@ -155,16 +133,6 @@ export function RecommendationStudio({
     return new Set(localRecommendations.map((recommendation) => recommendation.memberId))
       .size;
   }, [localRecommendations]);
-  const topPick = localRecommendations[0];
-  const filteredRecommendations = useMemo(() => {
-    if (activeFilter === "saved") {
-      return localRecommendations.filter((recommendation) =>
-        savedRecommendationIds.has(recommendation.id),
-      );
-    }
-
-    return localRecommendations;
-  }, [activeFilter, localRecommendations, savedRecommendationIds]);
   const savedRecommendations = useMemo(() => {
     return localRecommendations.filter((recommendation) =>
       savedRecommendationIds.has(recommendation.id),
@@ -183,8 +151,6 @@ export function RecommendationStudio({
   const mobileFeedRecommendations = activeFilter === "saved"
     ? savedRecommendations
     : localRecommendations;
-  const featuredRecommendations = filteredRecommendations.slice(0, 4);
-  const remainingRecommendations = filteredRecommendations.slice(4);
 
   function handleResetStorage() {
     resetStoredRecommendationState();
@@ -390,413 +356,206 @@ export function RecommendationStudio({
       </main>
 
       <div className="hidden md:block">
-        <main className="min-h-screen px-4 pb-28 pt-24 text-stone-100 md:px-6 md:pb-12 md:pt-28">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8">
-        <section className="onochu-panel relative overflow-hidden rounded-[2rem] p-6 md:p-8">
-          <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[color:rgba(213,140,116,0.14)] blur-[100px]" />
-          <div className="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-sm bg-[var(--primary)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-black">
-                  {activeTheme.phaseLabel ?? "Current Theme"}
-                </span>
-                {activeTheme.relatedEvent ? (
-                  <span className="rounded-sm border border-white/12 bg-black/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/72">
-                    {activeTheme.relatedEvent}
-                  </span>
-                ) : null}
-              </div>
-              <div>
-                <span className="onochu-eyebrow">Recommendation Feed</span>
-                <h1 className="onochu-display mt-4 max-w-3xl text-4xl font-semibold uppercase leading-[0.95] text-white md:text-6xl">
-                  Hear the song, meet the person, keep the context.
+        <main className="min-h-screen bg-[var(--paper)] px-6 pb-28 pt-28 text-[var(--accent-ink)]">
+          <div className="mx-auto max-w-6xl border-x border-[rgba(64,52,44,0.28)]">
+            <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-14">
+                <h1 className="max-w-[7ch] text-[4.75rem] font-bold leading-[0.92] tracking-[-0.09em] text-[var(--accent-ink)]">
+                  추천은 여기서 흐릅니다
                 </h1>
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-                  곡과 추천 이유를 먼저 읽고, 반응한 뒤, 추천인 프로필로
-                  자연스럽게 이어지는 흐름에만 집중하도록 피드 구조를
-                  압축했습니다.
+                <p className="mt-6 max-w-[24rem] text-[1.1rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                  단톡방에 묻힌 추천을 다시 꺼내고, 곡과 사람을 함께 발견하세요
                 </p>
               </div>
-
-              <div className="flex flex-wrap gap-2">
-                {activeTheme.activationWindow ? (
-                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
-                    {activeTheme.activationWindow}
-                  </span>
-                ) : null}
-                {activeTheme.participantSummary ? (
-                  <span className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/62">
-                    {activeTheme.participantSummary}
-                  </span>
-                ) : null}
-              </div>
-
-              {activeTheme.curatorNote ? (
-                <div className="max-w-2xl rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
-                  {activeTheme.curatorNote}
-                </div>
-              ) : null}
-
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/recommendations/new"
-                  className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
-                >
-                  Add your pick
-                </Link>
-                <a
-                  href="#feed-start"
-                  className="rounded-full border border-white/10 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70"
-                >
-                  Jump to feed
-                </a>
-              </div>
-            </div>
-
-            <aside className="grid gap-3">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-[1.25rem] bg-white/5 p-4">
-                  <p className="text-3xl font-bold text-white">
-                    {localRecommendations.length}
-                  </p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                    Total recs
-                  </p>
-                </div>
-                <div className="rounded-[1.25rem] bg-white/5 p-4">
-                  <p className="text-3xl font-bold text-white">
-                    {contributingMembers}
-                  </p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                    Contributors
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-[1.25rem] bg-white/5 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Feed rule
-                </p>
-                <p className="mt-2 text-sm leading-7 text-white/68">
-                  browse-first 구조를 유지하고 작성은 독립 route에서 처리합니다.
-                  local draft와 engagement는 같은 browser storage를 공유합니다.
-                </p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                  v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
-                </p>
-              </div>
-              <div className="rounded-[1.25rem] bg-white/5 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-                  Current campaign
-                </p>
-                <p className="mt-2 text-base font-semibold text-white">
-                  {activeTheme.title}
-                </p>
-                <p className="mt-2 text-sm leading-7 text-white/62">
-                  {activeTheme.relatedEvent ?? activeTheme.participantSummary}
-                </p>
-                <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                  {activeThemeRecommendations.length} theme-linked recs /{" "}
-                  {activeThemeContributorCount} contributors
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleResetStorage}
-                className="rounded-full border border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
-              >
-                Reset local feed
-              </button>
-            </aside>
-          </div>
-        </section>
-
-        {latestDraft ? (
-          <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
-                  Latest local draft
-                </p>
-                <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
-                  Ready At The Top Of The Feed
-                </h2>
-              </div>
-              <Link
-                href="/recommendations/new"
-                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
-              >
-                Open create route
-              </Link>
-            </div>
-            <RecommendationCard
-              recommendation={latestDraft}
-              linkToMember={false}
-              viewerPlatform={viewerPlatform}
-            />
-          </section>
-        ) : null}
-
-        <section className="onochu-panel rounded-[2rem] p-6 md:p-8">
-          <div className="mb-5 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
-                Saved shelf
-              </p>
-              <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
-                Your revisit queue
-              </h2>
-            </div>
-            {savedRecommendations.length > 0 ? (
-              <button
-                type="button"
-                onClick={() => setActiveFilter("saved")}
-                className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 transition hover:border-[color:rgba(213,140,116,0.3)] hover:text-white"
-              >
-                View saved only
-              </button>
-            ) : null}
-          </div>
-
-          {savedRecommendations.length > 0 ? (
-            <div className="grid gap-4 lg:grid-cols-2">
-              {savedRecommendations.slice(0, 2).map((recommendation) => (
-                <RecommendationCard
-                  key={recommendation.id}
-                  recommendation={recommendation}
-                  compact
-                  viewerPlatform={viewerPlatform}
-                  engagement={
-                    engagementByRecommendationId[recommendation.id] ??
-                    createEmptyRecommendationEngagementState()
-                  }
-                  linkToMember
-                  onToggleEngagement={handleToggleEngagement}
+              <div className="bg-[var(--accent-ink)] px-8 py-14 text-[var(--paper)]">
+                <MobileRecommendationSectionLabel
+                  number="01"
+                  label="Weekly Theme"
+                  dark
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">
-              아직 저장한 곡이 없습니다. 먼저 feed에서 Save를 눌러 두면 나중에
-              다시 듣고 싶은 트랙을 여기서 바로 꺼낼 수 있습니다.
-            </div>
-          )}
-        </section>
+                <h2 className="mt-8 max-w-[9ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em]">
+                  이번 주 오노추
+                </h2>
+                <p className="mt-5 max-w-[24rem] text-[1.02rem] leading-[1.85] text-[rgba(235,230,216,0.76)]">
+                  좋은 추천은 혼자 듣고 끝나지 않습니다. 이번 테마에 맞는 곡을 남기고, 다른 멤버의 취향을 같이 들어보세요.
+                </p>
+                <div className="mt-7 flex flex-wrap items-center gap-4">
+                  <Link
+                    href="/recommendations/new"
+                    className="flex min-h-[3.8rem] min-w-[15rem] items-center justify-between border border-[var(--paper)] bg-[var(--paper)] px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+                  >
+                    <span>이번 테마 참여하기</span>
+                    <span className="font-mono text-[1.05rem]">→</span>
+                  </Link>
+                  <span className="font-mono text-[0.78rem] uppercase tracking-[0.08em] text-[rgba(235,230,216,0.56)]">
+                    {activeTheme.participantSummary ??
+                      `${activeThemeContributorCount} participating`}
+                  </span>
+                </div>
+              </div>
+            </section>
 
-        <section id="feed-start" className="space-y-5">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <span className="onochu-eyebrow">Start here</span>
-              <h2 className="onochu-display mt-2 text-3xl font-bold uppercase text-white md:text-4xl">
-                {activeFilter === "saved"
-                  ? "What you saved for later."
-                  : "What the club is listening to now."}
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
-                {activeFilter === "saved"
-                  ? "save한 곡만 다시 꺼내 보면서 링크보다 맥락과 추천인을 먼저 이어 볼 수 있습니다."
-                  : "첫 카드부터 곡, 이유, 추천인 흐름이 바로 보이도록 최근 추천을 위로 올렸습니다."}
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <section className="grid border-b border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-12">
+                <MobileRecommendationSectionLabel number="02" label="Share" />
+                <h2 className="mt-8 max-w-[7ch] text-[3.25rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                  지금 듣고 있는 곡을 남겨보세요
+                </h2>
+                <p className="mt-5 max-w-[22rem] text-[1.04rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                  추천은 길게 설명하지 않아도 됩니다. 한 곡과 한 줄이면 충분합니다.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    href="/recommendations/new"
+                    className="flex min-h-[4rem] max-w-[18rem] items-center justify-between border border-[rgba(64,52,44,0.72)] border-b-[3px] border-b-[rgba(64,52,44,0.92)] px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+                  >
+                    <span>추천 남기기</span>
+                    <span className="font-mono text-[1.05rem]">→</span>
+                  </Link>
+                </div>
+              </div>
+              <div className="px-8 py-12">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
+                      Feed status
+                    </p>
+                    <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em] text-[var(--accent-ink)]">
+                      {localRecommendations.length}
+                    </p>
+                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
+                      추천이 지금 archive에 쌓여 있습니다.
+                    </p>
+                  </div>
+                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
+                      Community
+                    </p>
+                    <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em] text-[var(--accent-ink)]">
+                      {contributingMembers}
+                    </p>
+                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
+                      members have shared tracks in this feed.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                  <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
+                    Runtime
+                  </p>
+                  <p className="mt-3 text-[0.98rem] leading-7 text-[rgba(64,52,44,0.62)]">
+                    v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleResetStorage}
+                    className="mt-5 border border-[rgba(64,52,44,0.72)] px-4 py-3 text-[0.88rem] font-semibold text-[var(--accent-ink)]"
+                  >
+                    local feed reset
+                  </button>
+                </div>
+
+                {latestDraft ? (
+                  <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
+                      Latest draft
+                    </p>
+                    <p className="mt-3 text-[1.2rem] font-semibold text-[var(--accent-ink)]">
+                      {latestDraft.trackTitle}
+                    </p>
+                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
+                      {latestDraft.comment}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+
+            <div className="grid grid-cols-2 border-b border-[rgba(64,52,44,0.28)]">
               <button
                 type="button"
                 onClick={() => setActiveFilter("all")}
-                className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                className={`min-h-[4.25rem] border-r border-[rgba(64,52,44,0.28)] px-4 text-[1.02rem] font-semibold ${
                   activeFilter === "all"
-                    ? "bg-[var(--primary)] text-black"
-                    : "border border-white/10 text-white/55"
+                    ? "bg-[rgba(64,52,44,0.04)] text-[var(--accent-ink)]"
+                    : "text-[rgba(64,52,44,0.48)]"
                 }`}
               >
-                All
+                추천 피드
               </button>
               <button
                 type="button"
                 onClick={() => setActiveFilter("saved")}
-                className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] ${
+                className={`min-h-[4.25rem] px-4 text-[1.02rem] font-semibold ${
                   activeFilter === "saved"
-                    ? "bg-[var(--primary)] text-black"
-                    : "border border-white/10 text-white/55"
+                    ? "bg-[rgba(64,52,44,0.04)] text-[var(--accent-ink)]"
+                    : "text-[rgba(64,52,44,0.48)]"
                 }`}
               >
-                Saved by you {savedRecommendationIds.size > 0 ? savedRecommendationIds.size : ""}
+                저장한 추천
               </button>
             </div>
-          </div>
 
-          {featuredRecommendations.length > 0 ? (
-            <div className="grid gap-4 lg:grid-cols-2">
-              {featuredRecommendations.map((recommendation) => (
-                <RecommendationCard
-                  key={recommendation.id}
-                  recommendation={recommendation}
-                  viewerPlatform={viewerPlatform}
-                  engagement={
-                    engagementByRecommendationId[recommendation.id] ??
-                    createEmptyRecommendationEngagementState()
-                  }
-                  linkToMember
-                  onToggleEngagement={handleToggleEngagement}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-white/3 p-6 text-sm leading-7 text-white/55">
-              아직 save한 곡이 없습니다. feed 카드에서 `Save`를 누르면 여기서
-              다시 꺼내 볼 수 있습니다.
-            </div>
-          )}
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
-          <article className="onochu-panel rounded-[1.75rem] p-5">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-                  Feed context
-                </p>
-                <h2 className="onochu-display mt-2 text-2xl font-bold uppercase text-white">
-                  Top pick and queue
-                </h2>
-              </div>
-              <Link
-                href="/recommendations/new"
-                className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45"
-              >
-                Create route
-              </Link>
-            </div>
-
-            <div className="mt-5 rounded-[1.5rem] border border-white/8 bg-white/4 p-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
-                Top editorial pick
-              </p>
-              <h3 className="onochu-display mt-3 text-3xl font-bold uppercase text-white">
-                {topPick.trackTitle}
-              </h3>
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/40">
-                {topPick.artistName}
-              </p>
-              <p className="mt-4 text-sm leading-7 text-white/68">
-                &ldquo;{topPick.comment}&rdquo;
-              </p>
-            </div>
-
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {queuedThemes.map((themeSpotlight) => (
-                <article
-                  key={themeSpotlight.id}
-                  className="rounded-[1.25rem] border border-white/8 bg-black/20 p-4"
-                >
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">
-                    {themeSpotlight.phaseLabel ?? "Queued"}
-                  </p>
-                  <h3 className="mt-2 text-sm font-semibold text-white">
-                    {themeSpotlight.title}
-                  </h3>
-                  <p className="mt-2 text-xs uppercase tracking-[0.16em] text-white/42">
-                    {themeSpotlight.relatedEvent ?? "Weekly curation"}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <div className="grid gap-4">
-            <article className="onochu-panel rounded-[1.75rem] p-5">
-              <h2 className="onochu-display text-2xl font-bold uppercase text-white">
-                Top contributors
-              </h2>
-              <div className="mt-4 grid gap-3">
-                {topContributors.map(([memberId, count]) => (
-                  <div
-                    key={memberId}
-                    className="rounded-[1.25rem] bg-white/4 p-4"
-                  >
-                    <p className="text-sm font-semibold text-white">
-                      {getMemberName(memberId)}
-                    </p>
-                    <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-white/40">
-                      {count} recs in the feed
-                    </p>
+            <section id="feed-start">
+              {mobileFeedRecommendations.length > 0 ? (
+                mobileFeedRecommendations.map((recommendation) => (
+                  <RecommendationCard
+                    key={recommendation.id}
+                    recommendation={recommendation}
+                    mobileSimple
+                    viewerPlatform={viewerPlatform}
+                    engagement={
+                      engagementByRecommendationId[recommendation.id] ??
+                      createEmptyRecommendationEngagementState()
+                    }
+                    onToggleEngagement={handleToggleEngagement}
+                  />
+                ))
+              ) : (
+                <div className="border-b border-[rgba(64,52,44,0.18)] px-8 py-14">
+                  <div className="max-w-2xl border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-8 py-10 text-[1rem] leading-8 text-[rgba(64,52,44,0.68)]">
+                    아직 저장한 추천이 없습니다. 추천 피드에서 저장해 두면 이 영역에서 다시 꺼내 볼 수 있습니다.
                   </div>
-                ))}
-              </div>
-            </article>
+                </div>
+              )}
+            </section>
 
-            <article className="onochu-panel rounded-[1.75rem] p-5">
-              <h2 className="onochu-display text-2xl font-bold uppercase text-white">
-                Mood highlights
-              </h2>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {moodHighlights.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-sm border border-white/8 bg-white/5 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </article>
-
-            <article className="rounded-[1.75rem] border border-[color:rgba(213,140,116,0.16)] bg-[color:rgba(213,140,116,0.08)] p-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
-                Contribute next
-              </p>
-              <h2 className="onochu-display mt-3 text-2xl font-bold uppercase text-white">
-                Use the dedicated create route.
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-white/68">
-                feed에서는 지금 흐르는 추천을 읽는 데 집중하고, 작성은 별도
-                화면에서 빠르게 끝내도록 분리했습니다. 현재 작성자는{" "}
-                {currentMember.nickname}으로 가정합니다.
-              </p>
-              <div className="mt-4 rounded-[1.25rem] border border-white/8 bg-black/20 p-4 text-sm leading-7 text-white/68">
-                현재 테마 <span className="font-semibold text-white">{activeTheme.title}</span>
-                에는 {activeThemeRecommendations.length}개의 연결된 추천과{" "}
-                {activeThemeContributorCount}명의 참여자가 있습니다.
-              </div>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link
-                  href="/recommendations/new"
-                  className="rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-black"
-                >
-                  Open create route
-                </Link>
-                <span className="rounded-full border border-white/10 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
-                  {allMembers.length} member profiles seeded
-                </span>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        {remainingRecommendations.length > 0 ? (
-          <section className="space-y-5">
-            <div>
-              <span className="onochu-eyebrow">Archive continues</span>
-              <h2 className="onochu-display mt-2 text-3xl font-bold uppercase text-white">
-                Keep digging.
-              </h2>
-            </div>
-            <div className="grid gap-4 lg:grid-cols-2">
-              {remainingRecommendations.map((recommendation) => (
-                <RecommendationCard
-                  key={recommendation.id}
-                  recommendation={recommendation}
-                  viewerPlatform={viewerPlatform}
-                  engagement={
-                    engagementByRecommendationId[recommendation.id] ??
-                    createEmptyRecommendationEngagementState()
-                  }
-                  linkToMember
-                  onToggleEngagement={handleToggleEngagement}
+            <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-2">
+              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-12">
+                <MobileRecommendationSectionLabel
+                  number="03"
+                  label="Cross-platform"
                 />
-              ))}
-            </div>
-          </section>
-        ) : null}
-      </div>
+                <h2 className="mt-8 max-w-[10ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                  플랫폼이 달라도 괜찮습니다
+                </h2>
+                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                  곡명과 아티스트로 바로 찾아 듣을 수 있습니다. Onochu는 링크보다 청취 흐름이 먼저 이어지도록 설계되었습니다.
+                </p>
+              </div>
+              <div className="px-8 py-12">
+                <MobileRecommendationSectionLabel number="04" label="Archive" />
+                <h2 className="mt-8 max-w-[8ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                  좋은 추천은 사라지지 않습니다
+                </h2>
+                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                  Onochu에서는 취향이 계속 이어집니다. 추천 하나, 사람 하나, 저장한 트랙 하나가 계속 다음 대화로 연결됩니다.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-3 font-mono text-[0.76rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.58)]">
+                    {allMembers.length} member profiles
+                  </span>
+                  <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-3 font-mono text-[0.76rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.58)]">
+                    {savedRecommendations.length} saved picks
+                  </span>
+                  <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-3 font-mono text-[0.76rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.58)]">
+                    viewing as {currentMember.nickname}
+                  </span>
+                </div>
+              </div>
+            </section>
+          </div>
         </main>
       </div>
     </>
