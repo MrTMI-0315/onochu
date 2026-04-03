@@ -67,7 +67,7 @@ export function MemberCard({
   }
 
   return (
-    <article className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.12)] p-6 transition duration-200 hover:bg-[rgba(255,255,255,0.2)] focus-within:bg-[rgba(255,255,255,0.2)]">
+    <article className="border-b border-[rgba(64,52,44,0.18)] px-8 py-8 transition duration-200 hover:bg-[rgba(64,52,44,0.03)] focus-within:bg-[rgba(64,52,44,0.03)]">
       <div className="flex items-start gap-5">
         <div className="flex h-18 w-18 shrink-0 items-center justify-center border border-[rgba(64,52,44,0.22)] bg-[rgba(64,52,44,0.05)] font-mono text-[0.74rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.42)] md:h-20 md:w-20">
           ART
@@ -76,7 +76,7 @@ export function MemberCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
-              <h2 className="text-[2rem] font-bold leading-[0.98] tracking-[-0.07em] text-[var(--accent-ink)] md:text-[2.3rem]">
+              <h2 className="text-[2rem] font-bold leading-[0.98] tracking-[-0.07em] text-[var(--accent-ink)] md:text-[2.15rem]">
                 {member.nickname}
               </h2>
               <p className="mt-2 text-[1rem] leading-7 text-[rgba(64,52,44,0.58)]">
@@ -88,8 +88,8 @@ export function MemberCard({
             </span>
           </div>
 
-          <p className="mt-5 max-w-[32rem] text-[1.02rem] leading-8 text-[rgba(64,52,44,0.84)]">
-            {member.bio}
+          <p className="mt-5 max-w-[34rem] text-[1rem] leading-8 text-[rgba(64,52,44,0.84)]">
+            {member.mobileTagline ?? member.bio}
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
@@ -103,7 +103,7 @@ export function MemberCard({
             ))}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[rgba(64,52,44,0.2)] pt-4">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[rgba(64,52,44,0.2)] pt-5">
             <div className="flex items-center gap-4 text-[0.96rem] text-[rgba(64,52,44,0.64)]">
               <span className="text-[var(--primary-strong)]">↗</span>
               <span>{trackCount} shared tracks</span>
@@ -114,13 +114,13 @@ export function MemberCard({
                 href={member.playlistLinks[0]?.url}
                 target="_blank"
                 rel="noreferrer"
-                className="border border-[rgba(64,52,44,0.22)] px-4 py-3 text-[0.92rem] font-medium text-[var(--accent-ink)]"
+                className="border border-[rgba(64,52,44,0.22)] px-4 py-3 text-[0.92rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:bg-[rgba(64,52,44,0.04)]"
               >
                 플레이리스트 보기
               </a>
               <Link
                 href={`/members/${member.id}`}
-                className="flex items-center gap-3 border border-[rgba(64,52,44,0.82)] bg-[var(--accent-ink)] px-4 py-3 text-[0.92rem] font-medium text-[var(--paper)]"
+                className="flex items-center gap-3 border border-[rgba(64,52,44,0.82)] bg-[var(--accent-ink)] px-4 py-3 text-[0.92rem] font-medium text-[var(--paper)] transition-colors duration-200 hover:bg-[var(--primary-strong)]"
               >
                 <span>프로필 보기</span>
                 <span className="font-mono text-[1rem]">→</span>

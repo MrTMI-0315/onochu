@@ -238,7 +238,7 @@ export function ArchiveProfileView({
           </div>
         </section>
 
-        <section className="border-b border-[#1A1817] px-6 py-12 md:px-8 md:py-16">
+        <section className="border-b border-[#1A1817] px-6 py-12 md:px-8 md:py-14">
           <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-end">
             <div>
               <h1 className="max-w-[8ch] text-[3.2rem] font-bold leading-[0.95] tracking-[-0.07em] md:text-[4.9rem]">
@@ -270,9 +270,9 @@ export function ArchiveProfileView({
           </div>
         </section>
 
-        <section className="border-b border-[#1A1817] px-6 py-10 md:px-8 md:py-12">
+        <section className="border-b border-[#1A1817] px-6 py-10 md:px-8 md:py-10">
           <SectionHeader number="01" label="Taste Summary" />
-          <div className="mt-6 grid gap-8 md:grid-cols-[1fr_0.7fr]">
+          <div className="mt-6 grid gap-6 md:grid-cols-[1fr_0.7fr]">
             <div>
               <h2 className="text-[2.25rem] font-bold leading-[1.03] tracking-[-0.05em] md:text-[3rem]">
                 {summaryTitle}
@@ -300,9 +300,9 @@ export function ArchiveProfileView({
           </div>
         </section>
 
-        <section className="border-b border-[#1A1817] bg-[rgba(26,24,23,0.04)] px-6 py-10 md:px-8 md:py-12">
+        <section className="border-b border-[#1A1817] bg-[rgba(26,24,23,0.04)] px-6 py-10 md:px-8 md:py-10">
           <SectionHeader number="02" label="Conversation Starter" />
-          <div className="mt-6 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
             <div>
               <h2 className="max-w-[9ch] text-[2.45rem] font-bold leading-[1.03] tracking-[-0.06em] md:text-[3.2rem]">
                 이 사람과 대화를 시작해보세요
@@ -314,7 +314,7 @@ export function ArchiveProfileView({
 
             <div>
               {featuredRecommendation ? (
-                <article className="border border-[#1A1817] bg-[#EBE6D8] p-6">
+                <article className="border border-[#1A1817] bg-[#EBE6D8] p-6 md:p-5">
                   <div className="flex items-center justify-between gap-4">
                     <span className="bg-[#1A1817] px-3 py-1.5 font-mono text-[0.68rem] text-[#EBE6D8]">
                       {featuredRecommendation.id.replace("rec-", "REC. ").toUpperCase()}
@@ -375,7 +375,7 @@ export function ArchiveProfileView({
         </section>
 
         <section className="border-b border-[#1A1817]">
-          <div className="px-6 pt-10 md:px-8 md:pt-12">
+          <div className="px-6 pt-10 md:px-8 md:pt-10">
             <SectionHeader number="03" label="Archive" />
             <h2 className="mt-6 text-[2.3rem] font-bold leading-[1.03] tracking-[-0.05em] md:text-[3rem]">
               {archiveTitle}
@@ -404,7 +404,7 @@ export function ArchiveProfileView({
           </Link>
         </section>
 
-        <section className="px-6 pb-24 pt-12 md:px-8 md:pb-28">
+        <section className="px-6 pb-24 pt-12 md:px-8 md:pb-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-[1.18rem] font-semibold leading-8">{footerTitle}</p>
