@@ -52,11 +52,14 @@ export function SiteNavigation() {
   const pathname = usePathname();
   const isProfileRoute = pathname === "/profile" || pathname === "/profile/edit";
   const isMemberDetailRoute = pathname.startsWith("/members/");
-  const hideDesktopNav = pathname === "/" || isProfileRoute || isMemberDetailRoute;
+  const isMembersDirectoryRoute = pathname === "/members";
+  const hideDesktopNav =
+    pathname === "/" || isProfileRoute || isMemberDetailRoute || isMembersDirectoryRoute;
   const hideMobileNav =
     pathname === "/" ||
     pathname === "/recommendations" ||
     pathname === "/recommendations/new" ||
+    isMembersDirectoryRoute ||
     isProfileRoute ||
     isMemberDetailRoute;
 
