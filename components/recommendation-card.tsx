@@ -53,11 +53,22 @@ export function RecommendationCard({
     recommendation,
     preferredPlatform: viewerPlatform,
   });
-  const initials = memberName.slice(0, 1).toUpperCase();
   const mobileComment = recommendation.mobileComment || recommendation.comment;
   const searchQuery =
     recommendation.searchQuery?.trim() ||
     `${recommendation.trackTitle} ${recommendation.artistName}`.trim();
+  const mobileRecordId = recommendation.id.startsWith("rec-")
+    ? `REC. ${recommendation.id.slice(4).padStart(3, "0")}`
+    : recommendation.id.toUpperCase();
+  const mobileDateLabel = new Intl.DateTimeFormat("ko-KR", {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(new Date(recommendation.createdAt))
+    .replace(/\.\s/g, ".")
+    .replace(/\.$/, "");
+  const memberHandle = `@${memberName.toLowerCase().replace(/\s+/g, "_")}`;
   const resolvedPlatformLabel = viewerPlatform
     ? platformLabels[viewerPlatform]
     : platformLabels[recommendation.platform];
@@ -93,116 +104,138 @@ export function RecommendationCard({
 
   if (mobileSimple) {
     return (
-      <article className="mobile-card rounded-[0.16rem] p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.72)] text-sm font-semibold text-[var(--primary-strong)]">
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-[1.02rem] font-semibold text-[var(--accent-ink)]">
-                {memberName}
-              </p>
-            </div>
+      <article className="border-b border-[rgba(64,52,44,0.18)] px-4 py-6 text-[var(--accent-ink)]">
+        <div className="flex items-center justify-between gap-4">
+          <span className="bg-[var(--accent-ink)] px-3 py-1.5 text-[0.72rem] font-semibold tracking-[0.12em] text-[var(--paper)]">
+            {mobileRecordId}
+          </span>
+          <span className="font-mono text-[0.72rem] tracking-[0.04em] text-[rgba(64,52,44,0.48)]">
+            {mobileDateLabel}
+          </span>
+        </div>
+
+        <div className="mt-5 flex items-center gap-4">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-[rgba(64,52,44,0.24)] bg-[rgba(217,210,197,0.7)] text-[0.72rem] font-mono text-[rgba(64,52,44,0.42)]">
+            ART
           </div>
+          <div className="min-w-0">
+            <h3 className="text-[1.9rem] font-bold tracking-[-0.06em] text-[var(--accent-ink)]">
+              {recommendation.trackTitle}
+            </h3>
+            <p className="mt-1 text-[1rem] text-[rgba(64,52,44,0.58)]">
+              {recommendation.artistName}
+            </p>
+          </div>
+        </div>
+
+        <ul className="mt-6 space-y-4">
+          <li className="space-y-1">
+            <p className="text-[0.88rem] font-medium text-[rgba(64,52,44,0.56)]">
+              이 곡을 남긴 사람:
+            </p>
+            <p className="flex items-start gap-2 text-[1rem] text-[rgba(64,52,44,0.92)]">
+              <span className="font-mono text-[var(--primary-strong)]">→</span>
+              <span>{memberHandle}</span>
+            </p>
+          </li>
+          <li className="space-y-1">
+            <p className="text-[0.88rem] font-medium text-[rgba(64,52,44,0.56)]">
+              추천 한 줄:
+            </p>
+            <p className="flex items-start gap-2 text-[1rem] leading-7 text-[rgba(64,52,44,0.92)]">
+              <span className="font-mono text-[var(--primary-strong)]">→</span>
+              <span>{mobileComment}</span>
+            </p>
+          </li>
+          <li className="space-y-2">
+            <p className="text-[0.88rem] font-medium text-[rgba(64,52,44,0.56)]">
+              태그:
+            </p>
+            <div className="flex items-start gap-2">
+              <span className="pt-1 font-mono text-[var(--primary-strong)]">→</span>
+              <div className="flex flex-wrap gap-2">
+                {recommendation.moodTags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.04)] px-2 py-1 text-[0.82rem] text-[rgba(64,52,44,0.84)]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div className="mt-6 grid grid-cols-2 gap-2">
           <a
             href={resolvedLink.href}
             target="_blank"
             rel="noreferrer"
-            className="rounded-[0.2rem] border border-[rgba(109,66,60,0.12)] bg-white px-3 py-1.5 text-[0.9rem] font-medium text-[rgba(64,52,44,0.72)]"
+            className="col-span-2 flex items-center justify-center border border-[rgba(64,52,44,0.9)] bg-[var(--accent-ink)] px-4 py-3 text-[0.95rem] font-semibold text-[var(--paper)]"
           >
-            {resolvedPlatformLabel}
+            내 플랫폼에서 찾기
           </a>
-        </div>
-
-        <div className="mt-5">
-          <h3 className="text-[1.45rem] font-semibold tracking-[-0.045em] text-[var(--accent-ink)]">
-            {recommendation.trackTitle}
-          </h3>
-          <p className="mt-1 text-[0.98rem] text-[rgba(64,52,44,0.68)]">
-            {recommendation.artistName}
-          </p>
-        </div>
-
-        <p className="mt-5 max-w-[18rem] text-[0.98rem] leading-[1.7] text-[rgba(64,52,44,0.92)]">
-          {mobileComment}
-        </p>
-
-        <div className="mt-5 flex flex-wrap gap-2">
-          {recommendation.moodTags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="rounded-[0.16rem] bg-[rgba(213,140,116,0.08)] px-3 py-1.5 text-[0.88rem] font-medium text-[var(--primary-strong)]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-5 flex items-start justify-between gap-3 rounded-[0.18rem] border border-[rgba(109,66,60,0.12)] bg-[rgba(241,233,210,0.58)] px-4 py-3">
-          <div className="min-w-0">
-            <p className="text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-[rgba(64,52,44,0.5)]">
-              Search handoff
-            </p>
-            <p
-              className="mt-1 truncate text-[0.94rem] leading-6 text-[rgba(64,52,44,0.8)]"
-              title={searchQuery}
-            >
-              {searchQuery}
-            </p>
-            <p className="mt-1 text-[0.8rem] leading-5 text-[rgba(64,52,44,0.56)]">
-              {resolvedLink.isFallback
-                ? `Use this to search on ${resolvedPlatformLabel}`
-                : "Keep this ready if the source link is unavailable"}
-            </p>
-          </div>
           <button
             type="button"
             onClick={handleCopySearchQuery}
-            className="shrink-0 text-[0.82rem] font-semibold text-[var(--primary-strong)]"
+            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)]"
           >
             {copyStatus === "copied"
-              ? "Copied"
+              ? "복사됨 ✓"
               : copyStatus === "failed"
-                ? "Retry"
-                : "Copy"}
+                ? "복사 재시도"
+                : "곡명/아티스트 복사"}
           </button>
-        </div>
-
-        <div className="mt-6 flex items-center justify-between border-t border-[rgba(109,66,60,0.12)] pt-4">
+          <a
+            href={recommendation.url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)]"
+          >
+            원본 링크 열기
+          </a>
           <button
             type="button"
             disabled={!onToggleEngagement}
             onClick={() => onToggleEngagement?.(recommendation.id, "fire")}
-            className="flex items-center gap-2 text-[1rem] text-[rgba(64,52,44,0.76)]"
+            className={`flex items-center justify-center gap-2 border px-4 py-3 text-[0.95rem] font-medium ${
+              resolvedEngagement.fire
+                ? "border-[rgba(193,88,67,0.8)] bg-[rgba(193,88,67,0.08)] text-[var(--primary-strong)]"
+                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)]"
+            }`}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-              <path
-                d="M12 20s-6.5-4.2-8.6-8.1C1.9 8.9 4 6 7.1 6c1.9 0 3.1 1 3.9 2 0.8-1 2-2 3.9-2 3.1 0 5.2 2.9 3.7 5.9C18.5 15.8 12 20 12 20Z"
-                stroke={resolvedEngagement.fire ? "var(--primary-strong)" : "rgba(64,52,44,0.62)"}
-                strokeWidth="1.8"
-                fill={resolvedEngagement.fire ? "rgba(183,106,85,0.14)" : "transparent"}
-              />
-            </svg>
-            <span>{recommendation.reactionCount}</span>
+            <span>🔥</span>
+            <span>{resolvedEngagement.fire ? "반응함" : "반응하기"}</span>
           </button>
-
           <button
             type="button"
             disabled={!onToggleEngagement}
             onClick={() => onToggleEngagement?.(recommendation.id, "save")}
-            className="text-[rgba(64,52,44,0.76)]"
+            className={`flex items-center justify-center border px-4 py-3 text-[0.95rem] font-medium ${
+              resolvedEngagement.save
+                ? "border-[rgba(64,52,44,0.8)] bg-[rgba(64,52,44,0.08)] text-[var(--accent-ink)]"
+                : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)]"
+            }`}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-              <path
-                d="M7 4.5h10v15l-5-3.1-5 3.1v-15Z"
-                stroke={resolvedEngagement.save ? "var(--primary-strong)" : "rgba(64,52,44,0.62)"}
-                strokeWidth="1.8"
-                fill={resolvedEngagement.save ? "rgba(183,106,85,0.14)" : "transparent"}
-              />
-            </svg>
+            {resolvedEngagement.save ? "저장됨 ✓" : "저장하기"}
           </button>
         </div>
+
+        {linkToMember ? (
+          <Link
+            href={memberProfileHref}
+            className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)]"
+          >
+            <span>이 사람의 다른 추천 보기</span>
+            <span className="font-mono">→</span>
+          </Link>
+        ) : (
+          <div className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)]">
+            <span>이 프로필의 추천 흐름 유지</span>
+            <span className="font-mono">→</span>
+          </div>
+        )}
       </article>
     );
   }

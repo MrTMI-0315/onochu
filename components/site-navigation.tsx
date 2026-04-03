@@ -53,6 +53,7 @@ export function SiteNavigation() {
   const hideDesktopNav = pathname === "/";
   const hideMobileNav =
     pathname === "/" ||
+    pathname === "/recommendations" ||
     pathname === "/recommendations/new" ||
     pathname === "/profile/edit";
 

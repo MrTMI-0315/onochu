@@ -30,16 +30,39 @@ type RecommendationStudioProps = {
   initialRecommendations: SongRecommendation[];
 };
 
+function MobileRecommendationSectionLabel({
+  number,
+  label,
+  dark = false,
+}: {
+  number: string;
+  label: string;
+  dark?: boolean;
+}) {
+  const lineClass = dark
+    ? "bg-[rgba(235,230,216,0.58)]"
+    : "bg-[var(--primary-strong)]";
+  const textClass = dark
+    ? "text-[rgba(235,230,216,0.78)]"
+    : "text-[var(--primary-strong)]";
+
+  return (
+    <div
+      className={`flex items-center gap-3 font-mono text-[0.76rem] uppercase tracking-[0.16em] ${textClass}`}
+    >
+      <span>{number}</span>
+      <span className={`h-px w-10 ${lineClass}`} />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 export function RecommendationStudio({
   allMembers,
   currentMember,
   initialRecommendations,
 }: RecommendationStudioProps) {
   const [activeFilter, setActiveFilter] = useState<"all" | "saved">("all");
-  const [feedSearch, setFeedSearch] = useState("");
-  const [mobileCategory, setMobileCategory] = useState<
-    "all" | "jazz" | "electronic" | "rock" | "saved"
-  >("all");
   const [localRecommendations, setLocalRecommendations] =
     useState<SongRecommendation[]>(initialRecommendations);
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
@@ -52,7 +75,6 @@ export function RecommendationStudio({
   const [storageMessage, setStorageMessage] = useState(
     "browser storage active",
   );
-  const normalizedFeedSearch = feedSearch.trim().toLowerCase();
 
   useEffect(() => {
     const storedState = loadStoredRecommendationState(initialRecommendations);
@@ -112,12 +134,6 @@ export function RecommendationStudio({
       .sort((left, right) => right[1] - left[1])
       .slice(0, 3);
   }, [contributorCounts]);
-  const memberById = useMemo(() => {
-    return Object.fromEntries(
-      allMembers.map((member) => [member.id, member]),
-    ) as Record<string, MemberProfile>;
-  }, [allMembers]);
-
   const moodHighlights = useMemo(() => {
     return Array.from(
       new Set(localRecommendations.flatMap((recommendation) => recommendation.moodTags)),
@@ -154,68 +170,6 @@ export function RecommendationStudio({
       savedRecommendationIds.has(recommendation.id),
     );
   }, [localRecommendations, savedRecommendationIds]);
-  const mobileFeedRecommendations = useMemo(() => {
-    return localRecommendations.filter((recommendation) => {
-      const member = memberById[recommendation.memberId];
-      const haystack = [
-        recommendation.trackTitle,
-        recommendation.artistName,
-        recommendation.comment,
-        recommendation.memberNickname,
-        member?.nickname,
-      ]
-        .join(" ")
-        .toLowerCase();
-      const matchesSearch =
-        normalizedFeedSearch.length === 0 || haystack.includes(normalizedFeedSearch);
-
-      if (!matchesSearch) {
-        return false;
-      }
-
-      if (mobileCategory === "saved") {
-        return savedRecommendationIds.has(recommendation.id);
-      }
-
-      if (mobileCategory === "all") {
-        return true;
-      }
-
-      const genres = member?.favoriteGenres.map((genre) => genre.toLowerCase()) ?? [];
-
-      if (mobileCategory === "jazz") {
-        return genres.some(
-          (genre) => genre.includes("jazz") || genre.includes("soul"),
-        );
-      }
-
-      if (mobileCategory === "electronic") {
-        return genres.some(
-          (genre) =>
-            genre.includes("electro") ||
-            genre.includes("house") ||
-            genre.includes("garage") ||
-            genre.includes("ambient") ||
-            genre.includes("hyper") ||
-            genre.includes("bass"),
-        );
-      }
-
-      return genres.some(
-        (genre) =>
-          genre.includes("rock") ||
-          genre.includes("indie") ||
-          genre.includes("post-punk") ||
-          genre.includes("dream"),
-      );
-    });
-  }, [
-    localRecommendations,
-    memberById,
-    mobileCategory,
-    normalizedFeedSearch,
-    savedRecommendationIds,
-  ]);
   const activeThemeRecommendations = useMemo(() => {
     return localRecommendations.filter(
       (recommendation) => recommendation.themeId === activeTheme.id,
@@ -226,6 +180,9 @@ export function RecommendationStudio({
       activeThemeRecommendations.map((recommendation) => recommendation.memberId),
     ).size;
   }, [activeThemeRecommendations]);
+  const mobileFeedRecommendations = activeFilter === "saved"
+    ? savedRecommendations
+    : localRecommendations;
   const featuredRecommendations = filteredRecommendations.slice(0, 4);
   const remainingRecommendations = filteredRecommendations.slice(4);
 
@@ -285,122 +242,101 @@ export function RecommendationStudio({
 
   return (
     <>
-      <main className="mobile-screen pb-24 pt-5 md:hidden">
-        <div className="px-5">
-          <div className="flex items-center justify-between gap-4">
-            <h1 className="text-[2rem] font-medium tracking-[-0.055em] text-[var(--accent-ink)]">
-              Onochu
-            </h1>
-            <button
-              type="button"
-              className="flex h-10 w-10 items-center justify-center text-[rgba(64,52,44,0.65)]"
-              aria-label="More options"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                <circle cx="12" cy="5.5" r="1.7" />
-                <circle cx="12" cy="12" r="1.7" />
-                <circle cx="12" cy="18.5" r="1.7" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="relative mt-5">
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[rgba(64,52,44,0.42)]"
-              fill="none"
-            >
-              <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" />
-              <path d="M16 16l4.2 4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-            <input
-              value={feedSearch}
-              onChange={(event) => setFeedSearch(event.target.value)}
-              placeholder="Search recommendations"
-              className="mobile-input w-full rounded-[0.12rem] px-12 py-4 text-[1rem] outline-none"
-            />
-          </div>
-
-          <div className="mt-4 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {[
-              { id: "all", label: "All" },
-              { id: "jazz", label: "Jazz" },
-              { id: "electronic", label: "Electronic" },
-              { id: "rock", label: "Rock" },
-              { id: "saved", label: "Saved" },
-            ].map((category) => {
-              const isActive = mobileCategory === category.id;
-
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() =>
-                    setMobileCategory(
-                      category.id as "all" | "jazz" | "electronic" | "rock" | "saved",
-                    )
-                  }
-                  className={`shrink-0 rounded-[0.12rem] px-5 py-3 text-[0.95rem] font-medium ${
-                    isActive ? "mobile-chip-active" : "mobile-chip"
-                  }`}
-                >
-                  {category.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="mobile-section-rule mt-5" />
-
-        <div className="px-5 pt-7">
-          <section className="relative overflow-hidden rounded-[0.08rem] border border-[var(--primary-strong)] bg-[rgba(255,250,246,0.74)] p-7">
-            <div className="absolute right-0 top-0 h-28 w-28 bg-[rgba(183,106,85,0.08)] [clip-path:polygon(100%_0,0_0,100%_100%)]" />
-            <span className="inline-flex rounded-[0.08rem] border border-[rgba(183,106,85,0.46)] px-4 py-2 text-[0.86rem] font-semibold tracking-[0.14em] text-[var(--primary-strong)]">
-              THIS WEEK
+      <main className="mobile-screen bg-[var(--paper)] pb-16 md:hidden">
+        <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6">
+          <div className="flex items-start justify-between gap-4">
+            <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
+              ONOCHU
             </span>
-            <h2 className="mt-7 max-w-[12ch] text-[1.95rem] font-medium leading-[1.18] tracking-[-0.05em] text-[var(--primary-strong)]">
-              {activeTheme.title}
-            </h2>
-            <p className="mt-5 max-w-[16rem] text-[0.98rem] leading-[1.65] text-[rgba(64,52,44,0.72)]">
-              {activeTheme.description}
+            <p className="text-right font-mono text-[0.76rem] uppercase leading-[1.25] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+              ESTABLISHED 2024
+              <br />
+              SEOUL / BARCELONA
             </p>
-
-            <div className="mobile-section-rule mt-6 flex items-center justify-between gap-4 pt-6">
-              <p className="text-[1.02rem] text-[rgba(64,52,44,0.76)]">
-                {activeTheme.participantSummary ? (
-                  <span className="font-semibold text-[var(--primary-strong)]">
-                    {activeTheme.participantSummary}
-                  </span>
-                ) : (
-                  <>
-                    <span className="font-semibold text-[var(--primary-strong)]">
-                      {activeThemeContributorCount}
-                    </span>{" "}
-                    participating
-                  </>
-                )}
-              </p>
-              <Link
-                href="/recommendations/new"
-                className="rounded-[0.16rem] bg-[var(--primary-strong)] px-5 py-3 text-[1rem] font-semibold text-[var(--paper)]"
-              >
-                Join
-              </Link>
-            </div>
-          </section>
-        </div>
-
-        <div className="px-5 pb-5 pt-10">
-          <div className="flex items-center gap-4 text-[0.94rem] font-semibold uppercase tracking-[0.14em] text-[rgba(64,52,44,0.58)]">
-            <div className="h-px flex-1 bg-[rgba(109,66,60,0.12)]" />
-            <span>Recent</span>
-            <div className="h-px flex-1 bg-[rgba(109,66,60,0.12)]" />
           </div>
+        </section>
+
+        <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-12">
+          <h1 className="max-w-[8ch] text-[3.25rem] font-bold leading-[0.94] tracking-[-0.08em] text-[var(--accent-ink)]">
+            추천은 여기서 흐릅니다
+          </h1>
+          <p className="mt-6 max-w-[17rem] text-[1.04rem] leading-[1.7] text-[rgba(64,52,44,0.56)]">
+            단톡방에 묻힌 추천을 다시 꺼내고, 곡과 사람을 함께 발견하세요
+          </p>
+        </section>
+
+        <section className="border-b border-[rgba(64,52,44,0.28)] bg-[var(--accent-ink)] px-5 py-9 text-[var(--paper)]">
+          <MobileRecommendationSectionLabel
+            number="01"
+            label="Weekly Theme"
+            dark
+          />
+          <h2 className="mt-8 max-w-[10ch] text-[2.55rem] font-bold leading-[1] tracking-[-0.07em]">
+            이번 주 오노추
+          </h2>
+          <p className="mt-5 max-w-[18rem] text-[1.02rem] leading-[1.78] text-[rgba(235,230,216,0.76)]">
+            좋은 추천은 혼자 듣고 끝나지 않습니다
+            <br />
+            이번 테마에 맞는 곡을 남기고, 다른 멤버의 취향을 같이 들어보세요
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/recommendations/new"
+              className="flex min-h-[4rem] items-center justify-between border border-[var(--paper)] bg-[var(--paper)] px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+            >
+              <span>이번 테마 참여하기</span>
+              <span className="font-mono text-[1.05rem]">→</span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-9">
+          <MobileRecommendationSectionLabel number="02" label="Share" />
+          <h2 className="mt-8 max-w-[8ch] text-[2.45rem] font-bold leading-[1] tracking-[-0.07em] text-[var(--accent-ink)]">
+            지금 듣고 있는 곡을 남겨보세요
+          </h2>
+          <p className="mt-5 max-w-[15rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.62)]">
+            추천은 길게 설명하지 않아도 됩니다
+            <br />
+            한 곡과 한 줄이면 충분합니다
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/recommendations/new"
+              className="flex min-h-[4rem] items-center justify-between border border-[rgba(64,52,44,0.7)] border-b-[3px] border-b-[rgba(64,52,44,0.9)] bg-transparent px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+            >
+              <span>추천 남기기</span>
+              <span className="font-mono text-[1.05rem]">→</span>
+            </Link>
+          </div>
+        </section>
+
+        <div className="grid grid-cols-2 border-b border-[rgba(64,52,44,0.28)]">
+          <button
+            type="button"
+            onClick={() => setActiveFilter("all")}
+            className={`min-h-[3.85rem] border-r border-[rgba(64,52,44,0.28)] px-4 text-[1rem] font-semibold ${
+              activeFilter === "all"
+                ? "bg-[rgba(64,52,44,0.04)] text-[var(--accent-ink)]"
+                : "text-[rgba(64,52,44,0.48)]"
+            }`}
+          >
+            추천 피드
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveFilter("saved")}
+            className={`min-h-[3.85rem] px-4 text-[1rem] font-semibold ${
+              activeFilter === "saved"
+                ? "bg-[rgba(64,52,44,0.04)] text-[var(--accent-ink)]"
+                : "text-[rgba(64,52,44,0.48)]"
+            }`}
+          >
+            저장한 추천
+          </button>
         </div>
 
-        <div className="space-y-4 px-5 pb-28">
+        <section className="pb-8">
           {mobileFeedRecommendations.length > 0 ? (
             mobileFeedRecommendations.map((recommendation) => (
               <RecommendationCard
@@ -416,11 +352,41 @@ export function RecommendationStudio({
               />
             ))
           ) : (
-            <div className="mobile-card rounded-[0.2rem] p-6 text-[1rem] leading-8 text-[rgba(64,52,44,0.68)]">
-              지금 선택한 필터와 검색에 맞는 추천이 없습니다.
+            <div className="border-b border-[rgba(64,52,44,0.18)] px-5 py-12">
+              <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-6 py-8 text-[1rem] leading-8 text-[rgba(64,52,44,0.68)]">
+                아직 저장한 추천이 없습니다. 피드에서 저장해 두면 이 섹션에서 다시 꺼내 볼 수 있습니다.
+              </div>
             </div>
           )}
-        </div>
+        </section>
+
+        <section className="border-y border-[rgba(64,52,44,0.28)] px-5 py-9">
+          <MobileRecommendationSectionLabel
+            number="03"
+            label="Cross-platform"
+          />
+          <h2 className="mt-8 max-w-[11ch] text-[2.15rem] font-bold leading-[1.08] tracking-[-0.07em] text-[var(--accent-ink)]">
+            플랫폼이 달라도 괜찮습니다
+          </h2>
+          <p className="mt-5 max-w-[16rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.62)]">
+            곡명과 아티스트로 바로 찾아 듣을 수 있습니다
+          </p>
+        </section>
+
+        <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-9">
+          <MobileRecommendationSectionLabel number="04" label="Archive" />
+          <h2 className="mt-8 max-w-[8ch] text-[2.4rem] font-bold leading-[1.02] tracking-[-0.07em] text-[var(--accent-ink)]">
+            좋은 추천은 사라지지 않습니다
+          </h2>
+          <p className="mt-5 max-w-[15rem] text-[1.02rem] leading-[1.75] text-[rgba(64,52,44,0.62)]">
+            Onochu에서는 취향이 계속 이어집니다
+          </p>
+        </section>
+
+        <div
+          aria-hidden="true"
+          className="fixed inset-x-0 bottom-0 z-20 h-1.5 bg-[var(--primary-strong)] md:hidden"
+        />
       </main>
 
       <div className="hidden md:block">
