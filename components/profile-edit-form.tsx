@@ -43,7 +43,7 @@ function SectionHeader({
   label: string;
 }) {
   return (
-    <div className="flex items-center gap-3 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
+    <div className="flex items-center gap-3 font-mono text-[0.74rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
       <span>{number}</span>
       <span className="h-px w-10 bg-[var(--primary-strong)]" />
       <span>{label}</span>
@@ -114,7 +114,9 @@ export function ProfileEditForm({
     "soundcloud",
   ];
   const renderedPlatforms: MusicPlatform[] =
-    mainPlatform === "melon" ? [...platformOrder, "melon"] : platformOrder;
+    initialMainPlatform === "melon" || mainPlatform === "melon"
+      ? [...platformOrder, "melon"]
+      : platformOrder;
 
   function toggleGenre(genre: string) {
     setSelectedGenres((currentGenres) =>
@@ -188,27 +190,19 @@ export function ProfileEditForm({
       );
 
       setErrors({});
-      setSaveMessage("저장되었습니다. 이제 추천을 남기고, 다른 사람의 취향도 이어서 볼 수 있습니다.");
+      setSaveMessage(
+        "저장되었습니다. 이제 추천을 남기고, 다른 사람의 취향도 이어서 볼 수 있습니다.",
+      );
     });
 
     setIsSaving(false);
   }
 
   return (
-    <div className="min-h-screen bg-[#1A1817] px-0 text-[#1A1817] md:px-8 md:py-8">
-      <section className="relative mx-auto min-h-screen max-w-[390px] overflow-hidden border border-[#1A1817] bg-[#EBE6D8] md:min-h-[calc(100vh-4rem)] md:rounded-[2rem] md:shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-60"
-          style={{
-            backgroundImage:
-              "linear-gradient(90deg, rgba(26, 24, 23, 0.04) 1px, transparent 1px)",
-            backgroundSize: "8px 100%",
-          }}
-        />
-
-        <form onSubmit={handleSubmit} className="relative">
-          <header className="border-b border-[#1A1817] px-6 py-6">
+    <main className="min-h-screen bg-[var(--paper)] text-[#1A1817]">
+      <div className="mx-auto max-w-5xl border-x border-[rgba(26,24,23,0.18)] bg-[#EBE6D8]">
+        <form onSubmit={handleSubmit}>
+          <section className="border-b border-[#1A1817] px-6 py-6 md:px-8">
             <div className="flex items-start justify-between gap-4">
               <span className="bg-[#1A1817] px-3 py-2 font-mono text-[0.78rem] font-bold uppercase tracking-[0.14em] text-[#EBE6D8]">
                 ONOCHU
@@ -219,22 +213,38 @@ export function ProfileEditForm({
                 SEOUL / BARCELONA
               </p>
             </div>
-          </header>
-
-          <section className="border-b border-[#1A1817] px-6 py-12">
-            <h1 className="max-w-[7ch] text-[3.15rem] font-bold leading-[1.02] tracking-[-0.07em]">
-              내 취향을
-              <br />
-              남겨보세요
-            </h1>
-            <p className="mt-4 max-w-[17rem] text-[0.98rem] leading-[1.7] text-[#8C867A]">
-              닉네임, 플랫폼, 링크 하나면 충분합니다
-              <br />
-              여기서부터 취향이 쌓이기 시작합니다
-            </p>
           </section>
 
-          <section className="border-b border-[#1A1817] bg-[#1A1817] px-6 py-8 text-[#EBE6D8]">
+          <section className="border-b border-[#1A1817] px-6 py-12 md:px-8 md:py-16">
+            <div className="grid gap-8 md:grid-cols-[1.05fr_0.95fr] md:items-end">
+              <div>
+                <h1 className="max-w-[7ch] text-[3.15rem] font-bold leading-[1.02] tracking-[-0.07em] md:text-[4.8rem]">
+                  내 취향을
+                  <br />
+                  남겨보세요
+                </h1>
+                <p className="mt-4 max-w-[18rem] text-[0.98rem] leading-[1.7] text-[#8C867A] md:max-w-[24rem] md:text-[1.05rem]">
+                  닉네임, 플랫폼, 링크 하나면 충분합니다
+                  <br />
+                  여기서부터 취향이 쌓이기 시작합니다
+                </p>
+              </div>
+
+              <div className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[#8C867A]">
+                  DRAFT STATUS
+                </p>
+                <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em]">
+                  {selectedGenres.length}
+                </p>
+                <p className="mt-2 text-[0.92rem] leading-6 text-[#8C867A]">
+                  archive에 남길 태그와 플랫폼을 지금 바로 정리할 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="border-b border-[#1A1817] bg-[#1A1817] px-6 py-8 text-[#EBE6D8] md:px-8">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em]">
               NOTICE
             </p>
@@ -245,150 +255,168 @@ export function ProfileEditForm({
             </p>
           </section>
 
-          <section className="border-b border-[#1A1817] px-6 py-10">
+          <section className="border-b border-[#1A1817] px-6 py-10 md:px-8 md:py-12">
             <SectionHeader number="01" label="Profile Info" />
 
-            <div className="mt-8 space-y-8">
-              <label className="block">
-                <span className="mb-3 block text-[1rem] font-semibold">닉네임</span>
-                <input
-                  value={nickname}
-                  onChange={(event) => setNickname(event.target.value)}
-                  placeholder="다른 멤버들이 부를 이름"
-                  className="w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
-                />
-                {errors.nickname ? (
-                  <span className="mt-2 block text-sm text-[#C15843]">
-                    {errors.nickname}
-                  </span>
-                ) : null}
-              </label>
+            <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.9fr]">
+              <div className="space-y-8">
+                <label className="block">
+                  <span className="mb-3 block text-[1rem] font-semibold">닉네임</span>
+                  <input
+                    value={nickname}
+                    onChange={(event) => setNickname(event.target.value)}
+                    placeholder="다른 멤버들이 부를 이름"
+                    className="w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
+                  />
+                  {errors.nickname ? (
+                    <span className="mt-2 block text-sm text-[#C15843]">
+                      {errors.nickname}
+                    </span>
+                  ) : null}
+                </label>
 
-              <label className="block">
-                <span className="mb-3 block text-[1rem] font-semibold">한 줄 소개</span>
-                <input
-                  value={bio}
-                  onChange={(event) => setBio(event.target.value.slice(0, 150))}
-                  placeholder="요즘 듣는 음악이나 취향을 한 줄로 적어보세요"
-                  className="w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
-                />
-              </label>
+                <label className="block">
+                  <span className="mb-3 block text-[1rem] font-semibold">한 줄 소개</span>
+                  <textarea
+                    value={bio}
+                    onChange={(event) => setBio(event.target.value.slice(0, 150))}
+                    placeholder="요즘 듣는 음악이나 취향을 한 줄로 적어보세요"
+                    rows={4}
+                    className="w-full resize-none rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] leading-7 outline-none placeholder:text-[#9A9387]"
+                  />
+                </label>
 
-              <div>
-                <span className="block text-[1rem] font-semibold">선호 장르</span>
-                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
-                  여러 개 선택할 수 있습니다
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {referenceGenres.map((genre) => {
-                    const isActive = selectedGenres.includes(genre.key);
-
-                    return (
-                      <button
-                        key={genre.key}
-                        type="button"
-                        onClick={() => toggleGenre(genre.key)}
-                        className={`border px-4 py-3 text-[0.92rem] font-medium ${
-                          isActive
-                            ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
-                            : "border-[#1A1817] bg-transparent text-[#1A1817]"
-                        }`}
-                      >
-                        {genre.label}
-                      </button>
-                    );
-                  })}
-                </div>
+                <label className="block">
+                  <span className="block text-[1rem] font-semibold">플레이리스트 링크</span>
+                  <p className="mt-1 text-[0.84rem] text-[#8C867A]">
+                    최소 1개 이상 필요합니다
+                  </p>
+                  <input
+                    value={playlistLinks[0] ?? ""}
+                    onChange={(event) =>
+                      setPlaylistLinks([event.target.value, ...playlistLinks.slice(1)])
+                    }
+                    placeholder="Spotify / Apple Music / YouTube Music 등"
+                    className="mt-4 w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
+                  />
+                  {errors.playlistLinks ? (
+                    <span className="mt-2 block text-sm text-[#C15843]">
+                      {errors.playlistLinks}
+                    </span>
+                  ) : null}
+                </label>
               </div>
 
-              <div>
-                <span className="block text-[1rem] font-semibold">주 사용 플랫폼</span>
-                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
-                  추천곡을 열 때 기본으로 사용할 플랫폼입니다
-                </p>
-                <div className="mt-4 space-y-3">
-                  {renderedPlatforms.map((platform) => {
-                    const isActive = mainPlatform === platform;
+              <div className="space-y-8">
+                <div>
+                  <span className="block text-[1rem] font-semibold">선호 장르</span>
+                  <p className="mt-1 text-[0.84rem] text-[#8C867A]">
+                    여러 개 선택할 수 있습니다
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {referenceGenres.map((genre) => {
+                      const isActive = selectedGenres.includes(genre.key);
 
-                    return (
-                      <button
-                        key={platform}
-                        type="button"
-                        onClick={() => setMainPlatform(platform)}
-                        className={`flex w-full items-center gap-4 border px-4 py-5 text-left ${
-                          isActive
-                            ? "bg-[rgba(26,24,23,0.04)]"
-                            : "bg-transparent"
-                        } border-[#1A1817]`}
-                      >
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full border border-[#1A1817]">
-                          {isActive ? (
-                            <span className="block h-2 w-2 rounded-full bg-[var(--primary-strong)]" />
-                          ) : null}
-                        </span>
-                        <span className="text-[1rem] font-medium">
-                          {platformLabels[platform]}
-                        </span>
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={genre.key}
+                          type="button"
+                          onClick={() => toggleGenre(genre.key)}
+                          className={`border px-4 py-3 text-[0.92rem] font-medium ${
+                            isActive
+                              ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
+                              : "border-[#1A1817] bg-transparent text-[#1A1817]"
+                          }`}
+                        >
+                          {genre.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                {errors.mainPlatform ? (
-                  <span className="mt-2 block text-sm text-[#C15843]">
-                    {errors.mainPlatform}
-                  </span>
-                ) : null}
-              </div>
 
-              <label className="block">
-                <span className="block text-[1rem] font-semibold">플레이리스트 링크</span>
-                <p className="mt-1 text-[0.84rem] text-[#8C867A]">
-                  최소 1개 이상 필요합니다
-                </p>
-                <input
-                  value={playlistLinks[0] ?? ""}
-                  onChange={(event) =>
-                    setPlaylistLinks([event.target.value, ...playlistLinks.slice(1)])
-                  }
-                  placeholder="Spotify / Apple Music / YouTube Music 등"
-                  className="mt-4 w-full rounded-none border border-[#1A1817] bg-transparent px-4 py-4 text-[1rem] outline-none placeholder:text-[#9A9387]"
-                />
-                {errors.playlistLinks ? (
-                  <span className="mt-2 block text-sm text-[#C15843]">
-                    {errors.playlistLinks}
-                  </span>
-                ) : null}
-              </label>
+                <div>
+                  <span className="block text-[1rem] font-semibold">주 사용 플랫폼</span>
+                  <p className="mt-1 text-[0.84rem] text-[#8C867A]">
+                    추천곡을 열 때 기본으로 사용할 플랫폼입니다
+                  </p>
+                  <div className="mt-4 space-y-3">
+                    {renderedPlatforms.map((platform) => {
+                      const isActive = mainPlatform === platform;
+
+                      return (
+                        <button
+                          key={platform}
+                          type="button"
+                          onClick={() => setMainPlatform(platform)}
+                          className={`flex w-full items-center gap-4 border px-4 py-5 text-left ${
+                            isActive
+                              ? "bg-[rgba(26,24,23,0.04)]"
+                              : "bg-transparent"
+                          } border-[#1A1817]`}
+                        >
+                          <span className="flex h-4 w-4 items-center justify-center rounded-full border border-[#1A1817]">
+                            {isActive ? (
+                              <span className="block h-2 w-2 rounded-full bg-[var(--primary-strong)]" />
+                            ) : null}
+                          </span>
+                          <span className="text-[1rem] font-medium">
+                            {platformLabels[platform]}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {errors.mainPlatform ? (
+                    <span className="mt-2 block text-sm text-[#C15843]">
+                      {errors.mainPlatform}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
             </div>
           </section>
 
-          <section className="px-6 pb-28 pt-8">
-            <button
-              type="submit"
-              disabled={isSaving || isPending}
-              className="flex w-full items-center justify-between border border-[#1A1817] bg-[#1A1817] px-5 py-5 text-[1rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
-            >
-              <span>{isSaving || isPending ? "저장 중..." : "프로필 저장하기"}</span>
-              <span className="font-mono text-[1rem]">→</span>
-            </button>
-
-            {saveMessage ? (
-              <div className="mt-6 border border-[#1A1817] bg-[rgba(26,24,23,0.04)] px-4 py-4 text-[0.9rem] leading-7 text-[#1A1817]">
-                {saveMessage}
+          <section className="px-6 pb-24 pt-10 md:px-8 md:pb-28">
+            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-[26rem]">
+                <p className="text-[1.18rem] font-semibold leading-8">
+                  좋은 추천은 나를 더 잘 보이게 합니다
+                </p>
+                <p className="mt-2 text-[0.96rem] text-[#8C867A]">
+                  취향을 남기면 추천과 대화가 같은 흐름으로 이어집니다.
+                </p>
+                {saveMessage ? (
+                  <div className="mt-5 border border-[#1A1817] bg-[rgba(26,24,23,0.04)] px-4 py-4 text-[0.9rem] leading-7 text-[#1A1817]">
+                    {saveMessage}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+
+              <div className="flex w-full flex-col gap-3 md:w-auto md:min-w-[22rem]">
+                <button
+                  type="submit"
+                  disabled={isSaving || isPending}
+                  className="flex items-center justify-between border border-[#1A1817] bg-[#1A1817] px-5 py-5 text-[1rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
+                >
+                  <span>
+                    {isSaving || isPending ? "저장 중..." : "프로필 저장하기"}
+                  </span>
+                  <span className="font-mono text-[1rem]">→</span>
+                </button>
+                <Link
+                  href="/profile"
+                  className="w-fit self-end bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-[#EBE6D8] shadow-[4px_4px_0_#1A1817]"
+                >
+                  SWITCH VIEW ↺
+                </Link>
+              </div>
+            </div>
           </section>
+
+          <div className="h-1.5 bg-[var(--primary-strong)]" />
         </form>
-
-        <Link
-          href="/profile"
-          className="absolute bottom-10 right-4 bg-[var(--primary-strong)] px-5 py-3 font-mono text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-[#EBE6D8] shadow-[4px_4px_0_#1A1817]"
-        >
-          SWITCH VIEW ↺
-        </Link>
-
-        <div className="absolute inset-x-0 bottom-0 h-1.5 bg-[var(--primary-strong)]" />
-      </section>
-    </div>
+      </div>
+    </main>
   );
 }
