@@ -1,6 +1,9 @@
-# Onochu QA v0.3
+# Onochu QA Baseline
 
-검증 날짜: 2026-03-31
+검증 기준선:
+
+- 2026-03-31: v0.3 route and production smoke
+- 2026-04-03: v0.4 recommendation feed search handoff verification
 
 ## Verification Commands
 
@@ -73,6 +76,37 @@
 - PASS: production `/recommendations/new`에서 유효한 입력 후 `draft 저장 흐름을 확인했습니다. posting member:` success message 확인
 - PASS: production `/profile/edit`에서 `v1` profile storage summary, completion, reset surface와 main platform save 확인
 
+## v0.4 Feed QA Addendum
+
+검증 날짜: 2026-04-03
+
+### Scope
+
+- `/recommendations`
+- recommendation card search handoff surface
+- recommendation create / profile edit platform option exposure
+
+### Verified
+
+- PASS: recommendation runtime model에 `searchQuery`가 seed 및 draft 생성 경로에 모두 반영된 상태 확인
+- PASS: recommendation card에 `Search handoff` 블록과 `Copy` 액션이 추가된 상태 확인
+- PASS: direct link가 없을 때 `Search Apple Music`, `Search Melon` 같은 preferred platform search handoff를 생성할 수 있는 helper 상태 확인
+- PASS: recommendation create mobile platform order에 `Melon`이 노출되는 상태 확인
+- PASS: profile edit mobile platform order에 `Melon`이 노출되는 상태 확인
+- PASS: mobile recommendation card에서 search handoff 문구를 compact하게 줄여 카드 높이를 과도하게 늘리지 않도록 조정한 상태 확인
+
+### Verification Commands
+
+- `npm run lint`
+- `npm run build`
+- `rg -n "searchQuery|melon|Copy query|Search handoff" /Users/mrtmi/Desktop/Mr_TMI/repos/onochu/lib /Users/mrtmi/Desktop/Mr_TMI/repos/onochu/components`
+
+### Browser Limitation
+
+- 현재 desktop app 환경에서는 Playwright MCP가 `ENOENT: no such file or directory, mkdir '/.playwright-mcp'` 오류로 production 브라우저 시각 smoke를 직접 남기지 못했다.
+- 따라서 2026-04-03 기준 v0.4 feed QA는 코드 경로 확인, lint/build 통과, live alias 응답, component diff 검토를 근거로 기록했다.
+- clipboard 기반 `Copy` 동작은 브라우저 권한 정책 영향을 받으므로, production 모바일 브라우저에서 한 번 더 수동 확인하는 것이 안전하다.
+
 ### `not-found`
 
 - PASS
@@ -97,6 +131,7 @@
 - blocker:
   - 없음
 - non-blocking:
+  - Playwright MCP browser verification은 현재 로컬 `/.playwright-mcp` 생성 오류로 제한됨
   - theme 운영 흐름은 여전히 manual/mock 수준
   - persistence는 recommendation/profile 모두 browser-local 범위에 머물러 있음
   - exact cross-platform mapping은 user-provided alternate link 또는 platform search fallback 기준이다
@@ -105,4 +140,5 @@
 ## Summary
 
 - PRD v0.3 route 기준 주요 화면은 현재 구현 범위 안에서 탐색 가능
+- PRD v0.4 기준 search-first cross-platform handoff는 runtime model과 UI surface까지 반영되었다
 - production deployment와 route smoke evidence를 확보했고, cross-platform recommendation access 흐름까지 QA 기준선에 포함했다
