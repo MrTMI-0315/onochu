@@ -21,11 +21,13 @@ import type {
 type RecommendationCreateRouteProps = {
   currentMember: MemberProfile;
   initialRecommendations: SongRecommendation[];
+  initialDraft?: Partial<RecommendationDraftInput>;
 };
 
 export function RecommendationCreateRoute({
   currentMember,
   initialRecommendations,
+  initialDraft,
 }: RecommendationCreateRouteProps) {
   const [viewerPlatform, setViewerPlatform] = useState<MusicPlatform>(
     currentMember.mainPlatform,
@@ -88,6 +90,7 @@ export function RecommendationCreateRoute({
           moodSuggestions={moodSuggestions}
           onDraftSaved={handleDraftSaved}
           mobile
+          initialDraft={initialDraft}
         />
       </div>
 
@@ -152,6 +155,7 @@ export function RecommendationCreateRoute({
               currentMemberName={currentMember.nickname}
               moodSuggestions={moodSuggestions}
               onDraftSaved={handleDraftSaved}
+              initialDraft={initialDraft}
             />
 
             <div className="space-y-6">

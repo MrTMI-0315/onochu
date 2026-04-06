@@ -159,6 +159,9 @@ export function ArchiveProfileView({
   const [storedProfileDraft, setStoredProfileDraft] = useState<ProfileDraft | null>(
     null,
   );
+  const [profileShareStatus, setProfileShareStatus] = useState<
+    "idle" | "copied" | "shared" | "failed"
+  >("idle");
 
   useEffect(() => {
     if (!useStoredProfile) {
@@ -218,6 +221,43 @@ export function ArchiveProfileView({
   const playlistHref = displayMember.playlistLinks[0]?.url || "/recommendations";
   const playlistIsExternal = playlistHref.startsWith("http");
   const switchHref = selfView ? `/members/${displayMember.id}` : "/profile";
+  const profileHref = selfView ? "/profile" : `/members/${displayMember.id}`;
+
+  async function handleCopyProfileLink() {
+    try {
+      const absoluteUrl = new URL(profileHref, window.location.origin).toString();
+      await navigator.clipboard.writeText(absoluteUrl);
+      setProfileShareStatus("copied");
+      window.setTimeout(() => setProfileShareStatus("idle"), 1600);
+    } catch {
+      setProfileShareStatus("failed");
+      window.setTimeout(() => setProfileShareStatus("idle"), 2000);
+    }
+  }
+
+  async function handleShareProfile() {
+    try {
+      const absoluteUrl = new URL(profileHref, window.location.origin).toString();
+
+      if (!navigator.share) {
+        await navigator.clipboard.writeText(absoluteUrl);
+        setProfileShareStatus("copied");
+        window.setTimeout(() => setProfileShareStatus("idle"), 1600);
+        return;
+      }
+
+      await navigator.share({
+        title: `${displayMember.nickname} on Onochu`,
+        text: `${displayMember.nickname}의 취향 프로필을 Onochu에서 확인해보세요.`,
+        url: absoluteUrl,
+      });
+      setProfileShareStatus("shared");
+      window.setTimeout(() => setProfileShareStatus("idle"), 1600);
+    } catch {
+      setProfileShareStatus("failed");
+      window.setTimeout(() => setProfileShareStatus("idle"), 2000);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[var(--paper)] text-[#1A1817]">
@@ -265,6 +305,26 @@ export function ArchiveProfileView({
                 <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em]">
                   {recommendations.length}
                 </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={handleCopyProfileLink}
+                  className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-4 text-[0.9rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.06)]"
+                >
+                  {profileShareStatus === "copied"
+                    ? "복사됨 ✓"
+                    : profileShareStatus === "failed"
+                      ? "복사 재시도"
+                      : "프로필 링크 복사"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShareProfile}
+                  className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-4 text-[0.9rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.06)]"
+                >
+                  {profileShareStatus === "shared" ? "공유됨 ✓" : "프로필 공유"}
+                </button>
               </div>
             </div>
           </div>

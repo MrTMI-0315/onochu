@@ -69,6 +69,17 @@ export function RecommendationCard({
     .replace(/\.\s/g, ".")
     .replace(/\.$/, "");
   const memberHandle = `@${memberName.toLowerCase().replace(/\s+/g, "_")}`;
+  const onochuShareHref = (() => {
+    const params = new URLSearchParams({
+      trackTitle: recommendation.trackTitle,
+      artistName: recommendation.artistName,
+      platform: recommendation.platform,
+      url: recommendation.url,
+      comment: recommendation.comment,
+    });
+
+    return `/recommendations/new?${params.toString()}`;
+  })();
   const resolvedPlatformLabel = viewerPlatform
     ? platformLabels[viewerPlatform]
     : platformLabels[recommendation.platform];
@@ -195,6 +206,12 @@ export function RecommendationCard({
           >
             원본 링크 열기
           </a>
+          <Link
+            href={onochuShareHref}
+            className="col-span-2 flex items-center justify-center border border-[rgba(64,52,44,0.42)] bg-transparent px-4 py-3 text-[0.95rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:bg-[rgba(64,52,44,0.04)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
+          >
+            Onochu로 공유
+          </Link>
           <button
             type="button"
             disabled={!onToggleEngagement}
@@ -266,6 +283,12 @@ export function RecommendationCard({
             >
               원본 링크 열기
             </a>
+            <Link
+              href={onochuShareHref}
+              className="font-medium transition-colors duration-200 hover:text-[var(--accent-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
+            >
+              Onochu로 공유
+            </Link>
             <button
               type="button"
               disabled={!onToggleEngagement}

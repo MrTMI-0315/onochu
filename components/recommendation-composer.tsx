@@ -14,6 +14,7 @@ type RecommendationComposerProps = {
   moodSuggestions: string[];
   onDraftSaved?: (draft: RecommendationDraftInput) => void;
   mobile?: boolean;
+  initialDraft?: Partial<RecommendationDraftInput>;
 };
 
 type ComposerErrors = {
@@ -52,17 +53,24 @@ export function RecommendationComposer({
   moodSuggestions,
   onDraftSaved,
   mobile = false,
+  initialDraft,
 }: RecommendationComposerProps) {
-  const [trackTitle, setTrackTitle] = useState("");
-  const [artistName, setArtistName] = useState("");
-  const [platform, setPlatform] = useState<MusicPlatform>("spotify");
-  const [url, setUrl] = useState("");
-  const [alternatePlatformUrls, setAlternatePlatformUrls] = useState<PlatformLinkMap>(
-    {},
+  const [trackTitle, setTrackTitle] = useState(initialDraft?.trackTitle ?? "");
+  const [artistName, setArtistName] = useState(initialDraft?.artistName ?? "");
+  const [platform, setPlatform] = useState<MusicPlatform>(
+    initialDraft?.platform ?? "spotify",
   );
-  const [comment, setComment] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [showAlternateLinks, setShowAlternateLinks] = useState(false);
+  const [url, setUrl] = useState(initialDraft?.url ?? "");
+  const [alternatePlatformUrls, setAlternatePlatformUrls] = useState<PlatformLinkMap>(
+    initialDraft?.alternatePlatformUrls ?? {},
+  );
+  const [comment, setComment] = useState(initialDraft?.comment ?? "");
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    initialDraft?.moodTags ?? [],
+  );
+  const [showAlternateLinks, setShowAlternateLinks] = useState(
+    Boolean(initialDraft?.alternatePlatformUrls),
+  );
   const [errors, setErrors] = useState<ComposerErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isPending, startTransition] = useTransition();
