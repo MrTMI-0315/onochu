@@ -289,8 +289,8 @@ export function ArchiveProfileView({
               </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-1">
-              <div className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+            <div className="grid gap-3 md:grid-cols-1">
+              <div className="border border-[rgba(26,24,23,0.14)] bg-[rgba(255,255,255,0.18)] p-5">
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[#8C867A]">
                   Main Platform
                 </p>
@@ -298,7 +298,7 @@ export function ArchiveProfileView({
                   {platformLabels[displayMember.mainPlatform]}
                 </p>
               </div>
-              <div className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] p-5">
+              <div className="border border-[rgba(26,24,23,0.14)] bg-[rgba(255,255,255,0.18)] p-5">
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[#8C867A]">
                   Archive Count
                 </p>
@@ -310,7 +310,7 @@ export function ArchiveProfileView({
                 <button
                   type="button"
                   onClick={handleCopyProfileLink}
-                  className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-4 text-[0.9rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.06)]"
+                  className="border border-[rgba(26,24,23,0.14)] bg-[#EBE6D8] px-4 py-4 text-[0.88rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.05)]"
                 >
                   {profileShareStatus === "copied"
                     ? "복사됨 ✓"
@@ -321,7 +321,7 @@ export function ArchiveProfileView({
                 <button
                   type="button"
                   onClick={handleShareProfile}
-                  className="border border-[rgba(26,24,23,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-4 text-[0.9rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.06)]"
+                  className="border border-[rgba(26,24,23,0.14)] bg-[#EBE6D8] px-4 py-4 text-[0.88rem] font-medium text-[#1A1817] transition hover:bg-[rgba(64,52,44,0.05)]"
                 >
                   {profileShareStatus === "shared" ? "공유됨 ✓" : "프로필 공유"}
                 </button>
