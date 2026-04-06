@@ -167,7 +167,7 @@ export function RecommendationCard({
           </li>
         </ul>
 
-        <div className="mt-6 grid grid-cols-2 gap-2 md:mt-6 md:grid-cols-4 md:gap-3">
+        <div className="mt-6 grid grid-cols-2 gap-2 md:hidden">
           <a
             href={resolvedLink.href}
             target="_blank"
@@ -222,10 +222,75 @@ export function RecommendationCard({
           </button>
         </div>
 
+        <div className="mt-6 hidden md:block">
+          <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(11rem,0.7fr)] gap-3">
+            <a
+              href={resolvedLink.href}
+              target="_blank"
+              rel="noreferrer"
+              className="flex min-h-[3.45rem] items-center justify-center border border-[rgba(64,52,44,0.9)] bg-[var(--accent-ink)] px-5 py-3 text-[0.95rem] font-semibold text-[var(--paper)] transition-colors duration-200 hover:bg-[var(--primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.38)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
+            >
+              내 플랫폼에서 찾기
+            </a>
+            <button
+              type="button"
+              disabled={!onToggleEngagement}
+              onClick={() => onToggleEngagement?.(recommendation.id, "save")}
+              className={`flex min-h-[3.45rem] items-center justify-center border px-4 py-3 text-[0.95rem] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] ${
+                resolvedEngagement.save
+                  ? "border-[rgba(64,52,44,0.8)] bg-[rgba(64,52,44,0.08)] text-[var(--accent-ink)]"
+                  : "border-[rgba(64,52,44,0.42)] text-[var(--accent-ink)] hover:bg-[rgba(64,52,44,0.04)]"
+              }`}
+            >
+              {resolvedEngagement.save ? "저장됨 ✓" : "저장하기"}
+            </button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-[0.86rem] text-[rgba(64,52,44,0.62)]">
+            <button
+              type="button"
+              onClick={handleCopySearchQuery}
+              className="font-medium transition-colors duration-200 hover:text-[var(--accent-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
+            >
+              {copyStatus === "copied"
+                ? "곡명/아티스트 복사됨"
+                : copyStatus === "failed"
+                  ? "복사 다시 시도"
+                  : "곡명/아티스트 복사"}
+            </button>
+            <a
+              href={recommendation.url}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium transition-colors duration-200 hover:text-[var(--accent-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
+            >
+              원본 링크 열기
+            </a>
+            <button
+              type="button"
+              disabled={!onToggleEngagement}
+              onClick={() => onToggleEngagement?.(recommendation.id, "fire")}
+              className={`font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] ${
+                resolvedEngagement.fire
+                  ? "text-[var(--primary-strong)]"
+                  : "text-[rgba(64,52,44,0.62)] hover:text-[var(--accent-ink)]"
+              }`}
+            >
+              {resolvedEngagement.fire ? "반응함" : "반응하기"}
+            </button>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-dashed border-[rgba(64,52,44,0.22)] pt-4 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.5)]">
+            <span>{resolvedPlatformLabel}</span>
+            <span>fire {recommendation.reactionCount}</span>
+            <span>save {recommendation.saveCount}</span>
+          </div>
+        </div>
+
         {linkToMember ? (
           <Link
             href={memberProfileHref}
-            className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:text-[var(--primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)] md:mt-6"
+            className="mt-6 flex items-center justify-between border-t border-dashed border-[rgba(64,52,44,0.24)] pt-4 text-[0.98rem] font-medium text-[var(--accent-ink)] transition-colors duration-200 hover:text-[var(--primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(193,88,67,0.22)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
           >
             <span>이 사람의 다른 추천 보기</span>
             <span className="font-mono">→</span>
