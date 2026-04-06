@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 
 const navigationItems = [
   { href: "/", label: "Home" },
-  { href: "/recommendations", label: "Recs" },
-  { href: "/members", label: "Members" },
-  { href: "/profile", label: "My Profile" },
+  { href: "/recommendations", label: "Recommend" },
+  { href: "/profile", label: "Profile" },
+  { href: "/profile/edit", label: "Settings" },
 ];
 
 function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
@@ -22,7 +22,7 @@ function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
     );
   }
 
-  if (label === "Recs") {
+  if (label === "Recommend") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
         <circle cx="12" cy="12" r="7" stroke={stroke} strokeWidth="1.9" />
@@ -31,26 +31,27 @@ function MobileNavIcon({ label, active }: { label: string; active: boolean }) {
     );
   }
 
-  if (label === "Members") {
+  if (label === "Profile") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-        <rect x="5" y="5" width="14" height="14" stroke={stroke} strokeWidth="1.9" />
-        <path d="M5 10.5h14M5 15h14" stroke={stroke} strokeWidth="1.9" strokeLinecap="round" />
+        <circle cx="12" cy="8.5" r="3.2" stroke={stroke} strokeWidth="1.9" />
+        <path d="M6.5 18c1.1-2.4 3-3.6 5.5-3.6s4.4 1.2 5.5 3.6" stroke={stroke} strokeWidth="1.9" strokeLinecap="round" />
       </svg>
     );
   }
 
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-      <circle cx="12" cy="8.5" r="3.2" stroke={stroke} strokeWidth="1.9" />
-      <path d="M6.5 18c1.1-2.4 3-3.6 5.5-3.6s4.4 1.2 5.5 3.6" stroke={stroke} strokeWidth="1.9" strokeLinecap="round" />
+      <path d="M12 5.2v2.1M12 16.7v2.1M18.1 12h-2.1M8 12H5.9M16.3 7.7l-1.5 1.5M9.2 14.8l-1.5 1.5M16.3 16.3l-1.5-1.5M9.2 9.2L7.7 7.7" stroke={stroke} strokeWidth="1.7" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="3.2" stroke={stroke} strokeWidth="1.9" />
     </svg>
   );
 }
 
 export function SiteNavigation() {
   const pathname = usePathname();
-  const isProfileRoute = pathname === "/profile" || pathname === "/profile/edit";
+  const isProfileRoute = pathname === "/profile";
+  const isSettingsRoute = pathname === "/profile/edit";
   const isMemberDetailRoute = pathname.startsWith("/members/");
   const isMembersDirectoryRoute = pathname === "/members";
   const isRecommendationsArchiveRoute =
@@ -58,15 +59,11 @@ export function SiteNavigation() {
   const hideDesktopNav =
     pathname === "/" ||
     isProfileRoute ||
+    isSettingsRoute ||
     isMemberDetailRoute ||
     isMembersDirectoryRoute ||
     isRecommendationsArchiveRoute;
-  const hideMobileNav =
-    pathname === "/" ||
-    isRecommendationsArchiveRoute ||
-    isMembersDirectoryRoute ||
-    isProfileRoute ||
-    isMemberDetailRoute;
+  const hideMobileNav = false;
 
   return (
     <>
@@ -89,7 +86,13 @@ export function SiteNavigation() {
           <nav className="flex items-center justify-self-end rounded-full border border-white/5 bg-black/20 p-1">
             {navigationItems.map((item) => {
               const isActive =
-                item.href === "/profile" ? isProfileRoute : pathname === item.href;
+                item.href === "/recommendations"
+                  ? isRecommendationsArchiveRoute
+                  : item.href === "/profile"
+                    ? isProfileRoute || isMemberDetailRoute || isMembersDirectoryRoute
+                    : item.href === "/profile/edit"
+                      ? isSettingsRoute
+                      : pathname === item.href;
 
               return (
                 <Link
@@ -115,9 +118,15 @@ export function SiteNavigation() {
         }`}
       >
         <div className="mx-auto grid max-w-md grid-cols-4 border-t border-[color:rgba(109,66,60,0.12)] bg-[rgba(255,255,255,0.96)] px-2 py-2 shadow-[0_-6px_24px_rgba(62,52,48,0.05)] backdrop-blur-xl">
-          {navigationItems.map((item) => {
-            const isActive =
-              item.href === "/profile" ? isProfileRoute : pathname === item.href;
+            {navigationItems.map((item) => {
+              const isActive =
+                item.href === "/recommendations"
+                  ? isRecommendationsArchiveRoute
+                  : item.href === "/profile"
+                    ? isProfileRoute || isMemberDetailRoute || isMembersDirectoryRoute
+                    : item.href === "/profile/edit"
+                      ? isSettingsRoute
+                      : pathname === item.href;
 
             return (
               <Link
@@ -130,7 +139,7 @@ export function SiteNavigation() {
                 }`}
               >
                 <MobileNavIcon label={item.label} active={isActive} />
-                <span>{item.label === "My Profile" ? "Profile" : item.label}</span>
+                <span>{item.label}</span>
               </Link>
             );
           })}
