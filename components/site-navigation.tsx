@@ -117,7 +117,7 @@ export function SiteNavigation() {
           hideMobileNav ? "hidden" : ""
         }`}
       >
-        <div className="mx-auto grid max-w-md grid-cols-4 border-t border-[color:rgba(109,66,60,0.12)] bg-[rgba(255,255,255,0.96)] px-2 py-2 shadow-[0_-6px_24px_rgba(62,52,48,0.05)] backdrop-blur-xl">
+        <div className="mx-auto grid max-w-[22rem] grid-cols-4 border border-[rgba(26,24,23,0.14)] bg-[rgba(255,255,255,0.92)] px-2 py-3 shadow-[0_8px_24px_rgba(26,24,23,0.06)]">
             {navigationItems.map((item) => {
               const isActive =
                 item.href === "/recommendations"
@@ -132,7 +132,7 @@ export function SiteNavigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 rounded-2xl px-3 py-2 text-center text-[0.78rem] font-medium transition ${
+                className={`flex flex-col items-center justify-center gap-1.5 px-2 py-1 text-center text-[0.72rem] font-medium transition ${
                   isActive
                     ? "text-[var(--primary-strong)]"
                     : "text-[rgba(64,52,44,0.62)]"

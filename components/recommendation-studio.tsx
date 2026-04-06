@@ -197,12 +197,12 @@ export function RecommendationStudio({
   return (
     <>
       <main className="mobile-screen bg-[var(--paper)] pb-16 md:hidden">
-        <section className="border-b border-[rgba(64,52,44,0.28)] px-5 py-6">
+        <section className="border-b border-[rgba(64,52,44,0.28)] px-6 py-6">
           <div className="flex items-start justify-between gap-4">
-            <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
+            <span className="bg-[var(--accent-ink)] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[var(--paper)]">
               ONOCHU
             </span>
-            <p className="text-right font-mono text-[0.76rem] uppercase leading-[1.25] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
+            <p className="text-right font-mono text-[0.68rem] uppercase leading-[1.35] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
               ESTABLISHED 2024
               <br />
               SEOUL / BARCELONA

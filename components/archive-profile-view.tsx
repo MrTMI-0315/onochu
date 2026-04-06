@@ -225,14 +225,14 @@ export function ArchiveProfileView({
         <section className="border-b border-[#1A1817] px-6 py-6 md:px-8">
           <div className="flex items-center gap-4">
             {!selfView ? (
-              <Link href="/members" className="font-mono text-[1.2rem] leading-none">
+              <Link href="/members" className="font-mono text-[1.15rem] leading-none">
                 ←
               </Link>
             ) : null}
-            <span className="bg-[#1A1817] px-3 py-2 font-mono text-[0.78rem] font-bold uppercase tracking-[0.14em] text-[#EBE6D8]">
+            <span className="bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]">
               ONOCHU
             </span>
-            <span className="ml-auto font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[#8C867A]">
+            <span className="ml-auto font-mono text-[0.68rem] uppercase tracking-[0.08em] text-[#8C867A]">
               {profileLabel}
             </span>
           </div>
