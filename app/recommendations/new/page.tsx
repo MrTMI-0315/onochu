@@ -23,6 +23,46 @@ const allowedPlatforms: MusicPlatform[] = [
   "other",
 ];
 
+function getArtistLikeScore(value: string) {
+  let score = 0;
+
+  if (/[a-z][A-Z]/.test(value)) {
+    score += 2;
+  }
+
+  if (/\b(feat\.|ft\.|x)\b/i.test(value) || /[,&]/.test(value)) {
+    score += 1;
+  }
+
+  if (value.split(/\s+/).length <= 2) {
+    score += 1;
+  }
+
+  return score;
+}
+
+function getTrackLikeScore(value: string) {
+  let score = 0;
+
+  if (/["'“”()[\]]/.test(value)) {
+    score += 2;
+  }
+
+  if (
+    /\b(remix|mix|version|ver\.|ost|theme|live|acoustic|demo|edit|intro|outro|pt\.?|part)\b/i.test(
+      value,
+    )
+  ) {
+    score += 2;
+  }
+
+  if (value.split(/\s+/).length >= 3) {
+    score += 1;
+  }
+
+  return score;
+}
+
 function parseTrackAndArtist(value: string) {
   const normalizedValue = value.trim();
 
@@ -30,19 +70,44 @@ function parseTrackAndArtist(value: string) {
     return null;
   }
 
+  const quotedByMatch = normalizedValue.match(
+    /^[“"']?(.*?)[”"']?\s+by\s+(.+)$/i,
+  );
+
+  if (quotedByMatch?.[1]?.trim() && quotedByMatch?.[2]?.trim()) {
+    return {
+      trackTitle: quotedByMatch[1].trim(),
+      artistName: quotedByMatch[2].trim(),
+    };
+  }
+
   const delimiters = [" - ", " – ", " — ", " / "];
 
   for (const delimiter of delimiters) {
-    const [trackTitle, artistName, ...rest] = normalizedValue.split(delimiter);
+    const [leftSegment, rightSegment, ...rest] = normalizedValue.split(delimiter);
 
     if (
       rest.length === 0 &&
-      trackTitle?.trim().length &&
-      artistName?.trim().length
+      leftSegment?.trim().length &&
+      rightSegment?.trim().length
     ) {
+      const left = leftSegment.trim();
+      const right = rightSegment.trim();
+      const leftWordCount = left.split(/\s+/).length;
+      const rightWordCount = right.split(/\s+/).length;
+      const leftArtistLikeScore = getArtistLikeScore(left);
+      const rightArtistLikeScore = getArtistLikeScore(right);
+      const leftTrackLikeScore = getTrackLikeScore(left);
+      const rightTrackLikeScore = getTrackLikeScore(right);
+
+      const shouldFlipArtistAndTrack =
+        (leftArtistLikeScore > rightArtistLikeScore &&
+          rightTrackLikeScore >= leftTrackLikeScore) ||
+        (leftWordCount <= 3 && rightWordCount >= 4);
+
       return {
-        trackTitle: trackTitle.trim(),
-        artistName: artistName.trim(),
+        trackTitle: shouldFlipArtistAndTrack ? right : left,
+        artistName: shouldFlipArtistAndTrack ? left : right,
       };
     }
   }
