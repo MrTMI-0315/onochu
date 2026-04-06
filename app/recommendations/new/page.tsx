@@ -23,15 +23,55 @@ const allowedPlatforms: MusicPlatform[] = [
   "other",
 ];
 
+function parseTrackAndArtist(value: string) {
+  const normalizedValue = value.trim();
+
+  if (!normalizedValue) {
+    return null;
+  }
+
+  const delimiters = [" - ", " – ", " — ", " / "];
+
+  for (const delimiter of delimiters) {
+    const [trackTitle, artistName, ...rest] = normalizedValue.split(delimiter);
+
+    if (
+      rest.length === 0 &&
+      trackTitle?.trim().length &&
+      artistName?.trim().length
+    ) {
+      return {
+        trackTitle: trackTitle.trim(),
+        artistName: artistName.trim(),
+      };
+    }
+  }
+
+  return null;
+}
+
 function toInitialDraft(
   searchParams: Awaited<RecommendationCreatePageProps["searchParams"]>,
 ): Partial<RecommendationDraftInput> | undefined {
+  const explicitTrackTitle = searchParams.trackTitle?.trim() ?? "";
+  const explicitArtistName = searchParams.artistName?.trim() ?? "";
+  const explicitComment = searchParams.comment?.trim() ?? "";
   const sharedTitle = searchParams.title?.trim() ?? "";
   const sharedText = searchParams.text?.trim() ?? "";
-  const trackTitle = searchParams.trackTitle?.trim() || sharedTitle;
-  const artistName = searchParams.artistName?.trim() ?? "";
+  const parsedFromTitle = parseTrackAndArtist(sharedTitle);
+  const parsedFromText = parseTrackAndArtist(sharedText);
+  const trackTitle =
+    explicitTrackTitle ||
+    parsedFromTitle?.trackTitle ||
+    parsedFromText?.trackTitle ||
+    sharedTitle;
+  const artistName =
+    explicitArtistName ||
+    parsedFromTitle?.artistName ||
+    parsedFromText?.artistName ||
+    "";
   const url = searchParams.url?.trim() ?? "";
-  const comment = searchParams.comment?.trim() || sharedText;
+  const comment = explicitComment || (parsedFromText ? "" : sharedText);
   const platform = allowedPlatforms.includes(searchParams.platform as MusicPlatform)
     ? (searchParams.platform as MusicPlatform)
     : undefined;
