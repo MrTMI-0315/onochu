@@ -11,8 +11,6 @@ import {
   createEmptyRecommendationEngagementState,
   loadStoredRecommendationState,
   persistStoredRecommendationState,
-  RECOMMENDATION_STORAGE_VERSION,
-  resetStoredRecommendationState,
 } from "@/lib/recommendation-drafts";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import type {
@@ -71,9 +69,7 @@ export function RecommendationStudio({
     currentMember.mainPlatform,
   );
   const [hasHydrated, setHasHydrated] = useState(false);
-  const [storageMessage, setStorageMessage] = useState(
-    "browser storage active",
-  );
+  const [, setStorageMessage] = useState("browser storage active");
 
   useEffect(() => {
     const storedState = loadStoredRecommendationState(initialRecommendations);
@@ -151,14 +147,6 @@ export function RecommendationStudio({
   const mobileFeedRecommendations = activeFilter === "saved"
     ? savedRecommendations
     : localRecommendations;
-
-  function handleResetStorage() {
-    resetStoredRecommendationState();
-    setLocalRecommendations(initialRecommendations);
-    setLatestDraft(null);
-    setEngagementByRecommendationId({});
-    setStorageMessage("storage cleared and reset to seeded feed");
-  }
 
   function handleToggleEngagement(
     recommendationId: string,
@@ -356,54 +344,54 @@ export function RecommendationStudio({
       </main>
 
       <div className="hidden md:block">
-        <main className="min-h-screen bg-[var(--paper)] text-[var(--accent-ink)]">
-          <div className="mx-auto max-w-5xl border-x border-[rgba(64,52,44,0.28)] bg-[#EBE6D8]">
-            <section className="border-b border-[rgba(64,52,44,0.28)] px-8 py-6">
-              <div className="flex items-start justify-between gap-4">
-                <span className="bg-[var(--accent-ink)] px-3 py-2 font-mono text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-[var(--paper)]">
-                  ONOCHU
-                </span>
-                <div className="text-right">
-                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
-                    RECOMMENDATIONS
-                  </p>
-                  <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
-                    SEOUL / BARCELONA
-                  </p>
-                </div>
+        <main className="min-h-screen bg-[var(--paper)] px-6 py-8 text-[var(--accent-ink)]">
+          <div className="mx-auto max-w-6xl overflow-hidden border border-[#1A1817] bg-[#EBE6D8] shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
+            <header className="flex items-start justify-between border-b border-[#1A1817] px-8 py-7">
+              <div className="bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]">
+                ONOCHU
               </div>
-            </section>
+              <div className="text-right font-mono text-[0.68rem] leading-tight text-[#1A1817]">
+                RECOMMENDATION ARCHIVE
+                <br />
+                SEOUL / BARCELONA
+              </div>
+            </header>
 
-            <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-14">
-                <h1 className="max-w-[7ch] text-[4.75rem] font-bold leading-[0.92] tracking-[-0.09em] text-[var(--accent-ink)]">
+            <section className="grid border-b border-[#1A1817] lg:grid-cols-[minmax(0,1.02fr)_minmax(22rem,0.98fr)]">
+              <div className="px-8 py-12 lg:px-10 lg:py-14">
+                <div className="mb-4 flex items-center gap-2 font-mono text-[0.72rem] text-[var(--primary-strong)]">
+                  <span className="inline-block h-px w-8 bg-[var(--primary-strong)]" />
+                  추천이 흐르는 곳, Onochu
+                </div>
+                <h1 className="max-w-[7.4ch] text-[clamp(3.8rem,6.2vw,5.6rem)] font-extrabold leading-[0.96] tracking-[-0.08em] text-[#1A1817]">
                   추천은 여기서 흐릅니다
                 </h1>
-                <p className="mt-6 max-w-[24rem] text-[1.1rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
-                  단톡방에 묻힌 추천을 다시 꺼내고, 곡과 사람을 함께 발견하세요
+                <p className="mt-6 max-w-[25rem] text-[1.08rem] leading-[1.78] text-[#8C867A]">
+                  단톡방에 묻힌 추천을 다시 꺼내고, 곡과 사람을 함께 발견하세요.
                 </p>
               </div>
-              <div className="bg-[var(--accent-ink)] px-8 py-14 text-[var(--paper)]">
+
+              <div className="border-t border-[#1A1817] bg-[#1A1817] px-8 py-12 text-[#EBE6D8] lg:border-l lg:border-t-0 lg:px-10 lg:py-14">
                 <MobileRecommendationSectionLabel
                   number="01"
                   label="Weekly Theme"
                   dark
                 />
-                <h2 className="mt-8 max-w-[9ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em]">
+                <h2 className="mt-8 max-w-[8ch] text-[clamp(2.8rem,4.2vw,4rem)] font-extrabold leading-[0.98] tracking-[-0.08em]">
                   이번 주 오노추
                 </h2>
-                <p className="mt-5 max-w-[24rem] text-[1.02rem] leading-[1.85] text-[rgba(235,230,216,0.76)]">
+                <p className="mt-5 max-w-[25rem] text-[1.02rem] leading-[1.85] text-[rgba(235,230,216,0.74)]">
                   좋은 추천은 혼자 듣고 끝나지 않습니다. 이번 테마에 맞는 곡을 남기고, 다른 멤버의 취향을 같이 들어보세요.
                 </p>
-                <div className="mt-7 flex flex-wrap items-center gap-4">
+                <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Link
                     href="/recommendations/new"
-                    className="flex min-h-[3.8rem] min-w-[15rem] items-center justify-between border border-[var(--paper)] bg-[var(--paper)] px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+                    className="flex min-h-[4rem] min-w-[16rem] items-center justify-between border border-[#EBE6D8] bg-[#EBE6D8] px-5 py-4 text-[1rem] font-semibold text-[#1A1817]"
                   >
                     <span>이번 테마 참여하기</span>
                     <span className="font-mono text-[1.05rem]">→</span>
                   </Link>
-                  <span className="font-mono text-[0.78rem] uppercase tracking-[0.08em] text-[rgba(235,230,216,0.56)]">
+                  <span className="font-mono text-[0.78rem] uppercase tracking-[0.08em] text-[rgba(235,230,216,0.58)]">
                     {activeTheme.participantSummary ??
                       `${activeThemeContributorCount} participating`}
                   </span>
@@ -411,80 +399,44 @@ export function RecommendationStudio({
               </div>
             </section>
 
-            <section className="grid border-b border-[rgba(64,52,44,0.28)] lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-12">
+            <section className="grid border-b border-[#1A1817] lg:grid-cols-[minmax(0,1.02fr)_minmax(20rem,0.98fr)]">
+              <div className="px-8 py-12 lg:px-10">
                 <MobileRecommendationSectionLabel number="02" label="Share" />
-                <h2 className="mt-8 max-w-[7ch] text-[3.25rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                <h2 className="mt-8 max-w-[7ch] text-[clamp(2.9rem,4.6vw,4.2rem)] font-extrabold leading-[0.98] tracking-[-0.08em] text-[#1A1817]">
                   지금 듣고 있는 곡을 남겨보세요
                 </h2>
-                <p className="mt-5 max-w-[22rem] text-[1.04rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                <p className="mt-5 max-w-[23rem] text-[1.04rem] leading-[1.8] text-[#8C867A]">
                   추천은 길게 설명하지 않아도 됩니다. 한 곡과 한 줄이면 충분합니다.
                 </p>
                 <div className="mt-8">
                   <Link
                     href="/recommendations/new"
-                    className="flex min-h-[4rem] max-w-[18rem] items-center justify-between border border-[rgba(64,52,44,0.72)] border-b-[3px] border-b-[rgba(64,52,44,0.92)] px-5 py-4 text-[1rem] font-semibold text-[var(--accent-ink)]"
+                    className="flex min-h-[4rem] max-w-[18rem] items-center justify-between border border-[#1A1817] border-b-4 bg-[#EBE6D8] px-5 py-4 text-[1rem] font-semibold text-[#1A1817]"
                   >
                     <span>추천 남기기</span>
                     <span className="font-mono text-[1.05rem]">→</span>
                   </Link>
                 </div>
               </div>
-              <div className="bg-[rgba(64,52,44,0.03)] px-8 py-12">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
-                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
-                      Feed status
-                    </p>
-                    <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em] text-[var(--accent-ink)]">
-                      {localRecommendations.length}
-                    </p>
-                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
-                      추천이 지금 archive에 쌓여 있습니다.
-                    </p>
-                  </div>
-                  <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
-                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
-                      Community
-                    </p>
-                    <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.05em] text-[var(--accent-ink)]">
-                      {contributingMembers}
-                    </p>
-                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
-                      members have shared tracks in this feed.
-                    </p>
-                  </div>
-                </div>
 
-                <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
-                  <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
-                    Runtime
-                  </p>
-                  <p className="mt-3 text-[0.98rem] leading-7 text-[rgba(64,52,44,0.62)]">
-                    v{RECOMMENDATION_STORAGE_VERSION} / {storageMessage}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleResetStorage}
-                    className="mt-5 border border-[rgba(64,52,44,0.72)] px-4 py-3 text-[0.88rem] font-semibold text-[var(--accent-ink)]"
-                  >
-                    local feed reset
-                  </button>
+              <div className="border-t border-[#1A1817] bg-[#E7E0D0] px-8 py-12 lg:border-l lg:border-t-0 lg:px-10">
+                <div className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[rgba(64,52,44,0.52)]">
+                  Archive Note
                 </div>
-
-                {latestDraft ? (
-                  <div className="mt-4 border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.24)] p-5">
-                    <p className="font-mono text-[0.74rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.44)]">
-                      Latest draft
-                    </p>
-                    <p className="mt-3 text-[1.2rem] font-semibold text-[var(--accent-ink)]">
-                      {latestDraft.trackTitle}
-                    </p>
-                    <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.58)]">
-                      {latestDraft.comment}
-                    </p>
-                  </div>
-                ) : null}
+                <h3 className="mt-6 max-w-[11ch] text-[2.4rem] font-extrabold leading-[1] tracking-[-0.07em] text-[#1A1817]">
+                  같이 들을수록 archive가 선명해집니다
+                </h3>
+                <p className="mt-5 max-w-[23rem] text-[1rem] leading-[1.8] text-[rgba(64,52,44,0.62)]">
+                  지금 이 피드에는 {localRecommendations.length}개의 추천과 {contributingMembers}명의 흔적이 이어져 있습니다. 저장한 추천은 아래 아카이브에서 다시 꺼내 볼 수 있습니다.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.28)] px-4 py-3 font-mono text-[0.74rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.56)]">
+                    {allMembers.length} member profiles
+                  </span>
+                  <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(255,255,255,0.28)] px-4 py-3 font-mono text-[0.74rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.56)]">
+                    {savedRecommendations.length} saved picks
+                  </span>
+                </div>
               </div>
             </section>
 
@@ -537,25 +489,25 @@ export function RecommendationStudio({
               )}
             </section>
 
-            <section className="grid border-y border-[rgba(64,52,44,0.28)] lg:grid-cols-2">
-              <div className="border-r border-[rgba(64,52,44,0.28)] px-8 py-12">
+            <section className="grid border-y border-[#1A1817] lg:grid-cols-2">
+              <div className="px-8 py-12 lg:border-r lg:border-[#1A1817] lg:px-10">
                 <MobileRecommendationSectionLabel
                   number="03"
                   label="Cross-platform"
                 />
-                <h2 className="mt-8 max-w-[10ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                <h2 className="mt-8 max-w-[10ch] text-[clamp(2.8rem,4.2vw,4rem)] font-extrabold leading-[0.98] tracking-[-0.08em] text-[#1A1817]">
                   플랫폼이 달라도 괜찮습니다
                 </h2>
-                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
-                  곡명과 아티스트로 바로 찾아 듣을 수 있습니다. Onochu는 링크보다 청취 흐름이 먼저 이어지도록 설계되었습니다.
+                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[#8C867A]">
+                  곡명과 아티스트로 바로 찾아 들을 수 있습니다. Onochu는 링크보다 청취 흐름이 먼저 이어지도록 설계되었습니다.
                 </p>
               </div>
-              <div className="px-8 py-12">
+              <div className="border-t border-[#1A1817] bg-[#E7E0D0] px-8 py-12 lg:border-t-0 lg:px-10">
                 <MobileRecommendationSectionLabel number="04" label="Archive" />
-                <h2 className="mt-8 max-w-[8ch] text-[3.1rem] font-bold leading-[0.98] tracking-[-0.08em] text-[var(--accent-ink)]">
+                <h2 className="mt-8 max-w-[8ch] text-[clamp(2.8rem,4.2vw,4rem)] font-extrabold leading-[0.98] tracking-[-0.08em] text-[#1A1817]">
                   좋은 추천은 사라지지 않습니다
                 </h2>
-                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[rgba(64,52,44,0.58)]">
+                <p className="mt-5 max-w-[24rem] text-[1.05rem] leading-[1.8] text-[#8C867A]">
                   Onochu에서는 취향이 계속 이어집니다. 추천 하나, 사람 하나, 저장한 트랙 하나가 계속 다음 대화로 연결됩니다.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
