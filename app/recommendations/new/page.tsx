@@ -9,6 +9,8 @@ type RecommendationCreatePageProps = {
     platform?: string;
     url?: string;
     comment?: string;
+    title?: string;
+    text?: string;
   }>;
 };
 
@@ -24,10 +26,12 @@ const allowedPlatforms: MusicPlatform[] = [
 function toInitialDraft(
   searchParams: Awaited<RecommendationCreatePageProps["searchParams"]>,
 ): Partial<RecommendationDraftInput> | undefined {
-  const trackTitle = searchParams.trackTitle?.trim() ?? "";
+  const sharedTitle = searchParams.title?.trim() ?? "";
+  const sharedText = searchParams.text?.trim() ?? "";
+  const trackTitle = searchParams.trackTitle?.trim() || sharedTitle;
   const artistName = searchParams.artistName?.trim() ?? "";
   const url = searchParams.url?.trim() ?? "";
-  const comment = searchParams.comment?.trim() ?? "";
+  const comment = searchParams.comment?.trim() || sharedText;
   const platform = allowedPlatforms.includes(searchParams.platform as MusicPlatform)
     ? (searchParams.platform as MusicPlatform)
     : undefined;

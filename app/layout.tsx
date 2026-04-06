@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Onochu",
   description: "KNU_POW music taste profile and recommendation web app MVP",
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
