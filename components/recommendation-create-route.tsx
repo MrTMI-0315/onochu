@@ -111,34 +111,34 @@ export function RecommendationCreateRoute({
                 </p>
               </div>
 
-              <div className="border-t border-[#1A1817] bg-[#1A1817] px-10 py-14 text-[#EBE6D8] lg:border-l lg:border-t-0">
+              <div className="border-t border-[#1A1817] bg-[rgba(64,52,44,0.04)] px-10 py-14 text-[#1A1817] lg:border-l lg:border-t-0">
                 <div className="space-y-4">
-                  <div className="border border-[rgba(235,230,216,0.18)] bg-[rgba(235,230,216,0.06)] p-5">
-                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(235,230,216,0.48)]">
+                  <div className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.22)] p-5">
+                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
                       Posting Member
                     </p>
-                    <p className="mt-3 text-[2rem] font-bold tracking-[-0.05em] text-[#EBE6D8]">
+                    <p className="mt-3 text-[2rem] font-bold tracking-[-0.05em] text-[#1A1817]">
                       {currentMember.nickname}
                     </p>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
-                    <div className="border border-[rgba(235,230,216,0.18)] bg-[rgba(235,230,216,0.06)] p-5">
-                      <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(235,230,216,0.48)]">
+                    <div className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.22)] p-5">
+                      <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
                         Viewer Platform
                       </p>
-                      <p className="mt-3 text-[1.35rem] font-semibold tracking-[-0.04em] text-[#EBE6D8]">
+                      <p className="mt-3 text-[1.35rem] font-semibold tracking-[-0.04em] text-[#1A1817]">
                         {viewerPlatform.replaceAll("_", " ")}
                       </p>
                     </div>
                     {activeTheme ? (
-                      <div className="border border-[rgba(235,230,216,0.18)] bg-[rgba(235,230,216,0.06)] p-5">
-                        <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(235,230,216,0.48)]">
+                      <div className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.22)] p-5">
+                        <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
                           Active Theme
                         </p>
-                        <p className="mt-3 text-[1.2rem] font-semibold tracking-[-0.04em] text-[#EBE6D8]">
+                        <p className="mt-3 text-[1.2rem] font-semibold tracking-[-0.04em] text-[#1A1817]">
                           {activeTheme.title}
                         </p>
-                        <p className="mt-3 text-sm leading-7 text-[rgba(235,230,216,0.68)]">
+                        <p className="mt-3 text-sm leading-7 text-[rgba(64,52,44,0.64)]">
                           {activeTheme.relatedEvent ?? activeTheme.activationWindow}
                         </p>
                         <p className="mt-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--primary)]">
@@ -147,12 +147,12 @@ export function RecommendationCreateRoute({
                       </div>
                     ) : null}
                   </div>
-                  <p className="max-w-[24rem] text-[0.98rem] leading-[1.8] text-[rgba(235,230,216,0.68)]">
+                  <p className="max-w-[24rem] text-[0.98rem] leading-[1.8] text-[rgba(64,52,44,0.64)]">
                     {storageMessage}
                   </p>
                   <Link
                     href="/recommendations"
-                    className="flex min-h-[4rem] max-w-[16rem] items-center justify-between border border-[#EBE6D8] bg-[#EBE6D8] px-5 py-4 text-[1rem] font-semibold text-[#1A1817]"
+                    className="flex min-h-[4rem] max-w-[16rem] items-center justify-between border border-[#1A1817] bg-[#1A1817] px-5 py-4 text-[1rem] font-semibold text-[#EBE6D8]"
                   >
                     <span>피드로 돌아가기</span>
                     <span className="font-mono text-[1.05rem]">→</span>

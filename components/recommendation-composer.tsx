@@ -225,12 +225,12 @@ export function RecommendationComposer({
     setIsSaving(false);
   }
 
-  const statusTone =
+  const desktopStatusTone =
     saveStatus.type === "success"
-      ? "border-[color:rgba(213,140,116,0.3)] bg-[color:rgba(213,140,116,0.12)] text-[color:var(--paper)]"
+      ? "border-[rgba(193,88,67,0.28)] bg-[rgba(193,88,67,0.08)] text-[#1A1817]"
       : saveStatus.type === "error"
-        ? "border-rose-300/30 bg-rose-300/10 text-rose-100"
-        : "border-white/10 bg-white/4 text-white/68";
+        ? "border-[rgba(190,24,93,0.24)] bg-[rgba(190,24,93,0.06)] text-[#1A1817]"
+        : "border-[rgba(26,24,23,0.16)] bg-[rgba(64,52,44,0.03)] text-[rgba(64,52,44,0.72)]";
 
   if (mobile) {
     return (
@@ -495,91 +495,85 @@ export function RecommendationComposer({
   }
 
   return (
-    <section id="compose-panel" className="onochu-panel rounded-[2rem] p-6 md:p-8">
-      <header className="mb-8">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--primary)]">
+    <section id="compose-panel" className="text-[#1A1817]">
+      <header className="border-b border-[rgba(26,24,23,0.18)] pb-8">
+        <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
           New Recommendation
         </p>
-        <h2 className="onochu-display mt-3 text-4xl font-bold uppercase leading-[0.9] text-white md:text-5xl">
-          Post a track
-          <br />
-          in under a minute.
+        <h2 className="mt-4 max-w-[8ch] text-[3.25rem] font-bold leading-[0.94] tracking-[-0.08em] text-[#1A1817] md:text-[4rem]">
+          지금 듣고 있는 곡을 남겨보세요
         </h2>
-        <div className="mt-5 h-1 w-12 bg-[var(--primary)]" />
-        <p className="mt-5 text-sm leading-7 text-white/65">
-          현재 로그인 개념은 없어서 local mock 기준 작성자는 {currentMemberName}
-          으로 가정합니다. 중요한 건 곡, 왜 골랐는지, 어디서 들을지 세 가지입니다.
+        <p className="mt-5 max-w-[32rem] text-[1rem] leading-[1.8] text-[rgba(64,52,44,0.66)]">
+          작성자는 local flow 기준으로 {currentMemberName}으로 가정합니다. 중요한 건
+          곡, 왜 골랐는지, 어디서 이어들을지 세 가지입니다.
         </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              01
-            </p>
-            <p className="mt-2 text-sm text-white/72">곡명과 아티스트</p>
-          </div>
-          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              02
-            </p>
-            <p className="mt-2 text-sm text-white/72">왜 이 곡인지 한 줄</p>
-          </div>
-          <div className="rounded-[1.25rem] border border-white/8 bg-white/4 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)]">
-              03
-            </p>
-            <p className="mt-2 text-sm text-white/72">
-              원본 링크와 optional alternate links
-            </p>
-          </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            "곡명과 아티스트",
+            "왜 이 곡인지 한 줄",
+            "원본 링크와 추가 플랫폼 링크",
+          ].map((item, index) => (
+            <div
+              key={item}
+              className="border border-[rgba(26,24,23,0.14)] bg-[rgba(255,255,255,0.18)] px-4 py-4"
+            >
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[var(--primary-strong)]">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <p className="mt-2 text-[0.95rem] leading-7 text-[rgba(64,52,44,0.72)]">
+                {item}
+              </p>
+            </div>
+          ))}
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className={`rounded-[1.25rem] border px-4 py-4 text-sm ${statusTone}`}>
+      <form onSubmit={handleSubmit} className="space-y-8 pt-8">
+        <div className={`border px-5 py-4 text-[0.94rem] leading-7 ${desktopStatusTone}`}>
           {saveStatus.message}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <label className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Song title
             </span>
             <input
               value={trackTitle}
               onChange={(event) => setTrackTitle(event.target.value)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="e.g. Midnight City"
             />
             {errors.trackTitle ? (
-              <span className="text-xs text-rose-200">{errors.trackTitle}</span>
+              <span className="text-xs text-rose-700">{errors.trackTitle}</span>
             ) : null}
           </label>
 
           <label className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Artist
             </span>
             <input
               value={artistName}
               onChange={(event) => setArtistName(event.target.value)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="e.g. M83"
             />
             {errors.artistName ? (
-              <span className="text-xs text-rose-200">{errors.artistName}</span>
+              <span className="text-xs text-rose-700">{errors.artistName}</span>
             ) : null}
           </label>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid gap-6 md:grid-cols-[0.72fr_1.28fr]">
           <label className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Platform
             </span>
             <select
               value={platform}
               onChange={(event) => setPlatform(event.target.value as MusicPlatform)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none"
             >
               {platformOptions.map(([value, label]) => (
                 <option key={value} value={value}>
@@ -590,40 +584,40 @@ export function RecommendationComposer({
           </label>
 
           <label className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Original link
             </span>
             <input
               value={url}
               onChange={(event) => setUrl(event.target.value)}
-              className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="https://open.spotify.com/track/..."
               type="url"
             />
             {errors.url ? (
-              <span className="text-xs text-rose-200">{errors.url}</span>
+              <span className="text-xs text-rose-700">{errors.url}</span>
             ) : null}
           </label>
         </div>
 
-        <section className="space-y-4 rounded-[1.5rem] border border-white/8 bg-white/3 p-5">
+        <section className="border border-[rgba(26,24,23,0.16)] bg-[rgba(64,52,44,0.03)] p-5">
           <div className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Alternate platform links
             </span>
-            <p className="text-sm leading-7 text-white/58">
-              선택 입력입니다. 추천을 보는 멤버가 자기 플랫폼으로 바로 이어질 수
-              있게 필요한 링크만 더 붙일 수 있습니다.
+            <p className="text-[0.94rem] leading-7 text-[rgba(64,52,44,0.66)]">
+              선택 입력입니다. 추천을 보는 멤버가 자기 플랫폼으로 바로 이어질 수 있게
+              필요한 링크만 더 붙일 수 있습니다.
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
             {alternatePlatformOptions.map(([value, label]) => {
               const isSourcePlatform = value === platform;
 
               return (
                 <label key={value} className="flex flex-col gap-2">
-                  <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+                  <span className="font-mono text-[0.66rem] uppercase tracking-[0.12em] text-[rgba(64,52,44,0.48)]">
                     {label}
                     {isSourcePlatform ? " (source handled above)" : " (optional)"}
                   </span>
@@ -632,7 +626,7 @@ export function RecommendationComposer({
                     onChange={(event) =>
                       updateAlternatePlatformUrl(value, event.target.value)
                     }
-                    className="rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20 disabled:cursor-not-allowed disabled:opacity-45"
+                    className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.24)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)] disabled:cursor-not-allowed disabled:bg-[rgba(64,52,44,0.04)] disabled:text-[rgba(64,52,44,0.36)]"
                     placeholder={
                       isSourcePlatform
                         ? "Original link already covers this platform"
@@ -647,7 +641,7 @@ export function RecommendationComposer({
           </div>
 
           {errors.alternatePlatformUrls ? (
-            <span className="text-xs text-rose-200">
+            <span className="mt-3 block text-xs text-rose-700">
               {errors.alternatePlatformUrls}
             </span>
           ) : null}
@@ -655,26 +649,26 @@ export function RecommendationComposer({
 
         <label className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Why this track
             </span>
-            <span className="text-[10px] uppercase tracking-[0.16em] text-white/30">
+            <span className="font-mono text-[0.66rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.38)]">
               {comment.length}/{MAX_COMMENT_LENGTH}
             </span>
           </div>
           <textarea
             value={comment}
             onChange={(event) => setComment(event.target.value.slice(0, MAX_COMMENT_LENGTH))}
-            className="min-h-28 rounded-[1rem] border border-white/8 bg-[#111111] p-4 text-white outline-none placeholder:text-white/20"
-            placeholder="Tell the members why this track hits different..."
+            className="min-h-32 border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
+            placeholder="왜 이 곡을 남기고 싶은지 짧게 적어보세요."
           />
           {errors.comment ? (
-            <span className="text-xs text-rose-200">{errors.comment}</span>
+            <span className="text-xs text-rose-700">{errors.comment}</span>
           ) : null}
         </label>
 
         <div className="space-y-4">
-          <span className="text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
             Add mood tags
           </span>
           <div className="flex flex-wrap gap-2">
@@ -686,8 +680,10 @@ export function RecommendationComposer({
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] ${
-                    isActive ? "onochu-chip-active" : "onochu-chip"
+                  className={`border px-3 py-2 text-[0.76rem] font-medium uppercase tracking-[0.08em] ${
+                    isActive
+                      ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
+                      : "border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] text-[rgba(64,52,44,0.78)]"
                   }`}
                 >
                   #{tag}
@@ -701,14 +697,14 @@ export function RecommendationComposer({
           <button
             type="button"
             onClick={resetForm}
-            className="flex-1 rounded-full bg-white/6 px-8 py-5 text-sm font-bold uppercase tracking-[0.2em] text-white"
+            className="flex-1 border border-[rgba(26,24,23,0.18)] bg-transparent px-6 py-4 text-[0.92rem] font-semibold text-[#1A1817]"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSaving || isPending}
-            className="onochu-glow flex-[1.4] rounded-full bg-[linear-gradient(135deg,var(--primary)_0%,var(--primary-strong)_100%)] px-8 py-5 text-sm font-extrabold uppercase tracking-[0.2em] text-black disabled:opacity-60"
+            className="flex-[1.35] border border-[#1A1817] bg-[#1A1817] px-6 py-4 text-[0.92rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
           >
             {isSaving || isPending ? "Posting..." : "Post now"}
           </button>
