@@ -78,7 +78,7 @@ export function SiteNavigation() {
           </Link>
 
           <Link href="/" className="justify-self-center">
-            <span className="onochu-display text-2xl font-bold uppercase italic tracking-tight text-[var(--primary)]">
+            <span className="onochu-display text-2xl font-bold uppercase italic tracking-tight text-[var(--paper)] drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]">
               ONOCHU
             </span>
           </Link>
