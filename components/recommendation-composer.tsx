@@ -496,18 +496,18 @@ export function RecommendationComposer({
 
   return (
     <section id="compose-panel" className="text-[#1A1817]">
-      <header className="border-b border-[rgba(26,24,23,0.18)] pb-8">
+      <header className="border-b border-[rgba(26,24,23,0.18)] pb-7">
         <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--primary-strong)]">
           New Recommendation
         </p>
-        <h2 className="mt-4 max-w-[8ch] text-[3.25rem] font-bold leading-[0.94] tracking-[-0.08em] text-[#1A1817] md:text-[4rem]">
+        <h2 className="mt-3 max-w-[8ch] text-[3.1rem] font-bold leading-[0.94] tracking-[-0.08em] text-[#1A1817] md:text-[3.75rem]">
           지금 듣고 있는 곡을 남겨보세요
         </h2>
-        <p className="mt-5 max-w-[32rem] text-[1rem] leading-[1.8] text-[rgba(64,52,44,0.66)]">
+        <p className="mt-4 max-w-[32rem] text-[0.98rem] leading-[1.75] text-[rgba(64,52,44,0.66)]">
           작성자는 local flow 기준으로 {currentMemberName}으로 가정합니다. 중요한 건
           곡, 왜 골랐는지, 어디서 이어들을지 세 가지입니다.
         </p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
           {[
             "곡명과 아티스트",
             "왜 이 곡인지 한 줄",
@@ -528,7 +528,7 @@ export function RecommendationComposer({
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="space-y-8 pt-8">
+      <form onSubmit={handleSubmit} className="space-y-6 pt-7">
         <div className={`border px-5 py-4 text-[0.94rem] leading-7 ${desktopStatusTone}`}>
           {saveStatus.message}
         </div>
@@ -541,7 +541,7 @@ export function RecommendationComposer({
             <input
               value={trackTitle}
               onChange={(event) => setTrackTitle(event.target.value)}
-              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-3.5 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="e.g. Midnight City"
             />
             {errors.trackTitle ? (
@@ -556,7 +556,7 @@ export function RecommendationComposer({
             <input
               value={artistName}
               onChange={(event) => setArtistName(event.target.value)}
-              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-3.5 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="e.g. M83"
             />
             {errors.artistName ? (
@@ -573,7 +573,7 @@ export function RecommendationComposer({
             <select
               value={platform}
               onChange={(event) => setPlatform(event.target.value as MusicPlatform)}
-              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-3.5 text-[#1A1817] outline-none"
             >
               {platformOptions.map(([value, label]) => (
                 <option key={value} value={value}>
@@ -590,7 +590,7 @@ export function RecommendationComposer({
             <input
               value={url}
               onChange={(event) => setUrl(event.target.value)}
-              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
+              className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-3.5 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
               placeholder="https://open.spotify.com/track/..."
               type="url"
             />
@@ -600,7 +600,7 @@ export function RecommendationComposer({
           </label>
         </div>
 
-        <section className="border border-[rgba(26,24,23,0.16)] bg-[rgba(64,52,44,0.03)] p-5">
+        <section className="border border-[rgba(26,24,23,0.16)] bg-[rgba(64,52,44,0.03)] p-4">
           <div className="flex flex-col gap-2">
             <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
               Alternate platform links
@@ -611,7 +611,7 @@ export function RecommendationComposer({
             </p>
           </div>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
             {alternatePlatformOptions.map(([value, label]) => {
               const isSourcePlatform = value === platform;
 
@@ -626,7 +626,7 @@ export function RecommendationComposer({
                     onChange={(event) =>
                       updateAlternatePlatformUrl(value, event.target.value)
                     }
-                    className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.24)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)] disabled:cursor-not-allowed disabled:bg-[rgba(64,52,44,0.04)] disabled:text-[rgba(64,52,44,0.36)]"
+                    className="border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.24)] px-4 py-3.5 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)] disabled:cursor-not-allowed disabled:bg-[rgba(64,52,44,0.04)] disabled:text-[rgba(64,52,44,0.36)]"
                     placeholder={
                       isSourcePlatform
                         ? "Original link already covers this platform"
@@ -659,7 +659,7 @@ export function RecommendationComposer({
           <textarea
             value={comment}
             onChange={(event) => setComment(event.target.value.slice(0, MAX_COMMENT_LENGTH))}
-            className="min-h-32 border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-4 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
+            className="min-h-28 border border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] px-4 py-3.5 text-[#1A1817] outline-none placeholder:text-[rgba(64,52,44,0.38)]"
             placeholder="왜 이 곡을 남기고 싶은지 짧게 적어보세요."
           />
           {errors.comment ? (
@@ -667,7 +667,7 @@ export function RecommendationComposer({
           ) : null}
         </label>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[rgba(64,52,44,0.48)]">
             Add mood tags
           </span>
@@ -680,7 +680,7 @@ export function RecommendationComposer({
                   key={tag}
                   type="button"
                   onClick={() => toggleTag(tag)}
-                  className={`border px-3 py-2 text-[0.76rem] font-medium uppercase tracking-[0.08em] ${
+                  className={`border px-3 py-1.5 text-[0.76rem] font-medium uppercase tracking-[0.08em] ${
                     isActive
                       ? "border-[#1A1817] bg-[#1A1817] text-[#EBE6D8]"
                       : "border-[rgba(26,24,23,0.16)] bg-[rgba(255,255,255,0.18)] text-[rgba(64,52,44,0.78)]"
@@ -697,14 +697,14 @@ export function RecommendationComposer({
           <button
             type="button"
             onClick={resetForm}
-            className="flex-1 border border-[rgba(26,24,23,0.18)] bg-transparent px-6 py-4 text-[0.92rem] font-semibold text-[#1A1817]"
+            className="flex-1 border border-[rgba(26,24,23,0.18)] bg-transparent px-6 py-3.5 text-[0.92rem] font-semibold text-[#1A1817]"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSaving || isPending}
-            className="flex-[1.35] border border-[#1A1817] bg-[#1A1817] px-6 py-4 text-[0.92rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
+            className="flex-[1.35] border border-[#1A1817] bg-[#1A1817] px-6 py-3.5 text-[0.92rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
           >
             {isSaving || isPending ? "Posting..." : "Post now"}
           </button>
