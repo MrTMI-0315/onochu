@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BrandMarkLink } from "@/components/brand-mark-link";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import { platformLabels } from "@/lib/mock-data";
 import type {
@@ -269,12 +270,7 @@ export function ArchiveProfileView({
                 ←
               </Link>
             ) : null}
-            <Link
-              href="/"
-              className="inline-flex items-center bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]"
-            >
-              ONOCHU
-            </Link>
+            <BrandMarkLink />
             <span className="ml-auto font-mono text-[0.68rem] uppercase tracking-[0.08em] text-[#8C867A]">
               {profileLabel}
             </span>

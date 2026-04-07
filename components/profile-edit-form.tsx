@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
+import { BrandMarkLink } from "@/components/brand-mark-link";
 import {
   createProfileDraft,
   loadStoredProfileDraft,
@@ -204,12 +205,7 @@ export function ProfileEditForm({
         <form onSubmit={handleSubmit}>
           <section className="border-b border-[#1A1817] px-6 py-6 md:px-8">
             <div className="flex items-start justify-between gap-4">
-              <Link
-                href="/"
-                className="inline-flex items-center bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]"
-              >
-                ONOCHU
-              </Link>
+              <BrandMarkLink />
               <p className="text-right font-mono text-[0.68rem] uppercase leading-[1.35] tracking-[0.08em] text-[#8C867A]">
                 ESTABLISHED 2024
                 <br />

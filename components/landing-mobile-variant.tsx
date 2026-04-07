@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BrandMarkLink } from "@/components/brand-mark-link";
 
 const problemItems = [
   { num: "01", text: "단톡방에서 좋았던 추천도 금방 묻힙니다." },
@@ -131,12 +132,7 @@ export function LandingMobileVariant() {
 
       <div className="md:mx-auto md:max-w-6xl md:overflow-hidden md:border md:border-[#1A1817] md:bg-[#EBE6D8] md:shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
         <header className="flex items-start justify-between border-b border-[#1A1817] px-6 py-6 md:px-8 md:py-7">
-          <Link
-            href="/"
-            className="inline-flex items-center bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]"
-          >
-            ONOCHU
-          </Link>
+          <BrandMarkLink />
           <div className="text-right font-mono text-[0.68rem] leading-tight text-[#1A1817]">
             MOBILE EDITION
             <br />

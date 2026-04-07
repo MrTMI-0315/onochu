@@ -17,6 +17,11 @@
 
 ## Route Checklist
 
+### Global Header Interaction
+
+- `ONOCHU` 브랜드 마크 클릭 시 항상 `/` 홈으로 이동해야 함
+- mobile/desktop 공통 헤더에서 동일한 브랜드 배지 스타일을 유지해야 함
+
 ### `/`
 
 - PASS
