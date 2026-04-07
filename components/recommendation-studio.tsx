@@ -199,9 +199,12 @@ export function RecommendationStudio({
       <main className="mobile-screen bg-[var(--paper)] pb-16 md:hidden">
         <section className="border-b border-[rgba(64,52,44,0.28)] px-6 py-6">
           <div className="flex items-start justify-between gap-4">
-            <span className="bg-[var(--accent-ink)] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[var(--paper)]">
+            <Link
+              href="/"
+              className="inline-flex items-center bg-[var(--accent-ink)] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[var(--paper)]"
+            >
               ONOCHU
-            </span>
+            </Link>
             <p className="text-right font-mono text-[0.68rem] uppercase leading-[1.35] tracking-[0.08em] text-[rgba(64,52,44,0.48)]">
               ESTABLISHED 2024
               <br />
@@ -347,9 +350,12 @@ export function RecommendationStudio({
         <main className="min-h-screen bg-[var(--paper)] px-6 py-8 text-[var(--accent-ink)]">
           <div className="mx-auto max-w-6xl overflow-hidden border border-[#1A1817] bg-[#EBE6D8] shadow-[0_24px_60px_rgba(26,24,23,0.08)]">
             <header className="flex items-start justify-between border-b border-[#1A1817] px-8 py-7">
-              <div className="bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]">
+              <Link
+                href="/"
+                className="inline-flex items-center bg-[#1A1817] px-2 py-1 font-mono text-[0.82rem] font-bold uppercase tracking-[0.1em] text-[#EBE6D8]"
+              >
                 ONOCHU
-              </div>
+              </Link>
               <div className="text-right font-mono text-[0.68rem] leading-tight text-[#1A1817]">
                 RECOMMENDATION ARCHIVE
                 <br />
