@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint . --max-warnings=0"
+    "lint": "eslint . --max-warnings=0",
+    "qa:brand-header": "node scripts/qa-brand-header.mjs"
   },
   "dependencies": {
     "next": "latest",
