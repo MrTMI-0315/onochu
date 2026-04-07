@@ -7,6 +7,7 @@
 
 ## Verification Commands
 
+- `npm run qa:brand-header`
 - `npm run lint`
 - `npm run build`
 - `npm run dev`
