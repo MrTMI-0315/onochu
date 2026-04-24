@@ -15,6 +15,7 @@
 - `ThemeSpotlight`
 - `GenreCollection`
 - `ArtistCollection`
+- `browserIdentityId` persistence owner key
 
 ### `MusicPlatform`
 
@@ -23,9 +24,8 @@
   - `apple_music`
   - `youtube_music`
   - `soundcloud`
-  - `other`
-- PRD v0.4 기준 later option:
   - `melon`
+  - `other`
 
 ### `SongRecommendation` Required Fields
 
@@ -106,3 +106,5 @@
 - genre / artist collection은 later scope지만 현재 태그/아티스트 metadata는 이 확장을 막지 않아야 한다
 - 추후 Supabase 연동 가능성을 고려해 UI와 데이터 계층을 분리
 - 외부 플랫폼 API는 MVP 범위에서 제외
+- Phase 2 server persistence는 로그인보다 anonymous browser identity를 먼저 도입한다
+- server write 실패 시 현재 browser storage flow를 fallback으로 유지한다

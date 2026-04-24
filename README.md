@@ -1,6 +1,6 @@
 # Onochu
 
-Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹앱 MVP 저장소입니다. 현재 문서 기준선은 [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md)이며, 이는 `/Users/mrtmi/Downloads/Onochu_PRD_v0.3.md`를 저장소용으로 재정리한 버전입니다.
+Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹앱 MVP 저장소입니다. 현재 문서 기준선은 [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md)의 PRD v0.4와 [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md)의 구현 기준선입니다.
 
 ## Current Status
 
@@ -29,10 +29,12 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - draft recommendation의 theme metadata 연결 및 participation summary 추가 완료
 - post-rebuild route QA refresh 및 production redeploy 완료
 - landing hero artwork 추가와 parchment/clay palette retheme 완료
+- cross-platform recommendation access model / alternate links / viewer platform CTA / search fallback 완료
+- Phase 2 lightweight identity boundary와 server persistence 진입 전략 정리 완료
 
 ## Documents
 
-- [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md): PRD v0.3 저장소 반영본
+- [`docs/prd.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/prd.md): PRD v0.4 저장소 반영본
 - [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md): MB 단위 작업 계획과 완료 기준
 - [`docs/spec.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/spec.md): PRD를 구현 기준으로 재구성한 제품 명세
 - [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md): route별 QA 결과와 blocker 정리
@@ -77,6 +79,8 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - `/members`에서는 닉네임 검색, 장르 필터, 플랫폼 필터 조합이 동작합니다.
 - `/recommendations`에서는 작성자 링크, fire/save 인터랙션, 무드 하이라이트, active theme event metadata가 함께 렌더링됩니다.
 - `/recommendations`에서는 saved shelf, all/saved filter, theme participation summary, fire/save persistence가 함께 동작합니다.
+- `/recommendations`에서는 profile의 main platform을 viewer preference로 읽고, direct alternate link가 없으면 search fallback CTA를 보여줍니다.
+- `/recommendations/new`에서는 원본 링크 외 optional alternate platform links를 입력할 수 있습니다.
 - `/` 랜딩에서는 hero artwork와 parchment/clay 기반 톤이 적용된 CTA shell이 함께 렌더링됩니다.
 - recommendation card에서는 작성자 프로필로 바로 이동하는 CTA가 함께 보입니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
@@ -86,7 +90,7 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - route별 QA 결과와 남은 blocker는 [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)에 정리했습니다.
 - Vercel import 기준 배포 절차와 smoke checklist는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md)에 정리했습니다.
 - 현재 production URL은 [https://onochu.vercel.app](https://onochu.vercel.app)입니다.
-- 현재 구현은 mock data 기반 MVP입니다.
+- 현재 구현은 mock data + browser storage 기반 MVP입니다.
 
 ## Commit Rule
 
@@ -96,6 +100,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 41` 기준으로 lightweight identity 전략을 먼저 정리
-2. recommendation과 profile 중 어느 저장 축을 먼저 서버 persistence로 옮길지 결정
+1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 53` 기준으로 recommendation draft와 alternate links를 server persistence로 이동
+2. 이후 fire/save engagement와 profile draft를 같은 identity key 기준으로 승격
 3. Git-integrated import path를 검증하려면 Vercel GitHub Login Connection 연결 여부 확인

@@ -323,27 +323,57 @@ type ThemeSpotlight = {
 - local reaction / save
 - browser storage 기반 draft persistence
 - viewer platform 기반 cross-platform CTA
+- optional alternate platform links
+- copy query + preferred platform search fallback
+- landing hero artwork와 parchment/clay palette
 
 현재 저장소에서 v0.4 기준으로 아직 문서 대비 남는 갭:
 
-- search handoff를 copy + search UX 관점으로 더 명확히 드러내는 surface
 - genre / artist collection 라우트
-- 실명 기반 신뢰 구조를 위한 약한 식별 전략
+- recommendation / engagement / profile의 server persistence
 - 장르/아티스트 단위 수동 큐레이션 UI
 
 ## 16. Acceptance Criteria
 
-- [ ] 랜딩 페이지가 존재한다
-- [ ] 추천곡 피드가 존재한다
-- [ ] 추천곡 등록 페이지가 존재한다
-- [ ] 멤버 디렉토리 페이지가 존재한다
-- [ ] 멤버 상세 페이지가 존재한다
-- [ ] 프로필 생성/수정 페이지가 존재한다
-- [ ] 추천 카드에 곡명 / 아티스트 / 추천인 / 코멘트 / 플랫폼 / 태그가 표시된다
-- [ ] 추천 카드에서 곡명/아티스트 복사 또는 플랫폼 검색 진입이 가능하다
-- [ ] 가벼운 반응 또는 저장 UI가 존재한다
-- [ ] 주간/행사 테마 슬롯이 존재한다
-- [ ] 모바일 기준으로 사용성이 깨지지 않는다
-- [ ] `npm run lint` 통과
-- [ ] `npm run build` 통과
-- [ ] Vercel 배포 가능한 상태다
+- [x] 랜딩 페이지가 존재한다
+- [x] 추천곡 피드가 존재한다
+- [x] 추천곡 등록 페이지가 존재한다
+- [x] 멤버 디렉토리 페이지가 존재한다
+- [x] 멤버 상세 페이지가 존재한다
+- [x] 프로필 생성/수정 페이지가 존재한다
+- [x] 추천 카드에 곡명 / 아티스트 / 추천인 / 코멘트 / 플랫폼 / 태그가 표시된다
+- [x] 추천 카드에서 곡명/아티스트 복사 또는 플랫폼 검색 진입이 가능하다
+- [x] 가벼운 반응 또는 저장 UI가 존재한다
+- [x] 주간/행사 테마 슬롯이 존재한다
+- [x] 모바일 기준으로 사용성이 깨지지 않는다
+- [x] `npm run lint` 통과
+- [x] `npm run build` 통과
+- [x] Vercel 배포 가능한 상태다
+
+## 17. Phase 2 Identity / Persistence Decision
+
+현재 확정된 다음 구현 방향은 **anonymous browser identity boundary → recommendation/engagement server persistence → profile persistence → optional trusted identity** 순서다.
+
+### 17.1 Lightweight Identity
+
+- 1차 식별자는 로그인 없는 `browserIdentityId`로 둔다.
+- `browserIdentityId`는 localStorage에 저장하고 server persistence record의 owner key로 사용한다.
+- 닉네임은 표시명일 뿐 고유 식별자로 사용하지 않는다.
+- 카카오/실명 기반 신뢰 구조는 persistence 사용성이 검증된 뒤 later phase에서 붙인다.
+- 현재 profile draft와 recommendation storage는 같은 browser identity boundary를 공유한다.
+
+### 17.2 Persistence Priority
+
+1. recommendation draft와 alternate platform links
+2. recommendation engagement: fire / save
+3. profile draft: nickname / bio / favorite genres / main platform / playlist links
+4. theme participation summary
+
+이 순서를 택하는 이유는 recommendation feed가 제품의 핵심 가치 검증면이고, 저장/반응이 browser-local에 머물면 다른 기기나 배포 환경에서 validation signal이 끊기기 때문이다.
+
+### 17.3 Data Boundary
+
+- 현재 `lib/recommendation-drafts.ts`와 `lib/profile-drafts.ts`의 browser storage contract를 migration source로 삼는다.
+- 서버 저장소 도입 전까지 기존 local flow는 fallback으로 유지한다.
+- 서버 persistence 실패 시 사용자는 local draft를 잃지 않아야 한다.
+- music API, 자동 플랫폼 매핑, heavy auth는 여전히 scope 밖이다.

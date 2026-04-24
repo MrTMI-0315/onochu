@@ -148,3 +148,26 @@
 - PRD v0.3 route 기준 주요 화면은 현재 구현 범위 안에서 탐색 가능
 - PRD v0.4 기준 search-first cross-platform handoff는 runtime model과 UI surface까지 반영되었다
 - production deployment와 route smoke evidence를 확보했고, cross-platform recommendation access 흐름까지 QA 기준선에 포함했다
+
+
+## 2026-04-24 Docs Alignment Smoke
+
+### Scope
+
+- README / SPEC / MB plan / shared docs의 v0.4 구현 기준선 정렬
+- Phase 2 lightweight identity 및 server persistence sequence 확정
+- local route smoke using Playwright MCP
+
+### Verified
+
+- PASS: npm run qa:brand-header
+- PASS: npm run lint
+- PASS: npm run build
+- PASS: Playwright MCP route smoke for /, /recommendations, /recommendations/new, /members, /members/kai, /profile/edit
+- PASS: route smoke에서 각 route가 HTTP 200을 반환하고 핵심 텍스트가 누락 없이 노출됨
+- PASS: profile draft와 recommendation storage가 anonymous browser identity boundary를 공유하도록 코드 경계가 추가됨
+
+### Remaining Gaps
+
+- recommendation / engagement / profile server persistence는 아직 구현 전이다.
+- genre / artist collection route는 later scope로 남아 있다.

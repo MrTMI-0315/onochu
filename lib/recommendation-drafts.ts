@@ -5,10 +5,12 @@ import type {
   SongRecommendation,
   ThemeSpotlight,
 } from "@/lib/types";
+import { ensureBrowserIdentity } from "@/lib/browser-identity";
 import { normalizePlatformLinkMap } from "@/lib/platform-links";
 
 export type StoredRecommendationState = {
   version: number;
+  ownerBrowserIdentityId: string;
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
   engagementByRecommendationId: Record<string, RecommendationEngagementState>;
@@ -17,9 +19,10 @@ export type StoredRecommendationState = {
 export const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
 export const LEGACY_RECOMMENDATION_STORAGE_KEY =
   "onochu-recommendation-studio-v1";
-export const RECOMMENDATION_STORAGE_VERSION = 5;
+export const RECOMMENDATION_STORAGE_VERSION = 6;
 
 type LoadedRecommendationState = {
+  browserIdentityId: string;
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
   engagementByRecommendationId: Record<string, RecommendationEngagementState>;
@@ -81,6 +84,7 @@ export function loadStoredRecommendationState(
   initialRecommendations: SongRecommendation[],
 ): LoadedRecommendationState {
   try {
+    const identityState = ensureBrowserIdentity();
     const storedValue = window.localStorage.getItem(RECOMMENDATION_STORAGE_KEY);
     const legacyValue = window.localStorage.getItem(
       LEGACY_RECOMMENDATION_STORAGE_KEY,
@@ -88,10 +92,11 @@ export function loadStoredRecommendationState(
 
     if (!storedValue && !legacyValue) {
       return {
+        browserIdentityId: identityState.browserIdentityId,
         recommendations: initialRecommendations,
         latestDraft: null,
         engagementByRecommendationId: {},
-        storageMessage: "browser storage active",
+        storageMessage: "browser storage active / anonymous identity ready",
       };
     }
 
@@ -105,47 +110,76 @@ export function loadStoredRecommendationState(
 
     if (!parsedValue) {
       return {
+        browserIdentityId: identityState.browserIdentityId,
         recommendations: initialRecommendations,
         latestDraft: null,
         engagementByRecommendationId: {},
-        storageMessage: "browser storage active",
+        storageMessage: "browser storage active / anonymous identity ready",
       };
     }
 
     if ("version" in parsedValue) {
-      if (parsedValue.version === 3) {
+      if (
+        parsedValue.version === RECOMMENDATION_STORAGE_VERSION &&
+        "ownerBrowserIdentityId" in parsedValue &&
+        parsedValue.ownerBrowserIdentityId === identityState.browserIdentityId
+      ) {
         return {
+          browserIdentityId: identityState.browserIdentityId,
           recommendations:
             Array.isArray(parsedValue.recommendations) &&
             parsedValue.recommendations.length > 0
-              ? parsedValue.recommendations.map((recommendation) => {
-                  const seededRecommendation = initialRecommendations.find(
-                    (initialRecommendation) =>
-                      initialRecommendation.id === recommendation.id,
-                  );
-
-                  if (!seededRecommendation) {
-                    return recommendation;
-                  }
-
-                  return {
-                    ...seededRecommendation,
-                    ...recommendation,
-                    themeId: seededRecommendation.themeId,
-                    themeTitle: seededRecommendation.themeTitle,
-                    themePhaseLabel: seededRecommendation.themePhaseLabel,
-                  };
-                })
+              ? parsedValue.recommendations
               : initialRecommendations,
           latestDraft: parsedValue.latestDraft ?? null,
           engagementByRecommendationId:
             parsedValue.engagementByRecommendationId ?? {},
-          storageMessage: "migrated browser storage to theme-aware state",
+          storageMessage: "hydrated from browser storage",
+        };
+      }
+
+      if (parsedValue.version === 3) {
+        const recommendations =
+          Array.isArray(parsedValue.recommendations) &&
+          parsedValue.recommendations.length > 0
+            ? parsedValue.recommendations.map((recommendation) => {
+                const seededRecommendation = initialRecommendations.find(
+                  (initialRecommendation) =>
+                    initialRecommendation.id === recommendation.id,
+                );
+
+                if (!seededRecommendation) {
+                  return recommendation;
+                }
+
+                return {
+                  ...seededRecommendation,
+                  ...recommendation,
+                  themeId: seededRecommendation.themeId,
+                  themeTitle: seededRecommendation.themeTitle,
+                  themePhaseLabel: seededRecommendation.themePhaseLabel,
+                };
+              })
+            : initialRecommendations;
+        const nextState = {
+          recommendations,
+          latestDraft: parsedValue.latestDraft ?? null,
+          engagementByRecommendationId:
+            parsedValue.engagementByRecommendationId ?? {},
+        };
+
+        persistStoredRecommendationState(nextState);
+
+        return {
+          browserIdentityId: identityState.browserIdentityId,
+          ...nextState,
+          storageMessage:
+            "migrated browser storage to anonymous identity boundary",
         };
       }
 
       if (parsedValue.version === 2) {
-        return {
+        const nextState = {
           recommendations:
             Array.isArray(parsedValue.recommendations) &&
             parsedValue.recommendations.length > 0
@@ -153,7 +187,15 @@ export function loadStoredRecommendationState(
               : initialRecommendations,
           latestDraft: parsedValue.latestDraft ?? null,
           engagementByRecommendationId: {},
-          storageMessage: "migrated browser storage to engagement state",
+        };
+
+        persistStoredRecommendationState(nextState);
+
+        return {
+          browserIdentityId: identityState.browserIdentityId,
+          ...nextState,
+          storageMessage:
+            "migrated browser storage to anonymous identity boundary",
         };
       }
 
@@ -161,6 +203,7 @@ export function loadStoredRecommendationState(
         resetStoredRecommendationState();
 
         return {
+          browserIdentityId: identityState.browserIdentityId,
           recommendations: initialRecommendations,
           latestDraft: null,
           engagementByRecommendationId: {},
@@ -168,7 +211,7 @@ export function loadStoredRecommendationState(
         };
       }
 
-      return {
+      const nextState = {
         recommendations:
           Array.isArray(parsedValue.recommendations) &&
           parsedValue.recommendations.length > 0
@@ -177,7 +220,14 @@ export function loadStoredRecommendationState(
         latestDraft: parsedValue.latestDraft ?? null,
         engagementByRecommendationId:
           parsedValue.engagementByRecommendationId ?? {},
-        storageMessage: "hydrated from browser storage",
+      };
+
+      persistStoredRecommendationState(nextState);
+
+      return {
+        browserIdentityId: identityState.browserIdentityId,
+        ...nextState,
+        storageMessage: "migrated browser storage to anonymous identity boundary",
       };
     }
 
@@ -197,13 +247,19 @@ export function loadStoredRecommendationState(
     }
 
     return {
+      browserIdentityId: identityState.browserIdentityId,
       recommendations,
       latestDraft,
       engagementByRecommendationId: {},
-      storageMessage,
+      storageMessage: legacyValue
+        ? "migrated legacy browser storage to anonymous identity boundary"
+        : storageMessage,
     };
   } catch {
+    const identityState = ensureBrowserIdentity();
+
     return {
+      browserIdentityId: identityState.browserIdentityId,
       recommendations: initialRecommendations,
       latestDraft: null,
       engagementByRecommendationId: {},
@@ -217,10 +273,13 @@ export function persistStoredRecommendationState({
   latestDraft,
   engagementByRecommendationId,
 }: PersistRecommendationStateInput) {
+  const identityState = ensureBrowserIdentity();
+
   window.localStorage.setItem(
     RECOMMENDATION_STORAGE_KEY,
     JSON.stringify({
       version: RECOMMENDATION_STORAGE_VERSION,
+      ownerBrowserIdentityId: identityState.browserIdentityId,
       recommendations,
       latestDraft,
       engagementByRecommendationId,
@@ -253,10 +312,11 @@ export function appendDraftToStoredRecommendationState({
   });
 
   return {
+    browserIdentityId: currentState.browserIdentityId,
     recommendations,
     latestDraft,
     engagementByRecommendationId,
-    storageMessage: "saved to browser storage",
+    storageMessage: "saved to browser storage with anonymous identity",
   };
 }
 

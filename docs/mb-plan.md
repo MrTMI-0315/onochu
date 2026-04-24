@@ -1,4 +1,4 @@
-# Onochu MB Plan v0.3
+# Onochu MB Plan v0.4
 
 ## Commit Convention
 
@@ -411,3 +411,108 @@
 - `MB 49` recommendation / create / profile accent retheme
 - `MB 50` landing / member route accent sweep
 - `MB 51` artwork palette rollout QA / production redeploy
+
+## Phase 2 Persistence Sequence
+
+Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser storage UX를 유지한 채 **anonymous browser identity**를 먼저 서버 record의 owner key로 승격한다.
+
+## Completed MB 52
+
+- `MB 52` anonymous browser identity boundary 도입
+
+## MB 52
+
+- 제목: Introduce Anonymous Browser Identity Boundary
+- Goal:
+  - localStorage에 유지되는 `browserIdentityId`를 정의하고 recommendation/profile persistence의 공통 owner key로 사용한다.
+- Scope:
+  - `docs/spec.md`
+  - `docs/shared.md`
+  - `lib/profile-drafts.ts`
+  - `lib/recommendation-drafts.ts`
+- Acceptance Criteria:
+  - 로그인 없이도 같은 브라우저에서 안정적인 identity key가 유지된다.
+  - 닉네임은 display value로만 사용되고 owner key로 사용되지 않는다.
+  - 기존 local draft / engagement migration path가 깨지지 않는다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+
+## MB 53
+
+- 제목: Move Recommendation Drafts To Server Persistence
+- Goal:
+  - recommendation draft와 alternate platform links를 browser identity 기준 server persistence로 저장한다.
+- Scope:
+  - `lib/recommendation-drafts.ts`
+  - `components/recommendation-composer.tsx`
+  - `components/recommendation-studio.tsx`
+- Acceptance Criteria:
+  - 새 추천 draft가 reload 이후와 다른 session에서도 복원 가능한 server source를 가진다.
+  - server write 실패 시 local fallback이 유지된다.
+  - `searchQuery`, `themeId`, `alternatePlatformUrls`가 보존된다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+  - route smoke: `/recommendations`, `/recommendations/new`
+
+## MB 54
+
+- 제목: Persist Recommendation Engagement
+- Goal:
+  - fire/save active state와 count delta를 browser identity 기준으로 서버에 유지한다.
+- Scope:
+  - `lib/recommendation-drafts.ts`
+  - `components/recommendation-studio.tsx`
+  - `components/recommendation-card.tsx`
+- Acceptance Criteria:
+  - fire/save 상태가 reload와 server hydration 이후에도 유지된다.
+  - duplicate toggles가 count를 비정상적으로 증가시키지 않는다.
+  - saved shelf와 saved filter가 server state 기준으로 복원된다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+  - route smoke: `/recommendations`
+
+## MB 55
+
+- 제목: Move Profile Draft To Server Persistence
+- Goal:
+  - profile edit의 nickname, bio, favorite genres, main platform, playlist links를 server persistence로 승격한다.
+- Scope:
+  - `lib/profile-drafts.ts`
+  - `components/profile-edit-form.tsx`
+  - `components/recommendation-studio.tsx`
+  - `components/recommendation-create-route.tsx`
+- Acceptance Criteria:
+  - 저장된 main platform이 server hydration 후 recommendation CTA 해석에 반영된다.
+  - completion summary와 reset action이 server/local boundary를 명확히 설명한다.
+  - server write 실패 시 기존 local fallback이 유지된다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+  - route smoke: `/profile/edit`, `/recommendations`
+
+## MB 56
+
+- 제목: Validate Persistence Migration and Production Flow
+- Goal:
+  - MB 52~55 이후 persistence migration, route smoke, production deployment 기준선을 갱신한다.
+- Scope:
+  - `docs/qa-v0.3.md`
+  - `docs/deployment.md`
+  - `README.md`
+- Acceptance Criteria:
+  - anonymous identity, recommendation draft, engagement, profile persistence smoke가 문서화된다.
+  - production deploy와 smoke evidence가 최신화된다.
+  - Git-integrated import path 또는 CLI fallback 상태가 명확히 정리된다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+  - Playwright smoke
+  - production smoke

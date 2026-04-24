@@ -119,5 +119,6 @@
 ## Known Limits
 
 - theme 운영 흐름은 manual/mock 수준이다.
-- persistence와 auth는 local/mock 범위에 머문다.
+- persistence와 auth는 아직 local/mock 범위에 머문다.
+- anonymous browser identity boundary는 local storage owner key로 먼저 도입됐고, 다음 단계는 이 key를 server persistence로 연결하는 것이다.
 - GitHub Login Connection은 아직 연결되지 않아 Git-integrated import path는 미완료 상태다.
