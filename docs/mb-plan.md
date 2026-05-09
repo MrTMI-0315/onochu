@@ -412,9 +412,11 @@
 - `MB 50` landing / member route accent sweep
 - `MB 51` artwork palette rollout QA / production redeploy
 
-## Phase 2 Persistence Sequence
+## Phase 2 Visual / Persistence Sequence
 
 Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser storage UX를 유지한 채 **anonymous browser identity**를 먼저 서버 record의 owner key로 승격한다.
+
+단, MB 52 이후 Playwright visual audit 결과 `/` main landing의 parchment / clay archive tone은 제품 기준선으로 충분히 강하지만, shared shell / mobile nav / 일부 card-form primitive에는 이전 dark glass tone의 흔적이 남아 있다. 따라서 server persistence에 들어가기 전, main tone 기준 visual system 정렬을 먼저 수행한다.
 
 ## Completed MB 52
 
@@ -441,6 +443,36 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
 
 ## MB 53
 
+- 제목: Visual System Audit & Main Tone Alignment
+- Goal:
+  - `/` main landing의 parchment / clay archive tone을 기준으로 shared shell, mobile nav, recommendation card/form primitive를 정렬한다.
+- Scope:
+  - `app/globals.css`
+  - `components/site-navigation.tsx`
+  - `components/page-shell.tsx`
+  - `app/not-found.tsx`
+  - `components/recommendation-card.tsx`
+  - `components/recommendation-composer.tsx`
+  - `components/recommendation-studio.tsx`
+  - `components/recommendation-create-route.tsx`
+  - `components/profile-edit-form.tsx`
+  - `components/member-directory-client.tsx`
+  - `components/archive-profile-view.tsx`
+  - `docs/qa-v0.3.md`
+- Acceptance Criteria:
+  - `/`, `/recommendations`, `/recommendations/new`, `/members`, `/members/[id]`, `/profile/edit`, not-found가 같은 archive tone으로 보인다.
+  - mobile bottom nav가 390x844 기준 첫 화면의 핵심 CTA/content를 가리지 않는다.
+  - recommendation card에서 곡명, 아티스트, 추천인, 추천 이유, search/copy, fire/save 우선순위가 유지된다.
+  - 의도적 black editorial block을 제외하고 old dark glass rounded shell이 재도입되지 않는다.
+- Verification:
+  - `npm run qa:brand-header`
+  - `npm run lint`
+  - `npm run build`
+  - Playwright smoke: `/`, `/recommendations`, `/recommendations/new`, `/members`, `/members/[id]`, `/profile/edit`
+  - Playwright mobile smoke: `/`, `/recommendations`, `/profile/edit`
+
+## MB 54
+
 - 제목: Move Recommendation Drafts To Server Persistence
 - Goal:
   - recommendation draft와 alternate platform links를 browser identity 기준 server persistence로 저장한다.
@@ -452,13 +484,14 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
   - 새 추천 draft가 reload 이후와 다른 session에서도 복원 가능한 server source를 가진다.
   - server write 실패 시 local fallback이 유지된다.
   - `searchQuery`, `themeId`, `alternatePlatformUrls`가 보존된다.
+  - MB 53에서 정렬한 visual primitive를 persistence 작업 중 되돌리지 않는다.
 - Verification:
   - `npm run qa:brand-header`
   - `npm run lint`
   - `npm run build`
   - route smoke: `/recommendations`, `/recommendations/new`
 
-## MB 54
+## MB 55
 
 - 제목: Persist Recommendation Engagement
 - Goal:
@@ -471,13 +504,14 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
   - fire/save 상태가 reload와 server hydration 이후에도 유지된다.
   - duplicate toggles가 count를 비정상적으로 증가시키지 않는다.
   - saved shelf와 saved filter가 server state 기준으로 복원된다.
+  - MB 53에서 정렬한 recommendation card hierarchy를 persistence 작업 중 되돌리지 않는다.
 - Verification:
   - `npm run qa:brand-header`
   - `npm run lint`
   - `npm run build`
   - route smoke: `/recommendations`
 
-## MB 55
+## MB 56
 
 - 제목: Move Profile Draft To Server Persistence
 - Goal:
@@ -491,28 +525,31 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
   - 저장된 main platform이 server hydration 후 recommendation CTA 해석에 반영된다.
   - completion summary와 reset action이 server/local boundary를 명확히 설명한다.
   - server write 실패 시 기존 local fallback이 유지된다.
+  - server/local boundary copy가 MB 53 archive notice tone과 충돌하지 않는다.
 - Verification:
   - `npm run qa:brand-header`
   - `npm run lint`
   - `npm run build`
   - route smoke: `/profile/edit`, `/recommendations`
 
-## MB 56
+## MB 57
 
-- 제목: Validate Persistence Migration and Production Flow
+- 제목: Validate Visual and Persistence Migration Production Flow
 - Goal:
-  - MB 52~55 이후 persistence migration, route smoke, production deployment 기준선을 갱신한다.
+  - MB 53 visual alignment와 MB 54~56 persistence migration 이후 route smoke, production deployment 기준선을 갱신한다.
 - Scope:
   - `docs/qa-v0.3.md`
   - `docs/deployment.md`
   - `README.md`
 - Acceptance Criteria:
-  - anonymous identity, recommendation draft, engagement, profile persistence smoke가 문서화된다.
+  - visual alignment, anonymous identity, recommendation draft, engagement, profile persistence smoke가 문서화된다.
   - production deploy와 smoke evidence가 최신화된다.
   - Git-integrated import path 또는 CLI fallback 상태가 명확히 정리된다.
+  - production 화면이 `/` main tone baseline과 일치하는지 route별로 기록된다.
 - Verification:
   - `npm run qa:brand-header`
   - `npm run lint`
   - `npm run build`
-  - Playwright smoke
+  - Playwright visual smoke
+  - Playwright persistence route smoke
   - production smoke
