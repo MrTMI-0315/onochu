@@ -264,3 +264,33 @@
 ### Remaining Gap
 
 - profile server backing 역시 in-memory server-session store다. Vercel cold start / redeploy / multi-region durability는 MB57 durable provider 결정 전까지 보장하지 않는다.
+
+## 2026-05-09 MB57 Visual and Persistence Migration Production Smoke
+
+### Scope
+
+- MB53 visual alignment 이후 production route tone baseline 재검증
+- MB54~56 recommendation draft / engagement / profile server-session persistence production smoke
+- Vercel production deployment evidence와 Git-integrated import fallback 상태 갱신
+
+### Verified
+
+- PASS: `npm run qa:brand-header`
+- PASS: `npm run lint`
+- PASS: `npm run build`
+- PASS: `npx vercel --prod --yes`
+- PASS: Vercel deployment `dpl_5EnW8kkkMfXLgVJ9HE8Ug4GEHiaC` READY
+- PASS: production alias [https://onochu.vercel.app](https://onochu.vercel.app) 최신 deployment에 alias됨
+- PASS: Playwright production route smoke `/`, `/recommendations`, `/recommendations/new`, `/members`, `/members/kai`, `/profile/edit` 모두 HTTP 200
+- PASS: production route text와 surfaces가 parchment / clay archive tone 기준에서 벗어나지 않음
+- PASS: `/profile/edit`에서 Apple Music main platform 저장 후 `GET /api/profile`이 `mainPlatform: "apple_music"` 반환
+- PASS: `/recommendations/new`에서 `MB57 Production Smoke` draft 저장 후 `GET /api/recommendations` record에 반영됨
+- PASS: `/recommendations` reload 후 MB57 draft가 visible feed item으로 hydrate됨
+- PASS: profile server hydration 후 recommendation CTA가 Apple Music search link를 우선 사용함
+- PASS: save engagement toggle이 `saveCount: 1`, `save: true`로 저장되고 saved filter reload 후 복원됨
+- PASS: latest production smoke 기준 Playwright console error 0건
+
+### Remaining Gap
+
+- GitHub Login Connection은 아직 미연결이라 CLI upload deployment path가 fallback이다.
+- server-session backing은 production smoke에서 동작했지만, in-memory Map이므로 Vercel cold start / redeploy / multi-region durability는 다음 단계에서 durable provider로 해소해야 한다.

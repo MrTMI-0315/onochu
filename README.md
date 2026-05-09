@@ -31,6 +31,9 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - landing hero artwork 추가와 parchment/clay palette retheme 완료
 - cross-platform recommendation access model / alternate links / viewer platform CTA / search fallback 완료
 - Phase 2 lightweight identity boundary와 server persistence 진입 전략 정리 완료
+- shared shell / mobile nav / not-found recovery를 main landing의 parchment archive tone에 맞춰 정렬 완료
+- recommendation draft, fire/save engagement, profile draft를 anonymous browser identity 기준 server-session API로 승격 완료
+- MB57 production redeploy와 visual / persistence smoke 완료
 
 ## Documents
 
@@ -84,13 +87,13 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 - `/` 랜딩에서는 hero artwork와 parchment/clay 기반 톤이 적용된 CTA shell이 함께 렌더링됩니다.
 - recommendation card에서는 작성자 프로필로 바로 이동하는 CTA가 함께 보입니다.
 - 잘못된 멤버 경로는 커스텀 not-found 화면으로 복구 경로를 제공합니다.
-- `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 local flow로 동작합니다.
-- `/profile/edit`에서는 browser storage 기준 hydrate, completion summary, reset profile action이 함께 동작합니다.
+- `/profile/edit`에서는 필수값 검증, URL 형식 검증, 저장 중/성공/실패 상태가 server-session + local fallback flow로 동작합니다.
+- `/profile/edit`에서는 browser identity 기준 server hydrate, completion summary, server/local reset profile action이 함께 동작합니다.
 - `/members/[id]`에서는 추천 수 외에 reaction/save aggregate, conversation starter, reply CTA도 함께 보입니다.
 - route별 QA 결과와 남은 blocker는 [`docs/qa-v0.3.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/qa-v0.3.md)에 정리했습니다.
 - Vercel import 기준 배포 절차와 smoke checklist는 [`docs/deployment.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/deployment.md)에 정리했습니다.
 - 현재 production URL은 [https://onochu.vercel.app](https://onochu.vercel.app)입니다.
-- 현재 구현은 mock data + browser storage 기반 MVP입니다.
+- 현재 구현은 mock data + anonymous browser identity + server-session API + browser storage fallback 기반 MVP입니다.
 
 ## Commit Rule
 
@@ -100,6 +103,6 @@ Onochu는 KNU_POW 동아리원을 위한 음악 추천/발견 커뮤니티 웹�
 
 ## Recommended Next Step
 
-1. [`docs/mb-plan.md`](/Users/mrtmi/Desktop/Mr_TMI/repos/onochu/docs/mb-plan.md)의 `MB 53` 기준으로 recommendation draft와 alternate links를 server persistence로 이동
-2. 이후 fire/save engagement와 profile draft를 같은 identity key 기준으로 승격
-3. Git-integrated import path를 검증하려면 Vercel GitHub Login Connection 연결 여부 확인
+1. server-session in-memory Map을 Vercel cold start / redeploy / multi-region을 견디는 durable provider로 교체
+2. Git-integrated import path를 검증하려면 Vercel GitHub Login Connection 연결 여부 확인
+3. production smoke 기준을 유지하며 genre / artist collection route 같은 later scope를 확장

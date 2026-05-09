@@ -13,10 +13,11 @@
 - verified commands:
   - `npm run lint`
   - `npm run build`
+  - `npm run qa:brand-header`
 - production deployment status:
-  - deployed on 2026-03-25
+  - redeployed on 2026-05-09 after MB 53~56 visual / persistence migration
   - production url: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/5dqZ4Ykbn3juapAUeGPHR3rtrXtv)
+  - deployment inspect url: [inspect build](https://vercel.com/episteme1999-9155s-projects/onochu/5EnW8kkkMfXLgVJ9HE8Ug4GEHiaC)
 
 ## Why This Repo Is Deployable
 
@@ -72,7 +73,8 @@
   - `npx vercel --prod --yes`
 - result:
   - production alias: [https://onochu.vercel.app](https://onochu.vercel.app)
-  - production deployment url: [https://onochu-8wr009bbd-episteme1999-9155s-projects.vercel.app](https://onochu-8wr009bbd-episteme1999-9155s-projects.vercel.app)
+  - latest production deployment url: [https://onochu-5zps4prm4-episteme1999-9155s-projects.vercel.app](https://onochu-5zps4prm4-episteme1999-9155s-projects.vercel.app)
+  - latest deployment id: `dpl_5EnW8kkkMfXLgVJ9HE8Ug4GEHiaC`
 - note:
   - GitHub Login Connection 부재로 repository link 단계에서 400 경고가 있었지만, CLI upload 방식으로 production 배포 자체는 성공했다.
   - 로컬에는 `.vercel`이 생성됐고 `.gitignore`에 ignore 규칙이 추가됐다.
@@ -106,6 +108,13 @@
 - PASS: recommendation feed의 Apple Music preferred platform CTA와 `Search fallback` 라벨 확인
 - PASS: recommendation create에서 optional alternate links 입력 후 draft preview CTA가 Apple Music 기준으로 바뀌는 것 확인
 - PASS: profile edit의 `v1` profile storage summary / completion / reset surface와 main platform save 확인
+- PASS: 2026-05-09 MB57 production smoke에서 `/`, `/recommendations`, `/recommendations/new`, `/members`, `/members/kai`, `/profile/edit` 모두 HTTP 200 확인
+- PASS: production `/profile/edit`에서 Apple Music main platform 저장 후 `GET /api/profile`이 `mainPlatform: "apple_music"` 반환
+- PASS: production `/recommendations/new`에서 `MB57 Production Smoke` draft 저장 후 `GET /api/recommendations`에서 server record 확인
+- PASS: production `/recommendations` reload 후 MB57 draft가 visible feed item으로 hydrate됨
+- PASS: production recommendation CTA가 server hydrated Apple Music profile 기준 search link를 사용함
+- PASS: production saved engagement toggle 후 `saveCount: 1`, `save: true`, saved filter reload 복원 확인
+- PASS: latest production smoke 중 Playwright console error 0건
 
 ## CLI Fallback
 
@@ -119,6 +128,6 @@
 ## Known Limits
 
 - theme 운영 흐름은 manual/mock 수준이다.
-- persistence와 auth는 아직 local/mock 범위에 머문다.
-- anonymous browser identity boundary는 local storage owner key로 먼저 도입됐고, 다음 단계는 이 key를 server persistence로 연결하는 것이다.
+- auth는 아직 anonymous browser identity 기반이다.
+- recommendation/profile persistence는 browser identity key를 server-session API에 연결했지만, backing store는 in-memory Map이라 cold start / redeploy / multi-region durability를 보장하지 않는다.
 - GitHub Login Connection은 아직 연결되지 않아 Git-integrated import path는 미완료 상태다.

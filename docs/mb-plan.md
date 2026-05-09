@@ -425,6 +425,7 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
 - `MB 54` recommendation draft server-session persistence 도입
 - `MB 55` recommendation engagement server-session persistence 도입
 - `MB 56` profile draft server-session persistence 도입
+- `MB 57` visual / persistence migration production baseline 갱신
 
 ## MB 52
 
