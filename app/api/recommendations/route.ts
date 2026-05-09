@@ -38,10 +38,7 @@ export async function GET(request: Request) {
   const record = recommendationRecords.get(ownerBrowserIdentityId);
 
   if (!record) {
-    return NextResponse.json(
-      { record: null, storageKind: "server-session" },
-      { status: 404 },
-    );
+    return NextResponse.json({ record: null, storageKind: "server-session" });
   }
 
   return NextResponse.json({

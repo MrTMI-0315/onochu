@@ -241,3 +241,26 @@
 ### Remaining Gap
 
 - MB55도 MB54와 같은 in-memory server-session backing을 사용한다. production-grade durability는 durable provider 연결 전까지 보장하지 않는다.
+
+## 2026-05-09 MB56 Profile Draft Server-Session Smoke
+
+### Scope
+
+- profile edit draft를 `browserIdentityId` 기준 server-session API에 저장
+- recommendation feed/create route가 server hydrated main platform을 CTA 해석에 반영
+- reset action은 local draft와 server session boundary를 함께 설명
+
+### Verified
+
+- PASS: `npm run qa:brand-header`
+- PASS: `npm run lint`
+- PASS: `npm run build`
+- PASS: Playwright MCP로 `/profile/edit`에서 main platform을 Apple Music으로 저장
+- PASS: API `GET /api/profile?ownerBrowserIdentityId=...`가 server profile draft와 main platform을 반환
+- PASS: `/recommendations` reload 후 recommendation CTA가 server hydrated Apple Music alternate link를 우선 사용
+- PASS: reset action이 local draft와 server-session reset copy를 노출
+- PASS: 빈 server-session fallback은 `record:null` 200 응답으로 처리되어 Playwright console error가 남지 않음
+
+### Remaining Gap
+
+- profile server backing 역시 in-memory server-session store다. Vercel cold start / redeploy / multi-region durability는 MB57 durable provider 결정 전까지 보장하지 않는다.

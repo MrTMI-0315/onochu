@@ -3,6 +3,7 @@ import { ensureBrowserIdentity } from "@/lib/browser-identity";
 
 export const PROFILE_STORAGE_KEY = "onochu-profile-draft";
 export const PROFILE_STORAGE_VERSION = 2;
+const PROFILE_SERVER_ENDPOINT = "/api/profile";
 
 type StoredProfileDraft = {
   version: number;
@@ -22,6 +23,13 @@ type LoadedProfileDraft = {
   draft: ProfileDraft;
   browserIdentityId: string;
   storageMessage: string;
+};
+
+type ServerProfileRecord = {
+  version: number;
+  ownerBrowserIdentityId: string;
+  draft: ProfileDraft;
+  updatedAt: string;
 };
 
 export function createProfileDraft(input: LoadProfileDraftInput): ProfileDraft {
@@ -115,4 +123,80 @@ export function persistStoredProfileDraft(draft: ProfileDraft) {
 
 export function resetStoredProfileDraft() {
   window.localStorage.removeItem(PROFILE_STORAGE_KEY);
+}
+
+export async function loadServerProfileDraft(
+  initialDraft: LoadProfileDraftInput,
+): Promise<LoadedProfileDraft | null> {
+  const identityState = ensureBrowserIdentity();
+  const localState = loadStoredProfileDraft(initialDraft);
+  const response = await fetch(
+    `${PROFILE_SERVER_ENDPOINT}?ownerBrowserIdentityId=${encodeURIComponent(
+      identityState.browserIdentityId,
+    )}`,
+    { cache: "no-store" },
+  );
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error("profile server persistence load failed");
+  }
+
+  const payload = (await response.json()) as {
+    record?: ServerProfileRecord | null;
+  };
+  const record = payload.record;
+
+  if (
+    !record ||
+    record.ownerBrowserIdentityId !== identityState.browserIdentityId
+  ) {
+    return null;
+  }
+
+  return {
+    ...localState,
+    draft: record.draft,
+    storageMessage: "hydrated profile from server session with local fallback",
+  };
+}
+
+export async function persistServerProfileDraft(draft: ProfileDraft) {
+  const identityState = ensureBrowserIdentity();
+  const response = await fetch(PROFILE_SERVER_ENDPOINT, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      version: PROFILE_STORAGE_VERSION,
+      ownerBrowserIdentityId: identityState.browserIdentityId,
+      draft,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("profile server persistence save failed");
+  }
+
+  return "saved profile to server session with local fallback";
+}
+
+export async function resetServerProfileDraft() {
+  const identityState = ensureBrowserIdentity();
+  const response = await fetch(
+    `${PROFILE_SERVER_ENDPOINT}?ownerBrowserIdentityId=${encodeURIComponent(
+      identityState.browserIdentityId,
+    )}`,
+    { method: "DELETE" },
+  );
+
+  if (!response.ok) {
+    throw new Error("profile server persistence reset failed");
+  }
+
+  return "reset profile server session and local fallback";
 }

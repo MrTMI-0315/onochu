@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { BrandMarkLink } from "@/components/brand-mark-link";
 import {
   createProfileDraft,
   loadStoredProfileDraft,
+  loadServerProfileDraft,
   persistStoredProfileDraft,
+  persistServerProfileDraft,
+  resetStoredProfileDraft,
+  resetServerProfileDraft,
 } from "@/lib/profile-drafts";
 import { platformLabels } from "@/lib/mock-data";
-import type { MusicPlatform } from "@/lib/types";
+import type { MusicPlatform, ProfileDraft } from "@/lib/types";
 
 type ProfileEditFormProps = {
   initialNickname: string;
@@ -71,10 +75,24 @@ export function ProfileEditForm({
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
+  function applyDraftToForm(draft: ProfileDraft) {
+    setNickname(draft.nickname);
+    setBio(draft.bio);
+    setSelectedGenres(draft.favoriteGenres);
+    setMainPlatform(draft.mainPlatform);
+    setPlaylistLinks(
+      draft.playlistLinks.length > 0
+        ? draft.playlistLinks
+        : initialPlaylistLinks.length > 0
+          ? initialPlaylistLinks
+          : [""],
+    );
+  }
+
   useEffect(() => {
+    let isMounted = true;
     const storedState = loadStoredProfileDraft({
       nickname: initialNickname,
       bio: initialBio,
@@ -84,22 +102,42 @@ export function ProfileEditForm({
     });
 
     const hydrationFrame = window.requestAnimationFrame(() => {
-      setNickname(storedState.draft.nickname);
-      setBio(storedState.draft.bio);
-      setSelectedGenres(storedState.draft.favoriteGenres);
-      setMainPlatform(storedState.draft.mainPlatform);
-      setPlaylistLinks(
-        storedState.draft.playlistLinks.length > 0
-          ? storedState.draft.playlistLinks
-          : initialPlaylistLinks.length > 0
-            ? initialPlaylistLinks
-            : [""],
-      );
+      if (!isMounted) {
+        return;
+      }
+
+      applyDraftToForm(storedState.draft);
+      setSaveMessage(storedState.storageMessage);
     });
 
+    loadServerProfileDraft({
+      nickname: initialNickname,
+      bio: initialBio,
+      favoriteGenres: initialFavoriteGenres,
+      mainPlatform: initialMainPlatform,
+      playlistLinks: initialPlaylistLinks,
+    })
+      .then((serverState) => {
+        if (!isMounted || !serverState) {
+          return;
+        }
+
+        applyDraftToForm(serverState.draft);
+        setSaveMessage(serverState.storageMessage);
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setSaveMessage("profile server unavailable / local fallback ready");
+      });
+
     return () => {
+      isMounted = false;
       window.cancelAnimationFrame(hydrationFrame);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     initialBio,
     initialFavoriteGenres,
@@ -173,30 +211,56 @@ export function ProfileEditForm({
     setIsSaving(true);
     setSaveMessage(null);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
+    const nextDraft = createProfileDraft({
+      nickname: nickname.trim(),
+      bio: bio.trim(),
+      favoriteGenres: selectedGenres,
+      mainPlatform,
+      playlistLinks: playlistLinks
+        .map((link) => link.trim())
+        .filter((link) => link.length > 0),
     });
 
-    startTransition(() => {
-      persistStoredProfileDraft(
-        createProfileDraft({
-          nickname: nickname.trim(),
-          bio: bio.trim(),
-          favoriteGenres: selectedGenres,
-          mainPlatform,
-          playlistLinks: playlistLinks
-            .map((link) => link.trim())
-            .filter((link) => link.length > 0),
-        }),
-      );
+    persistStoredProfileDraft(nextDraft);
 
+    try {
+      const message = await persistServerProfileDraft(nextDraft);
       setErrors({});
       setSaveMessage(
-        "저장되었습니다. 이제 추천을 남기고, 다른 사람의 취향도 이어서 볼 수 있습니다.",
+        `${message}. 추천 CTA는 server hydrated platform 기준으로 이어집니다.`,
       );
-    });
+    } catch {
+      setErrors({});
+      setSaveMessage(
+        "saved locally / profile server fallback retained. 추천 CTA는 local fallback platform 기준으로 이어집니다.",
+      );
+    }
 
     setIsSaving(false);
+  }
+
+  async function handleResetDraft() {
+    const seededDraft = createProfileDraft({
+      nickname: initialNickname,
+      bio: initialBio,
+      favoriteGenres: initialFavoriteGenres,
+      mainPlatform: initialMainPlatform,
+      playlistLinks: initialPlaylistLinks,
+    });
+
+    resetStoredProfileDraft();
+    applyDraftToForm(seededDraft);
+    setErrors({});
+    setSaveMessage("reset local profile draft / clearing server session");
+
+    try {
+      const message = await resetServerProfileDraft();
+      setSaveMessage(`${message}. seeded archive profile is active again.`);
+    } catch {
+      setSaveMessage(
+        "local profile draft reset / server reset unavailable, fallback remains active",
+      );
+    }
   }
 
   return (
@@ -395,13 +459,20 @@ export function ProfileEditForm({
               <div className="flex w-full flex-col gap-3 md:w-auto md:min-w-[22rem]">
                 <button
                   type="submit"
-                  disabled={isSaving || isPending}
+                  disabled={isSaving}
                   className="flex items-center justify-between border border-[#1A1817] bg-[#1A1817] px-5 py-5 text-[1rem] font-semibold text-[#EBE6D8] disabled:opacity-60"
                 >
                   <span>
-                    {isSaving || isPending ? "저장 중..." : "프로필 저장하기"}
+                    {isSaving ? "저장 중..." : "프로필 저장하기"}
                   </span>
                   <span className="font-mono text-[1rem]">→</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResetDraft}
+                  className="border border-[#1A1817] bg-transparent px-5 py-4 text-left font-mono text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-[#1A1817]"
+                >
+                  RESET SERVER / LOCAL DRAFT ↺
                 </button>
                 <Link
                   href="/profile"

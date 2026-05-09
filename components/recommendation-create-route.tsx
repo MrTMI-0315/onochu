@@ -8,7 +8,10 @@ import {
   getActiveThemeSpotlight,
   mobileMoodSuggestions,
 } from "@/lib/mock-data";
-import { loadStoredProfileDraft } from "@/lib/profile-drafts";
+import {
+  loadStoredProfileDraft,
+  loadServerProfileDraft,
+} from "@/lib/profile-drafts";
 import {
   appendDraftToStoredRecommendationState,
   persistServerRecommendationDraftState,
@@ -48,6 +51,7 @@ export function RecommendationCreateRoute({
   const moodSuggestions = useMemo(() => mobileMoodSuggestions, []);
 
   useEffect(() => {
+    let isMounted = true;
     const storedProfile = loadStoredProfileDraft({
       nickname: currentMember.nickname,
       bio: currentMember.bio,
@@ -57,10 +61,31 @@ export function RecommendationCreateRoute({
     });
 
     const hydrationFrame = window.requestAnimationFrame(() => {
+      if (!isMounted) {
+        return;
+      }
+
       setViewerPlatform(storedProfile.draft.mainPlatform);
     });
 
+    loadServerProfileDraft({
+      nickname: currentMember.nickname,
+      bio: currentMember.bio,
+      favoriteGenres: currentMember.favoriteGenres,
+      mainPlatform: currentMember.mainPlatform,
+      playlistLinks: currentMember.playlistLinks.map((playlistLink) => playlistLink.url),
+    }).then((serverProfile) => {
+      if (!isMounted || !serverProfile) {
+        return;
+      }
+
+      setViewerPlatform(serverProfile.draft.mainPlatform);
+    }).catch(() => {
+      // Keep the local fallback platform.
+    });
+
     return () => {
+      isMounted = false;
       window.cancelAnimationFrame(hydrationFrame);
     };
   }, [currentMember]);
