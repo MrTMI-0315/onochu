@@ -9,7 +9,10 @@ import {
   mobileMoodSuggestions,
 } from "@/lib/mock-data";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
-import { appendDraftToStoredRecommendationState } from "@/lib/recommendation-drafts";
+import {
+  appendDraftToStoredRecommendationState,
+  persistServerRecommendationDraftState,
+} from "@/lib/recommendation-drafts";
 import type {
   MemberProfile,
   MusicPlatform,
@@ -38,7 +41,7 @@ export function RecommendationCreateRoute({
     ).length,
   );
   const [storageMessage, setStorageMessage] = useState(
-    "submit creates a local draft and inserts it into the feed storage",
+    "submit creates a server-session draft while preserving local fallback",
   );
   const activeTheme = getActiveThemeSpotlight();
 
@@ -72,6 +75,19 @@ export function RecommendationCreateRoute({
 
     setLatestDraft(nextState.latestDraft);
     setStorageMessage(nextState.storageMessage);
+    void persistServerRecommendationDraftState({
+      recommendations: nextState.recommendations,
+      latestDraft: nextState.latestDraft,
+    })
+      .then((message) => {
+        setStorageMessage(message);
+      })
+      .catch(() => {
+        setStorageMessage(
+          "saved locally / server persistence fallback retained draft",
+        );
+      });
+
     if (activeTheme) {
       setThemeParticipationCount(
         nextState.recommendations.filter(
@@ -211,7 +227,7 @@ export function RecommendationCreateRoute({
                       </h2>
                     </div>
                     <span className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] px-4 py-3 font-mono text-[0.7rem] uppercase tracking-[0.08em] text-[rgba(64,52,44,0.52)]">
-                      Local only
+                      Server session
                     </span>
                   </div>
 
@@ -223,8 +239,8 @@ export function RecommendationCreateRoute({
                     />
                   ) : (
                     <div className="border border-[rgba(64,52,44,0.18)] bg-[rgba(64,52,44,0.03)] p-6 text-[0.96rem] leading-[1.8] text-[rgba(64,52,44,0.62)]">
-                      아직 이 route에서 저장한 draft가 없습니다. 한 번 등록하면 같은 browser storage를 쓰는
-                      `/recommendations` 피드 맨 위에서 이어집니다.
+                      아직 이 route에서 저장한 draft가 없습니다. 한 번 등록하면 server session과
+                      local fallback을 거쳐 `/recommendations` 피드 맨 위에서 이어집니다.
                     </div>
                   )}
                 </section>

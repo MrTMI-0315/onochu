@@ -76,7 +76,7 @@ export function RecommendationComposer({
   const [isPending, startTransition] = useTransition();
   const [saveStatus, setSaveStatus] = useState<SaveStatus>({
     type: "idle",
-    message: "현재 작성은 local mock flow로 동작합니다.",
+    message: "현재 작성은 server session 저장 후 local fallback을 유지합니다.",
   });
 
   const platformOptions = Object.entries(platformLabels) as Array<
@@ -192,7 +192,7 @@ export function RecommendationComposer({
     setIsSaving(true);
     setSaveStatus({
       type: "saving",
-      message: "추천곡 draft를 local mock state 기준으로 저장 중입니다.",
+      message: "추천곡 draft를 server session과 local fallback에 저장 중입니다.",
     });
 
     await new Promise((resolve) => {

@@ -20,6 +20,7 @@ export const RECOMMENDATION_STORAGE_KEY = "onochu-recommendation-studio";
 export const LEGACY_RECOMMENDATION_STORAGE_KEY =
   "onochu-recommendation-studio-v1";
 export const RECOMMENDATION_STORAGE_VERSION = 6;
+const RECOMMENDATION_SERVER_ENDPOINT = "/api/recommendations";
 
 type LoadedRecommendationState = {
   browserIdentityId: string;
@@ -33,6 +34,19 @@ type PersistRecommendationStateInput = {
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
   engagementByRecommendationId: Record<string, RecommendationEngagementState>;
+};
+
+type PersistServerRecommendationDraftInput = {
+  recommendations: SongRecommendation[];
+  latestDraft: SongRecommendation | null;
+};
+
+type ServerRecommendationRecord = {
+  version: number;
+  ownerBrowserIdentityId: string;
+  recommendations: SongRecommendation[];
+  latestDraft: SongRecommendation | null;
+  updatedAt: string;
 };
 
 type AppendDraftInput = {
@@ -285,6 +299,74 @@ export function persistStoredRecommendationState({
       engagementByRecommendationId,
     } satisfies StoredRecommendationState),
   );
+}
+
+export async function loadServerRecommendationDraftState(
+  initialRecommendations: SongRecommendation[],
+): Promise<LoadedRecommendationState | null> {
+  const identityState = ensureBrowserIdentity();
+  const localState = loadStoredRecommendationState(initialRecommendations);
+  const response = await fetch(
+    `${RECOMMENDATION_SERVER_ENDPOINT}?ownerBrowserIdentityId=${encodeURIComponent(
+      identityState.browserIdentityId,
+    )}`,
+    { cache: "no-store" },
+  );
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error("recommendation server persistence load failed");
+  }
+
+  const payload = (await response.json()) as {
+    record?: ServerRecommendationRecord | null;
+  };
+  const record = payload.record;
+
+  if (
+    !record ||
+    record.ownerBrowserIdentityId !== identityState.browserIdentityId
+  ) {
+    return null;
+  }
+
+  return {
+    ...localState,
+    recommendations:
+      Array.isArray(record.recommendations) && record.recommendations.length > 0
+        ? record.recommendations
+        : initialRecommendations,
+    latestDraft: record.latestDraft ?? null,
+    storageMessage: "hydrated recommendation drafts from server session",
+  };
+}
+
+export async function persistServerRecommendationDraftState({
+  recommendations,
+  latestDraft,
+}: PersistServerRecommendationDraftInput) {
+  const identityState = ensureBrowserIdentity();
+  const response = await fetch(RECOMMENDATION_SERVER_ENDPOINT, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      version: RECOMMENDATION_STORAGE_VERSION,
+      ownerBrowserIdentityId: identityState.browserIdentityId,
+      recommendations,
+      latestDraft,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("recommendation server persistence save failed");
+  }
+
+  return "saved recommendation draft to server session with local fallback";
 }
 
 export function appendDraftToStoredRecommendationState({

@@ -11,6 +11,7 @@ import {
 import {
   createEmptyRecommendationEngagementState,
   loadStoredRecommendationState,
+  loadServerRecommendationDraftState,
   persistStoredRecommendationState,
 } from "@/lib/recommendation-drafts";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
@@ -73,9 +74,14 @@ export function RecommendationStudio({
   const [, setStorageMessage] = useState("browser storage active");
 
   useEffect(() => {
+    let isMounted = true;
     const storedState = loadStoredRecommendationState(initialRecommendations);
 
     const hydrationFrame = window.requestAnimationFrame(() => {
+      if (!isMounted) {
+        return;
+      }
+
       setLocalRecommendations(storedState.recommendations);
       setLatestDraft(storedState.latestDraft);
       setEngagementByRecommendationId(storedState.engagementByRecommendationId);
@@ -83,7 +89,26 @@ export function RecommendationStudio({
       setHasHydrated(true);
     });
 
+    loadServerRecommendationDraftState(initialRecommendations)
+      .then((serverState) => {
+        if (!isMounted || !serverState) {
+          return;
+        }
+
+        setLocalRecommendations(serverState.recommendations);
+        setLatestDraft(serverState.latestDraft);
+        setStorageMessage(serverState.storageMessage);
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setStorageMessage("browser storage active / server fallback ready");
+      });
+
     return () => {
+      isMounted = false;
       window.cancelAnimationFrame(hydrationFrame);
     };
   }, [initialRecommendations]);

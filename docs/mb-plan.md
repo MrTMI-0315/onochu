@@ -422,6 +422,7 @@ Phase 2는 로그인/실명 인증부터 시작하지 않고, 현재 browser sto
 
 - `MB 52` anonymous browser identity boundary 도입
 - `MB 53` visual system audit & main tone alignment
+- `MB 54` recommendation draft server-session persistence 도입
 
 ## MB 52
 

@@ -195,3 +195,27 @@
 
 - `/members/unknown-member` 진입 시 개발 모드 console에 not-found resource error가 1건 보이는 것은 custom 404 route smoke에서 예상 가능한 로그로 분류한다.
 - mobile bottom nav는 여전히 fixed navigation이므로 viewport 하단 콘텐츠 일부와 겹칠 수 있으나, 첫 화면의 핵심 heading / description / primary context는 가리지 않는다.
+
+## 2026-05-09 MB54 Recommendation Draft Server-Session Smoke
+
+### Scope
+
+- recommendation draft와 alternate platform links를 `browserIdentityId` 기준 server API에 저장
+- 기존 browser storage는 migration source와 fallback으로 유지
+- `/recommendations/new`에서 저장한 draft가 `/recommendations` feed hydrate에 반영되는지 확인
+
+### Verified
+
+- PASS: `npm run qa:brand-header`
+- PASS: `npm run lint`
+- PASS: `npm run build`
+- PASS: `/api/recommendations` route가 build output에 dynamic function으로 포함됨
+- PASS: Playwright MCP로 `/recommendations/new`에서 `MB54 Smoke Song` draft 작성
+- PASS: API `GET /api/recommendations?ownerBrowserIdentityId=...`가 `200`과 저장 record를 반환
+- PASS: 저장 record에 `searchQuery`와 `themeId`가 보존됨
+- PASS: 저장 record에 alternate platform link map이 보존됨
+- PASS: `/recommendations` reload 후 server-session draft가 visible feed item으로 hydrate됨
+
+### Remaining Gap
+
+- 현재 server backing은 외부 DB 없이 가능한 in-memory server-session store다. Vercel cold start / redeploy / multi-region을 넘는 durable persistence는 MB57 전까지 별도 storage provider 결정이 필요하다.
