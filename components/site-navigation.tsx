@@ -113,11 +113,11 @@ export function SiteNavigation() {
       </header>
 
       <nav
-        className={`fixed inset-x-0 bottom-0 z-40 px-4 py-4 md:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-40 px-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:hidden ${
           hideMobileNav ? "hidden" : ""
         }`}
       >
-        <div className="mx-auto grid max-w-[22rem] grid-cols-4 border border-[rgba(26,24,23,0.14)] bg-[rgba(255,255,255,0.92)] px-2 py-3 shadow-[0_8px_24px_rgba(26,24,23,0.06)]">
+        <div className="mx-auto grid max-w-[21rem] grid-cols-4 border border-[var(--archive-ink)] border-b-4 bg-[rgba(235,230,216,0.96)] px-2 py-2 shadow-[0_10px_24px_rgba(26,24,23,0.12)]">
             {navigationItems.map((item) => {
               const isActive =
                 item.href === "/recommendations"
@@ -132,7 +132,8 @@ export function SiteNavigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1.5 px-2 py-1 text-center text-[0.72rem] font-medium transition ${
+                aria-current={isActive ? "page" : undefined}
+                className={`flex flex-col items-center justify-center gap-1 px-2 py-1 text-center font-mono text-[0.66rem] font-semibold uppercase tracking-[0.02em] transition ${
                   isActive
                     ? "text-[var(--primary-strong)]"
                     : "text-[rgba(64,52,44,0.62)]"

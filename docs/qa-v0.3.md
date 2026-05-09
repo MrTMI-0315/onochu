@@ -171,3 +171,27 @@
 
 - recommendation / engagement / profile server persistence는 아직 구현 전이다.
 - genre / artist collection route는 later scope로 남아 있다.
+
+## 2026-05-09 MB53 Visual System Alignment Smoke
+
+### Scope
+
+- `/` main landing의 parchment / clay archive tone을 기준선으로 삼아 shared shell과 mobile nav를 정렬
+- old dark glass shell이 남아 있던 `PageShell` / not-found recovery path 정리
+- mobile bottom nav를 archive border / opaque parchment surface로 조정
+
+### Verified
+
+- PASS: `npm run qa:brand-header`
+- PASS: `npm run lint`
+- PASS: `npm run build`
+- PASS: Playwright MCP desktop smoke for `/`
+- PASS: Playwright MCP not-found smoke for `/members/unknown-member`
+- PASS: Playwright MCP mobile smoke at `390x844` for `/`, `/recommendations`, `/profile/edit`
+- PASS: not-found recovery route가 dark rounded glass card 대신 parchment archive shell로 렌더링됨
+- PASS: mobile bottom nav가 더 작은 opaque archive surface로 표시되고 active state가 유지됨
+
+### Notes
+
+- `/members/unknown-member` 진입 시 개발 모드 console에 not-found resource error가 1건 보이는 것은 custom 404 route smoke에서 예상 가능한 로그로 분류한다.
+- mobile bottom nav는 여전히 fixed navigation이므로 viewport 하단 콘텐츠 일부와 겹칠 수 있으나, 첫 화면의 핵심 heading / description / primary context는 가리지 않는다.
