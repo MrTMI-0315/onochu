@@ -219,3 +219,25 @@
 ### Remaining Gap
 
 - 현재 server backing은 외부 DB 없이 가능한 in-memory server-session store다. Vercel cold start / redeploy / multi-region을 넘는 durable persistence는 MB57 전까지 별도 storage provider 결정이 필요하다.
+
+## 2026-05-09 MB55 Recommendation Engagement Server-Session Smoke
+
+### Scope
+
+- fire/save active state와 count delta를 `browserIdentityId` 기준 server-session record에 포함
+- server hydration 뒤 saved shelf / saved filter가 동일 engagement state를 복원하는지 확인
+- duplicate toggle은 기존 boolean state 기반 delta 계산을 유지해 비정상 count 증가를 방지
+
+### Verified
+
+- PASS: `npm run qa:brand-header`
+- PASS: `npm run lint`
+- PASS: `npm run build`
+- PASS: Playwright MCP로 `/recommendations`에서 save engagement toggle 후 API record 확인
+- PASS: API record에 `engagementByRecommendationId`가 저장되고 대상 추천의 `save` state와 `saveCount` delta가 유지됨
+- PASS: React dev/Strict 환경에서 toggle count가 중복 증가하던 updater side-effect를 제거한 뒤 0→1 delta를 재검증함
+- PASS: `/recommendations` reload 후 saved filter에서 saved item이 visible feed item으로 복원됨
+
+### Remaining Gap
+
+- MB55도 MB54와 같은 in-memory server-session backing을 사용한다. production-grade durability는 durable provider 연결 전까지 보장하지 않는다.

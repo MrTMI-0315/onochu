@@ -39,6 +39,7 @@ type PersistRecommendationStateInput = {
 type PersistServerRecommendationDraftInput = {
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId?: Record<string, RecommendationEngagementState>;
 };
 
 type ServerRecommendationRecord = {
@@ -46,6 +47,7 @@ type ServerRecommendationRecord = {
   ownerBrowserIdentityId: string;
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId?: Record<string, RecommendationEngagementState>;
   updatedAt: string;
 };
 
@@ -340,6 +342,7 @@ export async function loadServerRecommendationDraftState(
         ? record.recommendations
         : initialRecommendations,
     latestDraft: record.latestDraft ?? null,
+    engagementByRecommendationId: record.engagementByRecommendationId ?? {},
     storageMessage: "hydrated recommendation drafts from server session",
   };
 }
@@ -347,6 +350,7 @@ export async function loadServerRecommendationDraftState(
 export async function persistServerRecommendationDraftState({
   recommendations,
   latestDraft,
+  engagementByRecommendationId = {},
 }: PersistServerRecommendationDraftInput) {
   const identityState = ensureBrowserIdentity();
   const response = await fetch(RECOMMENDATION_SERVER_ENDPOINT, {
@@ -359,6 +363,7 @@ export async function persistServerRecommendationDraftState({
       ownerBrowserIdentityId: identityState.browserIdentityId,
       recommendations,
       latestDraft,
+      engagementByRecommendationId,
     }),
   });
 

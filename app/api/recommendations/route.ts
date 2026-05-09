@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import type { SongRecommendation } from "@/lib/types";
+import type {
+  RecommendationEngagementState,
+  SongRecommendation,
+} from "@/lib/types";
 
 const SERVER_RECOMMENDATION_VERSION = 1;
 
@@ -8,6 +11,7 @@ type ServerRecommendationRecord = {
   ownerBrowserIdentityId: string;
   recommendations: SongRecommendation[];
   latestDraft: SongRecommendation | null;
+  engagementByRecommendationId: Record<string, RecommendationEngagementState>;
   updatedAt: string;
 };
 
@@ -68,6 +72,11 @@ export async function PUT(request: Request) {
     ownerBrowserIdentityId: payload.ownerBrowserIdentityId,
     recommendations: payload.recommendations,
     latestDraft: payload.latestDraft ?? null,
+    engagementByRecommendationId:
+      payload.engagementByRecommendationId &&
+      typeof payload.engagementByRecommendationId === "object"
+        ? payload.engagementByRecommendationId
+        : {},
     updatedAt: new Date().toISOString(),
   };
 

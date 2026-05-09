@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BrandMarkLink } from "@/components/brand-mark-link";
 import { RecommendationCard } from "@/components/recommendation-card";
@@ -13,6 +13,7 @@ import {
   loadStoredRecommendationState,
   loadServerRecommendationDraftState,
   persistStoredRecommendationState,
+  persistServerRecommendationDraftState,
 } from "@/lib/recommendation-drafts";
 import { loadStoredProfileDraft } from "@/lib/profile-drafts";
 import type {
@@ -67,10 +68,15 @@ export function RecommendationStudio({
   const [latestDraft, setLatestDraft] = useState<SongRecommendation | null>(null);
   const [engagementByRecommendationId, setEngagementByRecommendationId] =
     useState<Record<string, RecommendationEngagementState>>({});
+  const localRecommendationsRef =
+    useRef<SongRecommendation[]>(initialRecommendations);
+  const engagementByRecommendationIdRef =
+    useRef<Record<string, RecommendationEngagementState>>({});
   const [viewerPlatform, setViewerPlatform] = useState<MusicPlatform>(
     currentMember.mainPlatform,
   );
   const [hasHydrated, setHasHydrated] = useState(false);
+  const [hasServerHydrated, setHasServerHydrated] = useState(false);
   const [, setStorageMessage] = useState("browser storage active");
 
   useEffect(() => {
@@ -91,13 +97,22 @@ export function RecommendationStudio({
 
     loadServerRecommendationDraftState(initialRecommendations)
       .then((serverState) => {
-        if (!isMounted || !serverState) {
+        if (!isMounted) {
+          return;
+        }
+
+        if (!serverState) {
+          setHasServerHydrated(true);
           return;
         }
 
         setLocalRecommendations(serverState.recommendations);
         setLatestDraft(serverState.latestDraft);
+        setEngagementByRecommendationId(
+          serverState.engagementByRecommendationId,
+        );
         setStorageMessage(serverState.storageMessage);
+        setHasServerHydrated(true);
       })
       .catch(() => {
         if (!isMounted) {
@@ -105,6 +120,7 @@ export function RecommendationStudio({
         }
 
         setStorageMessage("browser storage active / server fallback ready");
+        setHasServerHydrated(true);
       });
 
     return () => {
@@ -132,7 +148,7 @@ export function RecommendationStudio({
   }, [currentMember]);
 
   useEffect(() => {
-    if (!hasHydrated) {
+    if (!hasHydrated || !hasServerHydrated) {
       return;
     }
 
@@ -141,7 +157,33 @@ export function RecommendationStudio({
       latestDraft,
       engagementByRecommendationId,
     });
-  }, [engagementByRecommendationId, hasHydrated, latestDraft, localRecommendations]);
+
+    persistServerRecommendationDraftState({
+      recommendations: localRecommendations,
+      latestDraft,
+      engagementByRecommendationId,
+    })
+      .then((message) => {
+        setStorageMessage(message);
+      })
+      .catch(() => {
+        setStorageMessage("saved locally / server engagement fallback retained");
+      });
+  }, [
+    engagementByRecommendationId,
+    hasHydrated,
+    hasServerHydrated,
+    latestDraft,
+    localRecommendations,
+  ]);
+
+  useEffect(() => {
+    localRecommendationsRef.current = localRecommendations;
+  }, [localRecommendations]);
+
+  useEffect(() => {
+    engagementByRecommendationIdRef.current = engagementByRecommendationId;
+  }, [engagementByRecommendationId]);
 
   const activeTheme = getActiveThemeSpotlight() ?? themeSpotlights[0];
   const savedRecommendationIds = useMemo(() => {
@@ -178,46 +220,48 @@ export function RecommendationStudio({
     recommendationId: string,
     action: RecommendationEngagementAction,
   ) {
-    setEngagementByRecommendationId((currentEngagementByRecommendationId) => {
-      const currentEngagement =
-        currentEngagementByRecommendationId[recommendationId] ??
-        createEmptyRecommendationEngagementState();
-      const nextIsActive = !currentEngagement[action];
-      const nextEngagementByRecommendationId = {
-        ...currentEngagementByRecommendationId,
-        [recommendationId]: {
-          ...currentEngagement,
-          [action]: nextIsActive,
-        },
-      };
-      const nextCountDelta = nextIsActive ? 1 : -1;
+    const currentEngagementByRecommendationId =
+      engagementByRecommendationIdRef.current;
+    const currentEngagement =
+      currentEngagementByRecommendationId[recommendationId] ??
+      createEmptyRecommendationEngagementState();
+    const nextIsActive = !currentEngagement[action];
+    const nextEngagementByRecommendationId = {
+      ...currentEngagementByRecommendationId,
+      [recommendationId]: {
+        ...currentEngagement,
+        [action]: nextIsActive,
+      },
+    };
+    const nextCountDelta = nextIsActive ? 1 : -1;
+    const nextRecommendations = localRecommendationsRef.current.map(
+      (recommendation) => {
+        if (recommendation.id !== recommendationId) {
+          return recommendation;
+        }
 
-      setLocalRecommendations((currentRecommendations) =>
-        currentRecommendations.map((recommendation) => {
-          if (recommendation.id !== recommendationId) {
-            return recommendation;
-          }
-
-          if (action === "save") {
-            return {
-              ...recommendation,
-              saveCount: Math.max(0, recommendation.saveCount + nextCountDelta),
-            };
-          }
-
+        if (action === "save") {
           return {
             ...recommendation,
-            reactionCount: Math.max(
-              0,
-              recommendation.reactionCount + nextCountDelta,
-            ),
+            saveCount: Math.max(0, recommendation.saveCount + nextCountDelta),
           };
-        }),
-      );
-      setStorageMessage("saved engagement to browser storage");
+        }
 
-      return nextEngagementByRecommendationId;
-    });
+        return {
+          ...recommendation,
+          reactionCount: Math.max(
+            0,
+            recommendation.reactionCount + nextCountDelta,
+          ),
+        };
+      },
+    );
+
+    engagementByRecommendationIdRef.current = nextEngagementByRecommendationId;
+    localRecommendationsRef.current = nextRecommendations;
+    setEngagementByRecommendationId(nextEngagementByRecommendationId);
+    setLocalRecommendations(nextRecommendations);
+    setStorageMessage("syncing engagement to server session");
   }
 
   return (
